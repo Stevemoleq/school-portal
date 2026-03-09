@@ -4,9 +4,9 @@ services:
     env: python
     plan: free
     buildCommand: |
-      pip install -r requirements.txt
-      python school_portal/manage.py collectstatic --noinput
-      python school_portal/manage.py migrate
+      pip install -r requirements.txt && \
+      python manage.py collectstatic --noinput && \
+      python manage.py migrate
     startCommand: gunicorn school_portal.wsgi
     envVars:
       - key: PYTHON_VERSION
@@ -14,11 +14,13 @@ services:
       - key: DEBUG
         value: "False"
       - key: ALLOWED_HOSTS
-        generateValue: true
+        value: "your-app-name.onrender.com"
       - key: SECRET_KEY
         generateValue: true
 
 databases:
   - name: school-portal-db
     engine: postgresql
+    version: "15"
     ipAllowList: []
+
