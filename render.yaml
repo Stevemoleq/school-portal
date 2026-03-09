@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: school-portal
+    env: python
+    plan: free
+    buildCommand: |
+      pip install -r requirements.txt
+      python school_portal/manage.py collectstatic --noinput
+      python school_portal/manage.py migrate
+    startCommand: gunicorn school_portal.wsgi
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12
+      - key: DEBUG
+        value: "False"
+      - key: ALLOWED_HOSTS
+        generateValue: true
+      - key: SECRET_KEY
+        generateValue: true
+
+databases:
+  - name: school-portal-db
+    engine: postgresql
+    ipAllowList: []

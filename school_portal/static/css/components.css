@@ -1,0 +1,181 @@
+/* Modern Components CSS */
+
+/* Stat Card */
+.stat-card {
+    @apply relative overflow-hidden rounded-lg bg-white dark:bg-gray-800 p-6 shadow-md transition-all duration-300 hover:shadow-xl;
+}
+
+.stat-card::before {
+    content: '';
+    @apply absolute top-0 right-0 w-24 h-24 bg-gradient-to-br from-blue-400 to-transparent opacity-10 rounded-full;
+}
+
+.stat-card h3 {
+    @apply text-gray-600 dark:text-gray-400 text-sm font-medium uppercase tracking-wide;
+}
+
+.stat-card .stat-value {
+    @apply text-3xl font-bold text-gray-900 dark:text-white mt-2;
+}
+
+.stat-card .stat-icon {
+    @apply absolute top-4 right-4 text-3xl opacity-10;
+}
+
+/* Progress Bar */
+.progress-bar {
+    @apply w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 overflow-hidden;
+}
+
+.progress-bar.progress-fill {
+    @apply bg-gradient-to-r from-blue-400 to-blue-600 h-full transition-all duration-500 ease-out;
+}
+
+/* Table Styles */
+.table-modern {
+    @apply w-full text-sm rounded-lg overflow-hidden;
+}
+
+.table-modern thead {
+    @apply bg-gray-100 dark:bg-gray-800;
+}
+
+.table-modern th {
+    @apply px-6 py-4 text-left font-semibold text-gray-900 dark:text-white;
+}
+
+.table-modern tbody tr {
+    @apply border-b border-gray-200 dark:border-gray-700 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700;
+}
+
+.table-modern td {
+    @apply px-6 py-4 text-gray-900 dark:text-gray-300;
+}
+
+/* List Items */
+.list-item {
+    @apply px-4 py-3 border-b border-gray-200 dark:border-gray-700 last:border-b-0 transition-colors hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer;
+}
+
+/* Alert/Notification */
+.alert {
+    @apply px-4 py-3 rounded-lg flex items-center gap-3;
+}
+
+.alert-success {
+    @apply bg-green-100 text-green-800 dark:bg-green-950 dark:text-green-200;
+}
+
+.alert-error {
+    @apply bg-red-100 text-red-800 dark:bg-red-950 dark:text-red-200;
+}
+
+.alert-warning {
+    @apply bg-yellow-100 text-yellow-800 dark:bg-yellow-950 dark:text-yellow-200;
+}
+
+.alert-info {
+    @apply bg-blue-100 text-blue-800 dark:bg-blue-950 dark:text-blue-200;
+}
+
+/* Modal/Dialog */
+.modal {
+    @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden;
+}
+
+.modal.active {
+    @apply flex;
+}
+
+.modal-content {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-xl max-w-md w-full mx-4;
+}
+
+/* Tabs */
+.tabs {
+    @apply flex border-b border-gray-200 dark:border-gray-700;
+}
+
+.tab {
+    @apply px-4 py-3 font-medium text-gray-600 dark:text-gray-400 border-b-2 border-transparent transition-colors cursor-pointer hover:text-gray-900 dark:hover:text-white;
+}
+
+.tab.active {
+    @apply text-blue-600 dark:text-blue-400 border-blue-600 dark:border-blue-400;
+}
+
+/* Badge Sizes */
+.badge-lg {
+    @apply px-4 py-2 text-base;
+}
+
+.badge-md {
+    @apply px-3 py-1 text-sm;
+}
+
+.badge-sm {
+    @apply px-2 py-0.5 text-xs;
+}
+
+/* Input Group */
+.input-group {
+    @apply relative flex items-center;
+}
+
+.input-group input {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+.input-group-addon {
+    @apply absolute right-3 text-gray-400 pointer-events-none;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    @apply bg-gray-200 dark:bg-gray-700 animate-pulse rounded;
+}
+
+.skeleton-text {
+    @apply h-4 w-full mb-2;
+}
+
+.skeleton-avatar {
+    @apply h-12 w-12 rounded-full;
+}
+
+/* Card Grid */
+.card-grid {
+    @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6;
+}
+
+/* Responsive Grid */
+.responsive-grid {
+    @apply grid gap-6;
+}
+
+@media (min-width: 640px) {
+    .responsive-grid {
+        @apply grid-cols-2;
+    }
+}
+
+@media (min-width: 1024px) {
+    .responsive-grid {
+        @apply grid-cols-3;
+    }
+}
+
+/* Form Group */
+.form-group {
+    @apply mb-4;
+}
+
+.form-group label {
+    @apply block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    @apply w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent;
+}

@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}{{ announcement.title }}{% endblock %}
+{% block content %}
+<div class="card">
+    <h1 style="color: #1e3c72; margin-bottom: 1rem;">{{ announcement.title }}</h1>
+    <p style="color: #666; font-size: 0.9rem;">
+        Posted on {{ announcement.created_at|date:"F j, Y \a\t g:i A" }} by {{ announcement.author.get_full_name|default:announcement.author.username }}
+    </p>
+    {% if announcement.updated_at != announcement.created_at %}
+        <p style="color: #999; font-size: 0.85rem;">
+            Last updated: {{ announcement.updated_at|date:"F j, Y \a\t g:i A" }}
+        </p>
+    {% endif %}
+    
+    <div style="margin-top: 2rem; line-height: 1.6;">
+        {{ announcement.content|linebreaks }}
+    </div>
+    
+    <div style="margin-top: 2rem; padding-top: 1rem; border-top: 1px solid #eee;">
+        <small style="color: #666;">
+            Target Audience: 
+            {% if announcement.target_audience == 'all' %}
+                Everyone
+            {% elif announcement.target_audience == 'students' %}
+                Students Only
+            {% elif announcement.target_audience == 'teachers' %}
+                Teachers Only
+            {% endif %}
+        </small>
+    </div>
+    
+    {% if user.is_staff or user == announcement.author %}
+        <div style="margin-top: 2rem;">
+            <a href="{% url 'announcement_edit' announcement.pk %}" class="btn-sm">Edit</a>
+            <a href="{% url 'announcement_delete' announcement.pk %}" class="btn-sm" style="background: #c0392b;">Delete</a>
+        </div>
+    {% endif %}
+</div>
+
+<div style="margin-top: 2rem;">
+    <a href="{% url 'announcement_list' %}" class="btn btn-sm">← Back to Announcements</a>
+</div>
+{% endblock %}

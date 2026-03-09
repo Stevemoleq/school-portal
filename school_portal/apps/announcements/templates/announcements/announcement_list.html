@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Announcements{% endblock %}
+{% block content %}
+<h1 class="text-3xl font-bold text-[#1e3c72] mb-6">School Announcements</h1>
+
+<div class="bg-white rounded-xl shadow-md divide-y divide-gray-200">
+    {% for ann in announcements %}
+        <div class="p-6">
+            <h2 class="text-xl font-semibold text-gray-800">{{ ann.title }}</h2>
+            <p class="text-sm text-gray-500 mb-2">Posted on {{ ann.created_at|date:"F j, Y" }} by {{ ann.author.get_full_name|default:ann.author.username }}</p>
+            <p class="text-gray-700">{{ ann.content|linebreaks }}</p>
+            {% if user.is_staff or user == ann.author %}
+                <div class="mt-4 space-x-2">
+                    <a href="{% url 'announcement_edit' ann.pk %}" class="text-[#1e3c72] hover:text-[#f39c12] transition">Edit</a>
+                    <a href="{% url 'announcement_delete' ann.pk %}" class="text-red-600 hover:text-red-800 transition">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+    {% empty %}
+        <p class="p-6 text-gray-500">No announcements yet.</p>
+    {% endfor %}
+</div>
+
+{% if user.is_staff or user.teacher %}
+    <div class="mt-6">
+        <a href="{% url 'announcement_create' %}" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-6 py-2 rounded-lg transition">➕ Create New Announcement</a>
+    </div>
+{% endif %}
+{% endblock %}

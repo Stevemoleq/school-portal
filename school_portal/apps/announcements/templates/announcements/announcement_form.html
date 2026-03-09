@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Announcement{% endblock %}
+{% block content %}
+<div class="card" style="max-width: 700px; margin: 2rem auto;">
+    <h2 style="color: #1e3c72;">{% if form.instance.pk %}Edit Announcement{% else %}New Announcement{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Save</button>
+        <a href="{% url 'announcement_list' %}" class="btn btn-sm" style="background: #7f8c8d;">Cancel</a>
+    </form>
+</div>
+{% endblock %}

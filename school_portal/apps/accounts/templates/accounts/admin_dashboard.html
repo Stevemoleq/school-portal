@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-3xl font-bold text-[#1e3c72]">Administration Panel</h1>
+    <p class="text-gray-600">Welcome back, {{ user.first_name }}. Here’s what’s happening.</p>
+</div>
+
+<!-- Stats cards -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+        <div class="text-4xl font-bold text-[#1e3c72]">{{ student_count }}</div>
+        <div class="text-gray-600">Students</div>
+        <a href="/admin/accounts/student/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+        <div class="text-4xl font-bold text-[#1e3c72]">{{ teacher_count }}</div>
+        <div class="text-gray-600">Teachers</div>
+        <a href="/admin/accounts/teacher/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+        <div class="text-4xl font-bold text-[#1e3c72]">{{ class_count }}</div>
+        <div class="text-gray-600">Classes</div>
+        <a href="/admin/school/class/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
+    </div>
+    <div class="bg-white rounded-xl shadow-md p-6 text-center">
+        <div class="text-4xl font-bold text-[#1e3c72]">{{ subject_count }}</div>
+        <div class="text-gray-600">Subjects</div>
+        <a href="/admin/school/subject/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+    <!-- Recent Results -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Recent Results</h2>
+        <p class="text-3xl font-bold text-[#1e3c72]">{{ result_count }}</p>
+        <p class="text-gray-600">total results uploaded</p>
+        <a href="/admin/results/result/" class="mt-4 inline-block text-[#1e3c72] hover:text-[#f39c12] transition">View all →</a>
+    </div>
+    <!-- Announcements -->
+    <div class="bg-white rounded-xl shadow-md p-6">
+        <h2 class="text-xl font-semibold text-gray-800 mb-2">Announcements</h2>
+        <p class="text-3xl font-bold text-[#1e3c72]">{{ announcement_count }}</p>
+        <p class="text-gray-600">total announcements</p>
+        <a href="/admin/announcements/announcement/" class="mt-4 inline-block text-[#1e3c72] hover:text-[#f39c12] transition">Manage →</a>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="bg-white rounded-xl shadow-md p-6">
+    <h2 class="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h2>
+    <div class="flex flex-wrap gap-3">
+        <a href="/admin/accounts/student/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Student</a>
+        <a href="/admin/accounts/teacher/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Teacher</a>
+        <a href="/admin/school/class/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Class</a>
+        <a href="/admin/school/subject/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Subject</a>
+        <a href="/admin/results/result/add/" class="bg-[#f39c12] hover:bg-[#e08e0b] text-white px-4 py-2 rounded transition">📝 Upload Results</a>
+    </div>
+</div>
+{% endblock %}

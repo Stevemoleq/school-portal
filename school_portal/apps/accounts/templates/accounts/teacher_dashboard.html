@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% block title %}Teacher Dashboard - {{ teacher.user.get_full_name }}{% endblock %}
+{% block content %}
+<!-- Header -->
+<div class="mb-12" data-aos="fade-up">
+    <div class="flex items-center justify-between">
+        <div>
+            <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-2">
+                <i class="fas fa-chalkboard-user text-blue-600"></i> Welcome, {{ teacher.user.get_full_name }}
+            </h1>
+            <p class="text-gray-600 dark:text-gray-400 flex items-center gap-2">
+                <i class="fas fa-briefcase"></i> Employee ID: {{ teacher.employee_id }}
+                <span class="text-blue-600">•</span>
+                <i class="fas fa-phone"></i> {{ teacher.phone|default:"N/A" }}
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Classes & Subjects Section -->
+<div class="mb-12" data-aos="fade-up">
+    <div class="card">
+        <div class="border-b border-gray-200 dark:border-gray-700 p-6">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <i class="fas fa-book text-blue-600"></i> My Classes & Subjects
+            </h2>
+        </div>
+        
+        {% if classes_dict %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+            {% for class, subjects in classes_dict.items %}
+                <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-6 hover:shadow-lg transition-all" data-aos="fade-up">
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 bg-gradient-to-br from-blue-400 to-blue-600 rounded-lg flex items-center justify-center text-white font-bold">
+                            {{ class.name|first }}
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white">{{ class.name }}</h3>
+                    </div>
+                    
+                    <div class="space-y-2 mb-4">
+                    {% for subject in subjects %}
+                        <div class="flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-800 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                            <div>
+                                <p class="font-semibold text-gray-900 dark:text-white">{{ subject.name }}</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">Code: {{ subject.code }}</p>
+                            </div>
+                            <span class="badge badge-primary text-xs">Assigned</span>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div class="p-6 text-center">
+                <i class="fas fa-inbox text-3xl text-gray-400 mb-3"></i>
+                <p class="text-gray-600 dark:text-gray-400">You are not assigned to any subjects yet.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Announcements Section -->
+<div class="mb-12" data-aos="fade-up">
+    <div class="card">
+        <div class="border-b border-gray-200 dark:border-gray-700 p-6 flex items-center justify-between">
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white flex items-center gap-3">
+                <i class="fas fa-broadcast-tower text-purple-600"></i> Announcements
+            </h2>
+            <a href="{% url 'announcement_create' %}" class="btn btn-primary btn-sm">
+                <i class="fas fa-plus"></i> New
+            </a>
+        </div>
+        
+        {% if announcements %}
+            <div class="divide-y divide-gray-200 dark:divide-gray-700">
+            {% for ann in announcements %}
+                <div class="p-6 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                    <div class="flex items-start justify-between gap-4">
+                        <div class="flex-1">
+                            <h3 class="font-bold text-gray-900 dark:text-white">{{ ann.title }}</h3>
+                            <div class="flex items-center gap-4 mt-2 text-sm text-gray-600 dark:text-gray-400">
+                                <span><i class="fas fa-user"></i> {{ ann.author.get_full_name }}</span>
+                                <span><i class="fas fa-calendar"></i> {{ ann.created_at|date:"M d, Y" }}</span>
+                                <span class="badge badge-success">{{ ann.get_target_audience_display }}</span>
+                            </div>
+                            <p class="text-gray-700 dark:text-gray-300 mt-3">{{ ann.content|truncatewords:30 }}</p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+            </div>
+            <div class="p-6 border-t border-gray-200 dark:border-gray-700">
+                <a href="{% url 'announcement_list' %}" class="inline-flex items-center gap-2 text-blue-600 dark:text-blue-400 hover:gap-3 transition-all">
+                    <span>View All Announcements</span> <i class="fas fa-arrow-right"></i>
+                </a>
+            </div>
+        {% else %}
+            <div class="p-6 text-center">
+                <i class="fas fa-inbox text-3xl text-gray-400 mb-3"></i>
+                <p class="text-gray-600 dark:text-gray-400">No announcements at this time.</p>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div class="mb-8" data-aos="fade-up">
+    <div class="card p-6">
+        <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-3">
+            <i class="fas fa-zap text-yellow-500"></i> Quick Actions
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <a href="{% url 'announcement_create' %}" class="btn btn-primary group">
+                <i class="fas fa-pen group-hover:rotate-12 transition-transform"></i>
+                <span>Post Announcement</span>
+            </a>
+            <a href="{% url 'announcement_list' %}" class="btn btn-primary group">
+                <i class="fas fa-list group-hover:scale-110 transition-transform"></i>
+                <span>View Announcements</span>
+            </a>
+            <a href="{% url 'dashboard_redirect' %}" class="btn btn-primary group">
+                <i class="fas fa-home group-hover:scale-110 transition-transform"></i>
+                <span>Home</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
