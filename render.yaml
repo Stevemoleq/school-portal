@@ -21,8 +21,8 @@ services:
 
 databases:
   - name: school-portal-db
-    databaseName: school-portal-db
-    user: postgres
+    databaseName: school_portal_db
+    user: schooluser
     plan: free
     ipAllowList: []
 
