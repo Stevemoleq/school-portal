@@ -21,7 +21,8 @@ services:
 
 databases:
   - name: school-portal-db
-    engine: postgresql  # yaml: ignore
-    version: "15"  # yaml: ignore
+    databaseName: school-portal-db
+    user: postgres
+    plan: free
     ipAllowList: []
 
