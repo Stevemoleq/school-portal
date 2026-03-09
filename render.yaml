@@ -25,7 +25,4 @@ services:
 databases:
   - name: school-portal-db
     databaseName: school_portal_db
-    user: school
-    password:
-      generateValue: true
     plan: free
