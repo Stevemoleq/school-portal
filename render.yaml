@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/render-oss/render-yaml-spec/main/schema.json
 services:
   - type: web
     name: school-portal
