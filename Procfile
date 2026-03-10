@@ -1,1 +1,1 @@
-web: gunicorn school_portal.wsgi
+web: sh -c 'cd school_portal && gunicorn school_portal.wsgi'

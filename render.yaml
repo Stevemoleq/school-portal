@@ -9,7 +9,7 @@ services:
       python school_portal/manage.py collectstatic --noinput && \
       python school_portal/manage.py migrate
 
-    startCommand: gunicorn school_portal.wsgi:application
+    startCommand: sh -c 'cd school_portal && gunicorn school_portal.wsgi:application'
 
     envVars:
       - key: DEBUG
