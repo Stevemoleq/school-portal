@@ -8,7 +8,8 @@ services:
       pip install --upgrade pip && \
       pip install -r school_portal/requirements.txt && \
       python school_portal/manage.py migrate && \
-      python school_portal/manage.py collectstatic --noinput
+      python school_portal/manage.py collectstatic --noinput && \
+      python school_portal/manage.py create_admin
 
     startCommand: sh -c 'cd school_portal && gunicorn school_portal.wsgi:application'
 
