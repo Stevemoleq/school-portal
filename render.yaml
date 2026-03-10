@@ -3,14 +3,15 @@ services:
     name: school-portal
     env: python
     plan: free
+    root: school_portal
 
     buildCommand: |
       pip install --upgrade pip && \
-      pip install -r school_portal/requirements.txt && \
-      python school_portal/manage.py collectstatic --noinput && \
-      python school_portal/manage.py migrate
+      pip install -r requirements.txt && \
+      python manage.py collectstatic --noinput && \
+      python manage.py migrate
 
-    startCommand: sh -c 'cd school_portal && gunicorn school_portal.wsgi:application'
+    startCommand: gunicorn school_portal.wsgi:application
 
     envVars:
       - key: DEBUG
