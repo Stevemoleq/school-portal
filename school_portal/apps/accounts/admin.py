@@ -69,7 +69,7 @@ class TeacherResource(resources.ModelResource):
     class Meta:
         model = Teacher
         import_id_fields = ('employee_id',)
-        fields = ('employee_id', 'phone', 'date_hired')
+        fields = ('employee_id', 'first_name', 'last_name', 'email', 'phone', 'date_hired', 'subjects')
         skip_unchanged = True
         export_order = ('employee_id', 'first_name', 'last_name', 'email', 'phone', 'date_hired', 'subjects')
 
