@@ -6,10 +6,11 @@ services:
 
     buildCommand: |
       pip install -r requirements.txt && \
-      python school_portal/manage.py collectstatic --noinput && \
-      python school_portal/manage.py migrate
+      cd school_portal && \
+      python manage.py collectstatic --noinput && \
+      python manage.py migrate
 
-    startCommand: gunicorn school_portal.school_portal.wsgi:application
+    startCommand: cd school_portal && gunicorn school_portal.wsgi:application
 
     envVars:
       - key: DEBUG
