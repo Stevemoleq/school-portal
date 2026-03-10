@@ -3,19 +3,15 @@ services:
     name: school-portal
     env: python
     plan: free
-    root: school_portal
 
     buildCommand: |
-      pip install -r ../requirements.txt && \
-      python manage.py collectstatic --noinput && \
-      python manage.py migrate
+      pip install -r requirements.txt && \
+      python school_portal/manage.py collectstatic --noinput && \
+      python school_portal/manage.py migrate
 
-    startCommand: gunicorn school_portal.wsgi:application
+    startCommand: gunicorn school_portal.school_portal.wsgi:application
 
     envVars:
-      - key: PYTHON_VERSION
-        value: 3.12.3
-
       - key: DEBUG
         value: "False"
 
@@ -23,7 +19,7 @@ services:
         generateValue: true
 
       - key: ALLOWED_HOSTS
-        value: "school-portal.onrender.com"
+        value: ".onrender.com"
 
       - key: DATABASE_URL
         fromDatabase:
