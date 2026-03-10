@@ -6,14 +6,18 @@ class Command(BaseCommand):
     help = 'Creates or updates default admin user'
 
     def handle(self, *args, **options):
-        user, created = User.objects.get_or_create(username='admin')
-        user.set_password('admin123')
-        user.email = 'admin@example.com'
-        user.is_staff = True
-        user.is_superuser = True
-        user.save()
-        
-        if created:
-            self.stdout.write(self.style.SUCCESS('Admin user created: admin / admin123'))
-        else:
-            self.stdout.write(self.style.SUCCESS('Admin password reset: admin / admin123'))
+        try:
+            user, created = User.objects.get_or_create(username='admin')
+            user.set_password('admin123')
+            user.email = 'admin@example.com'
+            user.is_staff = True
+            user.is_superuser = True
+            user.save()
+            
+            if created:
+                self.stdout.write(self.style.SUCCESS('✓ Admin user created: admin / admin123'))
+            else:
+                self.stdout.write(self.style.SUCCESS('✓ Admin password updated: admin / admin123'))
+        except Exception as e:
+            self.stdout.write(self.style.ERROR(f'✗ Error creating admin user: {str(e)}'))
+
