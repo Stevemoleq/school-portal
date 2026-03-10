@@ -1,5 +1,3 @@
-# render.yaml - Web + Database deployment configuration
-
 services:
   - type: web
     name: school-portal
