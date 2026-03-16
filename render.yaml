@@ -3,32 +3,24 @@ services:
     name: school-portal
     env: python
     plan: free
-
+    rootDir: school_portal
     buildCommand: |
-      pip install --upgrade pip && \
-      pip install -r school_portal/requirements.txt && \
-      python school_portal/manage.py migrate && \
-      python school_portal/manage.py collectstatic --noinput --clear && \
-      python school_portal/manage.py create_admin
-
-    startCommand: sh -c 'cd school_portal && gunicorn school_portal.wsgi:application'
-
+      pip install --upgrade pip
+      pip install -r requirements.txt
+      python manage.py migrate
+      python manage.py collectstatic --noinput --clear
+      python manage.py create_admin
+    startCommand: gunicorn school_portal.wsgi:application
     envVars:
       - key: DEBUG
         value: "False"
-
       - key: SECRET_KEY
         generateValue: true
-
       - key: ALLOWED_HOSTS
         value: ".onrender.com"
-
       - key: DATABASE_URL
         fromDatabase:
           name: school-portal-db
           property: connectionString
-
-databases:
-  - name: school-portal-db
-    databaseName: school_portal_db
-    plan: free
+      - key: PYTHON_VERSION
+        value: "3.11.9"          # <-- add this line
