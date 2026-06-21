@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+{% block title %}Notifications — Parent Portal — Nazarene School{% endblock %}
+{% block page_title %}Notifications{% endblock %}
+
+{% block content %}
+<div class="mb-8">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Notifications</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Stay updated with important alerts and messages</p>
+</div>
+
+{% if page_obj %}
+<div class="space-y-3">
+    {% for notification in page_obj %}
+    <div class="scholarly-glass hover:shadow-md transition-shadow {% if notification.status != 'read' %}border-l-4 border-l-scholarly-primary{% endif %}">
+        <div class="p-4 sm:p-5">
+            <div class="flex items-start gap-3">
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0
+                    {% if notification.notification_type == 'sms' %}bg-blue-100 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400
+                    {% elif notification.notification_type == 'email' %}bg-purple-100 dark:bg-purple-950/50 text-purple-600 dark:text-purple-400
+                    {% else %}bg-scholarly-primary-container text-scholarly-primary{% endif %}"
+                    {% if notification.notification_type != 'sms' and notification.notification_type != 'email' %}style="background: rgba(0,40,142,0.10); color: #00288e;"{% endif %}>
+                    <i class="fas {% if notification.notification_type == 'sms' %}fa-sms{% elif notification.notification_type == 'email' %}fa-envelope{% else %}fa-bell{% endif %}"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-2">
+                        <div>
+                            <h3 class="text-sm font-semibold text-slate-900 dark:text-white">{{ notification.title }}</h3>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ notification.created_at|date:"M d, Y H:i" }}</p>
+                        </div>
+                        {% if notification.status == 'pending' %}
+                            <span class="status-chip status-chip-pending text-[10px] flex-shrink-0">{{ notification.get_status_display }}</span>
+                        {% elif notification.status == 'sent' %}
+                            <span class="status-chip status-chip-verified text-[10px] flex-shrink-0">{{ notification.get_status_display }}</span>
+                        {% elif notification.status == 'read' %}
+                            <span class="status-chip status-chip-approved text-[10px] flex-shrink-0">{{ notification.get_status_display }}</span>
+                        {% else %}
+                            <span class="status-chip status-chip-rejected text-[10px] flex-shrink-0">{{ notification.get_status_display }}</span>
+                        {% endif %}
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">{{ notification.message|truncatewords:30 }}</p>
+                    {% if notification.related_student %}
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                        <i class="fas fa-user-graduate mr-1"></i>{{ notification.related_student.user.get_full_name }}
+                    </p>
+                    {% endif %}
+                    {% if notification.status != 'read' %}
+                    <div class="mt-2">
+                        <a href="{% url 'parent_notification_read' notification.pk %}" class="text-xs text-scholarly-primary hover:text-scholarly-secondary font-semibold transition-colors">
+                            <i class="fas fa-check mr-1"></i> Mark as read
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="flex items-center justify-center gap-2 mt-8">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}" class="scholarly-btn-ghost">
+        <i class="fas fa-chevron-left text-xs"></i> Previous
+    </a>
+    {% endif %}
+    <span class="text-sm text-slate-500 dark:text-slate-400 px-3">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}" class="scholarly-btn-ghost">
+        Next <i class="fas fa-chevron-right text-xs"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="scholarly-glass p-12 text-center">
+    <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+        <i class="fas fa-bell"></i>
+    </div>
+    <p class="text-sm font-medium text-slate-900 dark:text-white">No notifications yet</p>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Notifications will appear here when sent by the school.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,224 @@
+{% extends 'base.html' %}
+{% block title %}Results — {{ student.user.get_full_name }} — Nazarene School{% endblock %}
+{% block page_title %}{{ student.user.get_full_name }} — Results{% endblock %}
+
+{% block content %}
+<!-- Back Link -->
+<a href="{% url 'parent_dashboard' %}" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 mb-6 transition-colors">
+    <i class="fas fa-arrow-left"></i> Back to Dashboard
+</a>
+
+<!-- Student Header -->
+<div class="scholarly-glass mb-6 overflow-hidden">
+    <div class="px-5 sm:px-6 py-5 relative overflow-hidden text-white" style="background: linear-gradient(135deg, #00288e 0%, #1e40af 50%, #4e45d5 100%);">
+        <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+        <div class="relative flex items-center gap-4">
+            <div class="w-14 h-14 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-white text-2xl flex-shrink-0">
+                <i class="fas fa-user-graduate"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white">{{ student.user.get_full_name }}</h2>
+                <p class="text-white/80 text-sm font-mono">{{ student.student_id }}</p>
+                <p class="text-white/70 text-xs">{{ student.current_class.name|default:"Class not set" }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filter -->
+<div class="scholarly-glass p-5 sm:p-6 mb-6">
+    <form method="get" class="flex flex-col sm:flex-row gap-3">
+        <div class="flex-1">
+            <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Select Term</label>
+            <select name="term" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary" onchange="this.form.submit()">
+                {% for code, display in terms %}
+                <option value="{{ code }}" {% if selected_term == code %}selected{% endif %}>{{ display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="flex items-end">
+            <a href="{% url 'parent_child_results' student.student_id %}" class="scholarly-btn-ghost">Clear</a>
+        </div>
+    </form>
+</div>
+
+<!-- Child Subjects -->
+{% if assigned_subjects %}
+<div class="scholarly-glass mb-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-book text-scholarly-primary"></i> Child Subjects</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">All subjects {{ student.user.first_name }} is currently taking</p>
+    </div>
+    <div class="p-5 sm:p-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+            <h3 class="text-xs font-semibold text-emerald-600 dark:text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <i class="fas fa-lock"></i> Compulsory
+            </h3>
+            <ul class="space-y-1.5">
+                {% for s in compulsory_subjects %}
+                    <li class="flex items-center gap-2 text-sm">
+                        <i class="fas fa-check-circle text-emerald-500 text-xs"></i>
+                        <span class="text-slate-900 dark:text-white">{{ s.name }}</span>
+                        <span class="text-xs text-slate-500">({{ s.code }})</span>
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div>
+            <h3 class="text-xs font-semibold text-sky-600 dark:text-sky-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                <i class="fas fa-book-open"></i> Electives
+            </h3>
+            <ul class="space-y-1.5">
+                {% for s in elective_subjects %}
+                    <li class="flex items-center gap-2 text-sm">
+                        <i class="fas fa-book text-sky-500 text-xs"></i>
+                        <span class="text-slate-900 dark:text-white">{{ s.name }}</span>
+                        <span class="text-xs text-slate-500">({{ s.code }})</span>
+                    </li>
+                {% empty %}
+                    <li class="text-xs text-slate-500">No electives yet</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Performance Chart -->
+{% if chart_data != '{}' and chart_data != '{"labels": [], "data": []}' %}
+<div class="scholarly-glass mb-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-chart-line text-scholarly-primary"></i> Performance Trend</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Average scores across terms</p>
+    </div>
+    <div class="p-5 sm:p-6">
+        <div class="relative h-64 sm:h-72">
+            <canvas id="performanceChart"></canvas>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Results Table -->
+{% if results %}
+<div class="scholarly-glass overflow-hidden">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+        <div>
+            <h3 class="scholarly-section-title"><i class="fas fa-table text-scholarly-primary"></i> {% if selected_term %}{{ selected_term|upper }} Term Results{% else %}All Results{% endif %}</h3>
+        </div>
+        <div class="text-right">
+            <p class="text-2xl font-bold text-scholarly-primary">{{ overall_average }}%</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400">Overall Average</p>
+        </div>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead>
+                <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200/60 dark:border-slate-700/60">
+                    <th class="text-left py-3 px-4 sm:px-6 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">Subject</th>
+                    <th class="text-center py-3 px-2 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">Marks</th>
+                    <th class="text-center py-3 px-2 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">Grade</th>
+                    <th class="hidden sm:table-cell text-center py-3 px-4 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">Term</th>
+                    <th class="hidden sm:table-cell text-center py-3 px-4 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">Session</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+                {% for result in results %}
+                <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                    <td class="py-3 px-4 sm:px-6 font-medium text-slate-900 dark:text-white">{{ result.subject.name }}</td>
+                    <td class="py-3 px-2 text-center font-semibold
+                        {% if result.marks >= 75 %}text-emerald-600 dark:text-emerald-400
+                        {% elif result.marks >= 50 %}text-scholarly-primary
+                        {% elif result.marks >= 40 %}text-amber-600 dark:text-amber-400
+                        {% else %}text-red-600 dark:text-red-400{% endif %}">{{ result.marks }}</td>
+                    <td class="py-3 px-2 text-center">
+                        <span class="inline-flex items-center justify-center w-8 h-8 rounded-lg font-bold text-sm
+                            {% if result.grade == 'A' %}bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400
+                            {% elif result.grade == 'B' %}bg-scholarly-primary-container text-scholarly-primary
+                            {% elif result.grade == 'C' %}bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:text-sky-400
+                            {% elif result.grade == 'D' %}bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400
+                            {% else %}bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400{% endif %}">
+                            {{ result.grade }}
+                        </span>
+                    </td>
+                    <td class="hidden sm:table-cell py-3 px-4 text-center text-slate-500 dark:text-slate-400">{{ result.get_term_display }}</td>
+                    <td class="hidden sm:table-cell py-3 px-4 text-center text-slate-500 dark:text-slate-400">{{ result.session }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<div class="scholarly-glass p-12 text-center">
+    <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+        <i class="fas fa-file-alt"></i>
+    </div>
+    <p class="text-sm font-medium text-slate-900 dark:text-white">No results published yet</p>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Check back later when results are available.</p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if chart_data and chart_data != '{}' and chart_data != '{"labels": [], "data": []}' %}
+{{ chart_data|json_script:"child-chart-data" }}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        try {
+            const chartData = JSON.parse(document.getElementById('child-chart-data').textContent);
+            const ctx = document.getElementById('performanceChart');
+            if (ctx && chartData.labels && chartData.labels.length > 0) {
+                var styles = getComputedStyle(document.documentElement);
+                var primary = styles.getPropertyValue('--scholarly-primary').trim() || '#00288e';
+                var tickColor = document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#444653';
+                var gridColor = document.documentElement.classList.contains('dark') ? 'rgba(148,163,184,0.15)' : 'rgba(0,0,0,0.05)';
+                var grad = ctx.getContext('2d').createLinearGradient(0, 0, 0, 280);
+                grad.addColorStop(0, 'rgba(78, 69, 213, 0.4)');
+                grad.addColorStop(1, 'rgba(0, 40, 142, 0.05)');
+                new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: chartData.labels,
+                        datasets: [{
+                            label: 'Average Marks',
+                            data: chartData.data,
+                            borderColor: primary,
+                            backgroundColor: grad,
+                            borderWidth: 3,
+                            pointRadius: 6,
+                            pointBackgroundColor: '#fff',
+                            pointBorderColor: primary,
+                            pointBorderWidth: 3,
+                            tension: 0.4,
+                            fill: true
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: { display: false },
+                            tooltip: {
+                                backgroundColor: 'rgba(15,23,42,0.9)',
+                                padding: 12,
+                                cornerRadius: 10,
+                                callbacks: { label: function(ctx) { return ctx.parsed.y.toFixed(1) + '%'; } }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true, max: 100,
+                                grid: { color: gridColor },
+                                ticks: { callback: function(v) { return v + '%'; }, font: { size: 11 }, color: tickColor }
+                            },
+                            x: { grid: { display: false }, ticks: { font: { size: 12, weight: '600' }, color: tickColor } }
+                        }
+                    }
+                });
+            }
+        } catch(e) {}
+    });
+</script>
+{% endif %}
+{% endblock %}

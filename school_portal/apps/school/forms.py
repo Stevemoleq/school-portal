@@ -11,4 +11,4 @@ class ClassForm(forms.ModelForm):
 class SubjectForm(forms.ModelForm):
     class Meta:
         model = Subject
-        fields = ['name', 'code', 'class_id']
+        fields = ['name', 'code', 'assigned_class']

@@ -1,5 +1,4 @@
 from django.db import models
-from django.db import models
 from django.contrib.auth.models import User
 
 class Announcement(models.Model):
@@ -7,6 +6,7 @@ class Announcement(models.Model):
         ('all', 'Everyone'),
         ('students', 'Students Only'),
         ('teachers', 'Teachers Only'),
+        ('parents', 'Parents Only'),
     ]
     title = models.CharField(max_length=200)
     content = models.TextField()

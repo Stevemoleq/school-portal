@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}{{ receipt.receipt_number }} — Receipt{% endblock %}
+{% block page_title %}Receipt{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+        <p class="text-xs text-slate-500 dark:text-slate-400">Receipt</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-1 font-mono">{{ receipt.receipt_number }}</h1>
+    </div>
+    <a href="{% url 'fees:receipt_pdf' receipt.receipt_number %}" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold text-sm transition-colors">
+        <i class="fas fa-file-pdf"></i> Download PDF
+    </a>
+</div>
+
+<div class="scholarly-glass max-w-2xl mx-auto p-6 sm:p-8 print:shadow-none print:border-0">
+    <div class="text-center pb-6 border-b-2 border-slate-900 dark:border-white">
+        <div class="w-14 h-14 bg-scholarly-primary text-white rounded-2xl flex items-center justify-center text-2xl mx-auto mb-3">
+            <i class="fas fa-graduation-cap"></i>
+        </div>
+        <h2 class="text-xl font-extrabold text-scholarly-primary tracking-wider">NAZARENE SECONDARY SCHOOL</h2>
+        <p class="text-xs text-slate-500 uppercase tracking-widest mt-1">Excellence & Integrity</p>
+    </div>
+
+    <div class="text-center my-4">
+        <p class="text-sm font-bold text-slate-900 dark:text-white tracking-wider">OFFICIAL FEE PAYMENT RECEIPT</p>
+    </div>
+
+    <div class="grid grid-cols-2 gap-4 text-sm my-6">
+        <div><p class="text-xs text-slate-500">Receipt No.</p><p class="font-bold font-mono text-slate-900 dark:text-white">{{ receipt.receipt_number }}</p></div>
+        <div><p class="text-xs text-slate-500">Date Issued</p><p class="font-semibold text-slate-900 dark:text-white">{{ receipt.date_issued|date:"M d, Y H:i" }}</p></div>
+        <div><p class="text-xs text-slate-500">Student ID</p><p class="font-mono font-semibold text-slate-900 dark:text-white">{{ receipt.student_id }}</p></div>
+        <div><p class="text-xs text-slate-500">Term / Year</p><p class="font-semibold text-slate-900 dark:text-white">{{ receipt.get_term_display }} · {{ receipt.academic_year }}</p></div>
+        <div class="col-span-2"><p class="text-xs text-slate-500">Student Name</p><p class="font-bold text-slate-900 dark:text-white">{{ receipt.student_name }}</p></div>
+        <div><p class="text-xs text-slate-500">Bank</p><p class="font-semibold text-slate-900 dark:text-white">{{ receipt.payment.get_bank_name_display }}</p></div>
+        <div><p class="text-xs text-slate-500">Bank Reference</p><p class="font-mono font-semibold text-slate-900 dark:text-white">{{ receipt.payment.transaction_reference }}</p></div>
+        <div><p class="text-xs text-slate-500">Deposit Date</p><p class="font-semibold text-slate-900 dark:text-white">{{ receipt.payment.payment_date|date:"M d, Y" }}</p></div>
+        <div><p class="text-xs text-slate-500">Issued By</p><p class="font-semibold text-slate-900 dark:text-white">{{ receipt.issued_by.get_full_name|default:"—" }}</p></div>
+    </div>
+
+    <table class="w-full text-sm border-t border-b border-slate-200/60 dark:border-slate-700/60">
+        <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% if receipt.invoice %}
+            <tr><td class="py-2 text-slate-600 dark:text-slate-400">Total Invoice</td><td class="py-2 text-right font-semibold text-slate-900 dark:text-white">MWK {{ receipt.invoice.total_amount|floatformat:2 }}</td></tr>
+            <tr><td class="py-2 text-slate-600 dark:text-slate-400">Previously Paid</td><td class="py-2 text-right text-slate-700 dark:text-slate-300">MWK {{ receipt.invoice.paid_amount|add:"-"|add:receipt.amount|floatformat:2 }}</td></tr>
+            {% endif %}
+            <tr style="background: rgba(16,185,129,0.08);">
+                <td class="py-2 px-2 font-bold text-emerald-700 dark:text-emerald-400">Amount Paid</td>
+                <td class="py-2 px-2 text-right text-lg font-extrabold text-emerald-700 dark:text-emerald-400">MWK {{ receipt.amount|floatformat:2 }}</td>
+            </tr>
+            <tr><td class="py-2 font-bold text-slate-900 dark:text-white">Balance After Payment</td><td class="py-2 text-right font-bold {% if receipt.balance_after > 0 %}text-red-600 dark:text-red-400{% else %}text-emerald-600 dark:text-emerald-400{% endif %}">MWK {{ receipt.balance_after|floatformat:2 }}</td></tr>
+        </tbody>
+    </table>
+
+    <p class="text-[10px] text-slate-500 text-center mt-6">
+        This is a computer-generated receipt. No signature is required.<br>
+        Please retain for your records. Contact the school accountant with this receipt number for any queries.
+    </p>
+</div>
+{% endblock %}

@@ -1,61 +1,212 @@
 {% extends 'base.html' %}
-{% block title %}Admin Dashboard{% endblock %}
+{% block title %}Admin Dashboard — Nazarene School{% endblock %}
+{% block page_title %}Administration{% endblock %}
+
 {% block content %}
-<div class="mb-8">
-    <h1 class="text-3xl font-bold text-[#1e3c72]">Administration Panel</h1>
-    <p class="text-gray-600">Welcome back, {{ user.first_name }}. Here’s what’s happening.</p>
-</div>
-
-<!-- Stats cards -->
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-    <div class="bg-white rounded-xl shadow-md p-6 text-center">
-        <div class="text-4xl font-bold text-[#1e3c72]">{{ student_count }}</div>
-        <div class="text-gray-600">Students</div>
-        <a href="/admin/accounts/student/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
-    </div>
-    <div class="bg-white rounded-xl shadow-md p-6 text-center">
-        <div class="text-4xl font-bold text-[#1e3c72]">{{ teacher_count }}</div>
-        <div class="text-gray-600">Teachers</div>
-        <a href="/admin/accounts/teacher/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
-    </div>
-    <div class="bg-white rounded-xl shadow-md p-6 text-center">
-        <div class="text-4xl font-bold text-[#1e3c72]">{{ class_count }}</div>
-        <div class="text-gray-600">Classes</div>
-        <a href="/admin/school/class/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
-    </div>
-    <div class="bg-white rounded-xl shadow-md p-6 text-center">
-        <div class="text-4xl font-bold text-[#1e3c72]">{{ subject_count }}</div>
-        <div class="text-gray-600">Subjects</div>
-        <a href="/admin/school/subject/" class="mt-2 inline-block text-sm text-[#f39c12] hover:underline">Manage</a>
+<div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-6 text-white scholarly-bento-primary" style="background: linear-gradient(135deg, #00288e 0%, #4e45d5 50%, #7c3aed 100%); border: none;">
+    <div class="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-white/8 blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-16 -left-16 w-64 h-64 rounded-full bg-white/5 blur-2xl pointer-events-none"></div>
+    <div class="relative flex items-center gap-4 min-w-0">
+        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl sm:text-3xl text-white flex-shrink-0">
+            <i class="fas fa-user-shield"></i>
+        </div>
+        <div class="min-w-0">
+            <p class="text-white/70 text-sm font-medium">Welcome back</p>
+            <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1 truncate">{{ user.first_name|default:"Admin" }}</h1>
+            <p class="text-white/60 text-sm mt-1">Here's what's happening at your school today.</p>
+        </div>
     </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-    <!-- Recent Results -->
-    <div class="bg-white rounded-xl shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">Recent Results</h2>
-        <p class="text-3xl font-bold text-[#1e3c72]">{{ result_count }}</p>
-        <p class="text-gray-600">total results uploaded</p>
-        <a href="/admin/results/result/" class="mt-4 inline-block text-[#1e3c72] hover:text-[#f39c12] transition">View all →</a>
-    </div>
-    <!-- Announcements -->
-    <div class="bg-white rounded-xl shadow-md p-6">
-        <h2 class="text-xl font-semibold text-gray-800 mb-2">Announcements</h2>
-        <p class="text-3xl font-bold text-[#1e3c72]">{{ announcement_count }}</p>
-        <p class="text-gray-600">total announcements</p>
-        <a href="/admin/announcements/announcement/" class="mt-4 inline-block text-[#1e3c72] hover:text-[#f39c12] transition">Manage →</a>
-    </div>
+<div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
+    <a href="{% url 'admin:accounts_student_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-scholarly-primary-container text-scholarly-on-container flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-user-graduate text-scholarly-primary"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Students</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ student_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:accounts_teacher_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-chalkboard-user text-emerald-600 dark:text-emerald-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Teachers</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ teacher_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:parents_parent_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-950/50 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-users text-teal-600 dark:text-teal-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Parents</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ parent_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:accounts_class_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/50 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-school text-sky-600 dark:text-sky-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Classes</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ class_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:accounts_subject_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/50 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-book text-amber-600 dark:text-amber-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Subjects</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ subject_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:results_result_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/50 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-file-alt text-purple-600 dark:text-purple-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Results</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ result_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:announcements_announcement_changelist' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-950/50 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-bullhorn text-pink-600 dark:text-pink-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">News</p>
+        </div>
+        <p class="text-2xl font-bold text-scholarly-primary tracking-tight">{{ announcement_count }}</p>
+    </a>
+
+    <a href="{% url 'admin:index' %}" class="scholarly-glass p-5 hover:shadow-md transition-shadow group">
+        <div class="flex items-center gap-3 mb-3">
+            <div class="w-10 h-10 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center flex-shrink-0">
+                <i class="fas fa-cog text-slate-600 dark:text-slate-400"></i>
+            </div>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider">Admin</p>
+        </div>
+        <p class="text-sm font-semibold text-scholarly-primary">Open Panel <i class="fas fa-arrow-right text-xs ml-1"></i></p>
+    </a>
 </div>
 
-<!-- Quick Actions -->
-<div class="bg-white rounded-xl shadow-md p-6">
-    <h2 class="text-xl font-semibold text-gray-800 mb-4">Quick Actions</h2>
-    <div class="flex flex-wrap gap-3">
-        <a href="/admin/accounts/student/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Student</a>
-        <a href="/admin/accounts/teacher/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Teacher</a>
-        <a href="/admin/school/class/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Class</a>
-        <a href="/admin/school/subject/add/" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-4 py-2 rounded transition">➕ Add Subject</a>
-        <a href="/admin/results/result/add/" class="bg-[#f39c12] hover:bg-[#e08e0b] text-white px-4 py-2 rounded transition">📝 Upload Results</a>
+<div class="scholarly-glass">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h2 class="scholarly-section-title"><i class="fas fa-bolt text-scholarly-primary"></i> Quick Actions</h2>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Common management tasks</p>
+    </div>
+    <div class="p-5 sm:p-6">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            <a href="{% url 'admin:accounts_student_add' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-scholarly-primary-container/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-scholarly-primary-container text-scholarly-on-container flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user-plus text-scholarly-primary"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Add Student</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Register a new student</p>
+                </div>
+            </a>
+
+            <a href="{% url 'teacher_create' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user-tie text-emerald-600 dark:text-emerald-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Add Teacher</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Register a new teacher</p>
+                </div>
+            </a>
+
+            <a href="{% url 'school_class_create' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-sky-50 dark:hover:bg-sky-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-plus-circle text-sky-600 dark:text-sky-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Add Class</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Create a new class</p>
+                </div>
+            </a>
+
+            <a href="{% url 'school_subject_create' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-amber-50 dark:hover:bg-amber-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-book-open text-amber-600 dark:text-amber-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Add Subject</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Create a new subject</p>
+                </div>
+            </a>
+
+            <a href="{% url 'admin:parents_parent_add' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-teal-50 dark:hover:bg-teal-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-user-plus text-teal-600 dark:text-teal-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Add Parent</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Register a parent/guardian</p>
+                </div>
+            </a>
+
+            <a href="{% url 'admin:results_result_add' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-purple-50 dark:hover:bg-purple-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-file-pen text-purple-600 dark:text-purple-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Upload Results</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Enter student grades</p>
+                </div>
+            </a>
+
+            <a href="{% url 'announcement_create' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-pink-50 dark:hover:bg-pink-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-pink-100 dark:bg-pink-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-bullhorn text-pink-600 dark:text-pink-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Post Announcement</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Share school news</p>
+                </div>
+            </a>
+
+            <a href="{% url 'teacher_list' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-emerald-50 dark:hover:bg-emerald-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-chalkboard-user text-emerald-600 dark:text-emerald-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Manage Teachers</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">View, search, and edit teachers</p>
+                </div>
+            </a>
+
+            <a href="{% url 'student_subject_search' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-violet-50 dark:hover:bg-violet-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-violet-100 dark:bg-violet-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-book-reader text-violet-600 dark:text-violet-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Subject Assignments</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">Assign elective subjects to students</p>
+                </div>
+            </a>
+
+            <a href="{% url 'admin:parents_parent_changelist' %}" class="flex items-center gap-3 p-3 rounded-xl bg-slate-50/50 dark:bg-slate-800/30 hover:bg-teal-50 dark:hover:bg-teal-950/30 border border-slate-200/60 dark:border-slate-700/60 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-teal-100 dark:bg-teal-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-users-gear text-teal-600 dark:text-teal-400"></i>
+                </div>
+                <div class="min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">Manage Parents</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">View and edit parent accounts</p>
+                </div>
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

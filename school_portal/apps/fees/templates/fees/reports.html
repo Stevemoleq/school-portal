@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block title %}Financial Reports — Fees{% endblock %}
+{% block page_title %}Financial Reports{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Financial Reports</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Track income, outstanding balances, and class-level performance.</p>
+</div>
+
+<div class="flex flex-wrap gap-2 mb-6">
+    {% for p, label in period_choices %}
+    <a href="?period={{ p }}" class="px-4 py-2 rounded-xl text-sm font-semibold transition-colors
+        {% if period == p %}bg-scholarly-primary text-white
+        {% else %}bg-white/70 dark:bg-slate-800/40 text-slate-600 dark:text-slate-400 border border-slate-200/60 dark:border-slate-700/60 hover:bg-slate-100 dark:hover:bg-slate-800{% endif %}">
+        {{ label }}
+    </a>
+    {% endfor %}
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+    <div class="relative overflow-hidden rounded-2xl p-5 sm:p-6 text-white" style="background: linear-gradient(135deg, #059669 0%, #10b981 100%);">
+        <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/8 blur-2xl pointer-events-none"></div>
+        <div class="relative">
+            <p class="text-xs text-white/80 uppercase tracking-wider">Total Collected ({{ period }})</p>
+            <p class="text-3xl sm:text-4xl font-extrabold mt-2">MWK {{ total_collected|floatformat:2 }}</p>
+            <p class="text-xs text-white/70 mt-1">From {{ start|date:"M d" }} to {{ end|date:"M d, Y" }}</p>
+        </div>
+    </div>
+    <div class="relative overflow-hidden rounded-2xl p-5 sm:p-6 text-white" style="background: linear-gradient(135deg, #dc2626 0%, #ef4444 100%);">
+        <div class="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-white/8 blur-2xl pointer-events-none"></div>
+        <div class="relative">
+            <p class="text-xs text-white/80 uppercase tracking-wider">Total Outstanding</p>
+            <p class="text-3xl sm:text-4xl font-extrabold mt-2">MWK {{ total_outstanding|floatformat:2 }}</p>
+            <p class="text-xs text-white/70 mt-1">All students, all terms</p>
+        </div>
+    </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h3 class="scholarly-section-title"><i class="fas fa-university text-scholarly-primary"></i> By Bank</h3>
+        </div>
+        {% if per_bank %}
+        <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% for b in per_bank %}
+            <div class="px-5 sm:px-6 py-3 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                <div>
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ b.bank_name|upper }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ b.count }} transaction{{ b.count|pluralize }}</p>
+                </div>
+                <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400">MWK {{ b.total|floatformat:0 }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No data for this period.</div>
+        {% endif %}
+    </div>
+
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h3 class="scholarly-section-title"><i class="fas fa-calendar text-scholarly-primary"></i> By Term</h3>
+        </div>
+        {% if per_term %}
+        <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% for t in per_term %}
+            <div class="px-5 sm:px-6 py-3 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                <div>
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ t.invoice__fee_structure__term|default:"—" }} · {{ t.invoice__fee_structure__session }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400">{{ t.count }} transaction{{ t.count|pluralize }}</p>
+                </div>
+                <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400">MWK {{ t.total|floatformat:0 }}</p>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No data for this period.</div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="scholarly-glass overflow-hidden mb-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-school text-scholarly-primary"></i> Class Summary</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200/60 dark:border-slate-700/60">
+                <tr>
+                    <th class="text-left py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Class</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Due</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Total Paid</th>
+                    <th class="text-right py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Balance</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+                {% for c in per_class %}
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                    <td class="py-3 px-6 font-semibold text-slate-900 dark:text-white">{{ c.fee_structure__target_class__name|default:"School-wide" }}</td>
+                    <td class="py-3 px-4 text-right text-slate-700 dark:text-slate-300">MWK {{ c.due|floatformat:0 }}</td>
+                    <td class="py-3 px-4 text-right text-emerald-600 dark:text-emerald-400 font-semibold">MWK {{ c.paid|floatformat:0 }}</td>
+                    <td class="py-3 px-6 text-right font-bold text-red-600 dark:text-red-400">MWK {{ c.balance|floatformat:0 }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="4" class="px-6 py-8 text-center text-sm text-slate-500 dark:text-slate-400">No data</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="scholarly-glass overflow-hidden">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-exclamation-triangle text-red-500"></i> Top Outstanding Balances</h3>
+    </div>
+    <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+        {% for inv in outstanding %}
+        <a href="{% url 'fees:student_fee_detail' inv.student.student_id %}" class="flex items-center gap-3 px-5 sm:px-6 py-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ inv.student.user.get_full_name }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">{{ inv.student.student_id }} · {{ inv.fee_structure.get_term_display }} · {{ inv.fee_structure.session }}</p>
+            </div>
+            <p class="text-sm font-bold text-red-600 dark:text-red-400">MWK {{ inv.balance|floatformat:0 }}</p>
+        </a>
+        {% empty %}
+        <div class="px-6 py-8 text-center text-sm text-slate-500 dark:text-slate-400">All settled — great work!</div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

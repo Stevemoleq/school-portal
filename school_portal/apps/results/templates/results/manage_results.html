@@ -1,0 +1,238 @@
+{% extends 'base.html' %}
+{% block title %}Manage Results — {{ subject.name }}{% endblock %}
+{% block page_title %}Grade Management{% endblock %}
+
+{% block content %}
+<!-- Breadcrumb & Header -->
+<div class="mb-6">
+    <a href="{% url 'teacher_dashboard' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-scholarly-primary mb-3 transition-colors">
+        <i class="fas fa-arrow-left text-xs"></i> Back to Dashboard
+    </a>
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Grade Management</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">
+        <span class="font-medium text-slate-700 dark:text-slate-300">{{ student_class.name }}</span>
+        &middot;
+        <span class="font-medium text-slate-700 dark:text-slate-300">{{ subject.name }} ({{ subject.code }})</span>
+    </p>
+</div>
+
+<!-- Filters -->
+<div class="scholarly-glass mb-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-filter text-scholarly-primary"></i> Term & Session</h3>
+    </div>
+    <div class="p-5 sm:p-6">
+        <form method="get" class="flex flex-col sm:flex-row gap-3">
+            <div class="flex-1">
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Academic Term</label>
+                <select name="term" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                    {% for t in available_terms %}
+                        <option value="{{ t.term }}" data-session="{{ t.session }}"
+                            {% if selected_term == t.term and selected_session == t.session %}selected{% endif %}>
+                            {{ t.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="flex-1">
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Session</label>
+                <input type="text" name="session" value="{{ selected_session }}" placeholder="e.g., 2025-2026" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary" id="sessionInput">
+            </div>
+            <div class="flex items-end">
+                <button type="submit" class="scholarly-btn-primary w-full sm:w-auto">
+                    <i class="fas fa-sync-alt"></i> Load
+                </button>
+            </div>
+        </form>
+        <script>
+            document.querySelector('[name="term"]')?.addEventListener('change', function() {
+                var opt = this.options[this.selectedIndex];
+                if (opt && opt.dataset.session) {
+                    document.getElementById('sessionInput').value = opt.dataset.session;
+                }
+            });
+        </script>
+    </div>
+</div>
+
+<!-- Grades Table -->
+<form method="post" class="space-y-4">
+    {% csrf_token %}
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+            <h3 class="scholarly-section-title"><i class="fas fa-pen text-scholarly-primary"></i> Student Grades</h3>
+            {% if student_data %}
+            <span class="status-chip status-chip-approved">{{ student_data|length }} student{{ student_data|length|pluralize }}</span>
+            {% endif %}
+        </div>
+        {% if student_data %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-sm" id="gradesTable">
+                <thead>
+                    <tr class="bg-slate-50 dark:bg-slate-800/50 border-b border-slate-200/60 dark:border-slate-700/60">
+                        <th class="text-left py-3 px-4 sm:px-6 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider w-28">Reg No.</th>
+                        <th class="text-left py-3 px-2 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider">Student Name</th>
+                        <th class="text-center py-3 px-2 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider w-32">Marks</th>
+                        <th class="text-center py-3 px-2 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider w-20">Grade</th>
+                        <th class="text-center py-3 px-4 font-semibold text-slate-600 dark:text-slate-400 text-xs uppercase tracking-wider w-28">Status</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+                    {% for row in student_data %}
+                    <tr class="grade-row hover:bg-slate-50 dark:hover:bg-slate-800/30 transition-colors">
+                        <td data-label="Reg No." class="py-3 px-4 sm:px-6 font-mono text-xs font-semibold text-slate-900 dark:text-white">{{ row.student.registration_number }}</td>
+                        <td data-label="Student Name" class="py-3 px-2 font-medium text-slate-900 dark:text-white">{{ row.student.user.get_full_name }}</td>
+                        <td data-label="Marks" class="py-3 px-2 text-center">
+                            <input type="number" name="marks_{{ row.student.id }}"
+                                   value="{{ row.marks }}" min="0" max="100" step="any"
+                                   placeholder="—"
+                                   class="mark-input w-20 px-3 py-1.5 text-center rounded-lg border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary transition-all"
+                                   data-student-id="{{ row.student.id }}">
+                        </td>
+                        <td data-label="Grade" class="py-3 px-2 text-center">
+                            <span id="grade_{{ row.student.id }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg font-bold text-xs
+                                {% if row.grade == 'A' %}bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400
+                                {% elif row.grade == 'B' %}bg-scholarly-primary-container text-scholarly-primary
+                                {% elif row.grade == 'C' %}bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:text-sky-400
+                                {% elif row.grade == 'D' %}bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400
+                                {% elif row.grade == 'F' %}bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400
+                                {% else %}bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400{% endif %}">
+                                {{ row.grade|default:"—" }}
+                            </span>
+                        </td>
+                        <td data-label="Status" class="py-3 px-4 text-center">
+                            <label class="relative inline-flex items-center cursor-pointer">
+                                <input type="checkbox" name="publish_{{ row.student.id }}"
+                                       {% if row.is_published %}checked{% endif %}
+                                       class="sr-only peer">
+                                <div class="relative w-10 h-5 bg-slate-300 dark:bg-slate-700 rounded-full peer-checked:bg-emerald-500 transition-colors">
+                                    <span class="absolute top-0.5 left-0.5 w-4 h-4 bg-white rounded-full transition-transform peer-checked:translate-x-5"></span>
+                                </div>
+                                <span class="ml-2 text-[10px] font-semibold text-slate-500 dark:text-slate-400 peer-checked:text-emerald-600 dark:peer-checked:text-emerald-400 status-text">
+                                    {% if row.is_published %}Published{% else %}Draft{% endif %}
+                                </span>
+                            </label>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Footer -->
+        <div class="px-5 sm:px-6 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-50/50 dark:bg-slate-800/30">
+            <label class="flex items-center gap-2 text-xs text-slate-600 dark:text-slate-300 cursor-pointer">
+                <input type="checkbox" name="confirm_delete" value="1"
+                       class="rounded border-slate-300 text-rose-600 focus:ring-rose-500">
+                <span><i class="fas fa-info-circle mr-1 text-rose-500"></i> Confirm deletions — required to remove existing results when leaving a mark blank.</span>
+            </label>
+            <button type="submit" class="scholarly-btn-primary">
+                <i class="fas fa-save"></i> Save All Grades
+            </button>
+        </div>
+
+        {% else %}
+        <div class="p-12 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+                <i class="fas fa-user-slash"></i>
+            </div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">No students in this class</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Select a different class or add students first.</p>
+        </div>
+        {% endif %}
+    </div>
+</form>
+
+<!-- CSV Upload Section -->
+<div class="scholarly-glass mt-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <button type="button" onclick="document.getElementById('csvUploadSection').classList.toggle('hidden')" class="scholarly-section-title w-full flex items-center justify-between">
+            <span><i class="fas fa-file-csv text-scholarly-primary"></i> Bulk Import from CSV</span>
+            <i class="fas fa-chevron-down text-slate-400 text-xs transition-transform" id="csvChevron"></i>
+        </button>
+    </div>
+    <div id="csvUploadSection" class="hidden p-5 sm:p-6">
+        <div class="mb-4 p-4 rounded-xl bg-sky-50 dark:bg-sky-950/30 border border-sky-200 dark:border-sky-800">
+            <p class="text-sm font-semibold text-sky-800 dark:text-sky-300 mb-2">CSV Format</p>
+            <p class="text-xs text-sky-700 dark:text-sky-400 mb-2">Your CSV must have these columns:</p>
+            <code class="block text-xs bg-sky-100 dark:bg-sky-900/50 rounded-lg px-3 py-2 text-sky-900 dark:text-sky-200 font-mono">registration_number,marks,published</code>
+            <ul class="mt-2 text-xs text-sky-700 dark:text-sky-400 space-y-1">
+                <li><strong>registration_number</strong> — Student's registration number (e.g. SCH-001)</li>
+                <li><strong>marks</strong> — Score from 0 to 100</li>
+                <li><strong>published</strong> — Optional: TRUE/FALSE, YES/NO, or 1/0 (defaults to FALSE)</li>
+            </ul>
+            <p class="text-xs text-sky-600 dark:text-sky-500 mt-2">Existing results will be overwritten. Students not found in the CSV are skipped.</p>
+        </div>
+
+        <form method="post" enctype="multipart/form-data"
+              action="{% url 'upload_grades_csv' subject.id %}?term={{ selected_term }}&session={{ selected_session }}">
+            {% csrf_token %}
+            <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1">
+                    <input type="file" name="csv_file" accept=".csv" required
+                           class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-scholarly-primary file:text-white file:cursor-pointer hover:file:bg-scholarly-primary/90">
+                </div>
+                <button type="submit" class="scholarly-btn-primary">
+                    <i class="fas fa-upload"></i> Import Grades
+                </button>
+            </div>
+        </form>
+
+        <div class="mt-4">
+            <a href="{% url 'download_grades_template' subject.id %}?term={{ selected_term }}&session={{ selected_session }}"
+               class="inline-flex items-center gap-2 text-xs text-scholarly-primary hover:underline font-medium">
+                <i class="fas fa-download"></i> Download template CSV with enrolled students
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    function calculateGrade(marks) {
+        if (marks === '' || marks === null) return '—';
+        const m = parseFloat(marks);
+        if (isNaN(m) || m < 0 || m > 100) return '—';
+        if (m >= 75) return 'A';
+        if (m >= 60) return 'B';
+        if (m >= 50) return 'C';
+        if (m >= 40) return 'D';
+        return 'F';
+    }
+
+    function gradeClass(grade) {
+        if (grade === 'A') return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-400';
+        if (grade === 'B') return 'bg-scholarly-primary-container text-scholarly-primary';
+        if (grade === 'C') return 'bg-sky-100 text-sky-700 dark:bg-sky-950/50 dark:text-sky-400';
+        if (grade === 'D') return 'bg-amber-100 text-amber-700 dark:bg-amber-950/50 dark:text-amber-400';
+        if (grade === 'F') return 'bg-red-100 text-red-700 dark:bg-red-950/50 dark:text-red-400';
+        return 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400';
+    }
+
+    document.querySelectorAll('.mark-input').forEach(function(input) {
+        var studentId = input.getAttribute('data-student-id');
+        var badge = document.getElementById('grade_' + studentId);
+        if (badge) {
+            badge.textContent = badge.textContent.trim();
+            badge.className = 'inline-flex items-center justify-center w-8 h-8 rounded-lg font-bold text-xs ' + gradeClass(badge.textContent);
+        }
+        input.addEventListener('input', function() {
+            var g = calculateGrade(this.value);
+            if (badge) {
+                badge.textContent = g;
+                badge.className = 'inline-flex items-center justify-center w-8 h-8 rounded-lg font-bold text-xs ' + gradeClass(g);
+            }
+        });
+    });
+
+    document.querySelectorAll('input[type="checkbox"]').forEach(function(toggle) {
+        toggle.addEventListener('change', function() {
+            var statusText = this.closest('label').querySelector('.status-text');
+            if (statusText) statusText.textContent = this.checked ? 'Published' : 'Draft';
+        });
+    });
+});
+</script>
+{% endblock %}

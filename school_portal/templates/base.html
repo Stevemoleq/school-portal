@@ -1,409 +1,522 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 {% load static %}
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}Nazarene Secondary School{% endblock %}</title>
-    <!-- Tailwind CSS via CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Font Awesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Chart.js -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="theme-color" content="#4f46e5">
+    <meta name="description" content="Nazarene Secondary School Portal">
+    <title>{% block title %}Nazarene School{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/output.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-    <!-- AOS (Animate On Scroll) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.4/aos.js"></script>
-    <!-- Components CSS -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{% static 'css/components.css' %}">
-    <!-- Custom styles -->
     <style>
-        :root {
-            --primary: #1e3c72;
-            --secondary: #f39c12;
-            --success: #27ae60;
-            --danger: #e74c3c;
-            --warning: #e67e22;
-            --info: #3498db;
-        }
-        
-        * {
-            transition: background-color 0.3s ease, color 0.3s ease;
-        }
-        
-        /* Dark Mode */
-        html.dark {
-            color-scheme: dark;
-        }
-        
-        html.dark body {
-            @apply bg-gray-900 text-gray-100;
-        }
-        
-        html.dark nav {
-            @apply bg-gray-800 border-b border-gray-700;
-        }
-        
-        html.dark .card {
-            @apply bg-gray-800 border-gray-700;
-        }
-        
-        html.dark .btn-secondary {
-            @apply bg-gray-700 hover:bg-gray-600;
-        }
-        
-        /* Card styles */
-        .card {
-            @apply bg-white rounded-lg shadow-md border border-gray-200 transition-all duration-300 hover:shadow-lg;
-        }
-        
-        .card:hover {
-            @apply -translate-y-1;
-        }
-        
-        /* Buttons */
-        .btn {
-            @apply px-4 py-2 rounded-lg font-medium transition-all duration-200 inline-flex items-center gap-2;
-        }
-        
-        .btn-primary {
-            @apply bg-blue-600 text-white hover:bg-blue-700 active:scale-95;
-        }
-        
-        .btn-secondary {
-            @apply bg-gray-200 text-gray-800 hover:bg-gray-300 active:scale-95;
-        }
-        
-        .btn-sm {
-            @apply px-3 py-1 text-sm;
-        }
-        
-        /* Badge styles */
-        .badge {
-            @apply inline-block px-3 py-1 rounded-full text-sm font-medium;
-        }
-        
-        .badge-primary {
-            @apply bg-blue-100 text-blue-800;
-        }
-        
-        .badge-success {
-            @apply bg-green-100 text-green-800;
-        }
-        
-        .badge-warning {
-            @apply bg-yellow-100 text-yellow-800;
-        }
-        
-        .badge-danger {
-            @apply bg-red-100 text-red-800;
-        }
-        
-        /* Animations */
-        @keyframes slideInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-        
-        @keyframes pulse-glow {
-            0%, 100% {
-                box-shadow: 0 0 5px rgba(59, 130, 246, 0.5);
-            }
-            50% {
-                box-shadow: 0 0 15px rgba(59, 130, 246, 0.8);
-            }
-        }
-        
-        .animate-slide-in {
-            animation: slideInDown 0.3s ease-out;
-        }
-        
-        .animate-fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .pulse-glow {
-            animation: pulse-glow 2s infinite;
-        }
-        
-        /* Toast Notifications */
-        .toast {
-            @apply fixed bottom-4 right-4 px-6 py-3 rounded-lg text-white font-medium shadow-lg z-50 flex items-center gap-3;
-            animation: slideInDown 0.3s ease-out;
-        }
-        
-        .toast-success {
-            @apply bg-green-500;
-        }
-        
-        .toast-error {
-            @apply bg-red-500;
-        }
-        
-        .toast-info {
-            @apply bg-blue-500;
-        }
-        
-        .toast-warning {
-            @apply bg-yellow-500;
-        }
-        
-        /* Loading spinner */
-        .spinner {
-            @apply inline-block h-4 w-4 animate-spin rounded-full border-2 border-solid border-current border-r-transparent;
-        }
-        
-        /* Form styles */
-        input, textarea, select {
-            @apply transition-all duration-200;
-        }
-        
-        input:focus, textarea:focus, select:focus {
-            @apply ring-2 ring-blue-500 ring-opacity-50;
-        }
-        
-        html.dark input, html.dark textarea, html.dark select {
-            @apply bg-gray-700 border-gray-600 text-gray-100;
-        }
-        
-        /* Smooth scrolling */
-        html {
-            scroll-behavior: smooth;
-        }
+        .fa-fallback { display: none; }
+        .fa-icons-missing .fa-fallback { display: inline-flex !important; }
+        .fa-icons-missing [class*="fa-"]:not(.fa-fallback) { display: none !important; }
+    </style>
+    {% load fees_tags %}
+
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+        html { scroll-behavior: smooth; }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body class="h-full scholarly-bg text-surface-800 dark:text-surface-200 antialiased">
 
-    <!-- Dark Mode Toggle -->
-    <div class="fixed top-4 right-4 z-40">
-        <button id="darkModeToggle" class="bg-white dark:bg-gray-800 p-2 rounded-full shadow-md hover:shadow-lg transition-all duration-200" title="Toggle dark mode">
-            <i class="fas fa-moon text-gray-800 dark:text-yellow-400"></i>
-        </button>
+    <!-- Skip Nav (a11y) -->
+    <a href="#main-content" class="skip-link">Skip to main content</a>
+
+    {% if user.is_authenticated %}
+    <!-- Mobile Overlay -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/40 z-40 hidden lg:hidden transition-opacity duration-300" onclick="closeSidebar()" aria-hidden="true"></div>
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside id="sidebar" role="navigation" aria-label="Main navigation"
+           class="fixed top-0 left-0 h-full bg-white dark:bg-surface-900 border-r border-surface-200 dark:border-surface-800 z-50 flex flex-col w-64 -translate-x-full lg:translate-x-0 shadow-2xl lg:shadow-sm transition-transform duration-300">
+
+        <!-- Logo Header -->
+        <div class="h-16 px-5 border-b border-surface-200 dark:border-surface-800 flex-shrink-0 flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-9 h-9 flex-shrink-0 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-md shadow-brand-500/20">
+                    <i class="fas fa-graduation-cap text-white text-sm"></i>
+                </div>
+                <div class="min-w-0 sidebar-logo-text">
+                    <h1 class="text-sm font-bold text-surface-900 dark:text-white leading-tight truncate">Nazarene School</h1>
+                    <p class="text-[10px] font-semibold text-brand-600 dark:text-brand-400 uppercase tracking-wider mt-0.5">
+                        {% if user.parent %}Parent Portal{% elif user.teacher %}Teacher Portal{% elif user.student %}Student Portal{% elif user.is_staff %}Admin Portal{% endif %}
+                    </p>
+                </div>
+            </div>
+            <button onclick="SidebarManager.toggle()" class="hidden lg:flex w-7 h-7 items-center justify-center rounded-lg hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors flex-shrink-0" aria-label="Collapse sidebar">
+                <i id="collapseIcon" class="fas fa-chevron-left text-[10px] text-surface-400"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-4 px-3" aria-label="Sidebar links" id="sidebarNav">
+            {% if user.is_superuser or user.is_staff and not user|is_accountant %}
+                <!-- Admin Nav -->
+                <div class="space-y-1">
+                    <a href="{% url 'admin_dashboard' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'admin_dashboard' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'admin_dashboard' %}page{% endif %}">
+                        <span class="sidebar-nav-icon bg-brand-100 text-brand-600 dark:bg-brand-950/50 dark:text-brand-400"><i class="fas fa-th-large"></i></span>
+                        <span class="sidebar-label flex-1">Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Management</div>
+                <div class="space-y-1">
+                    <a href="{% url 'admin:accounts_student_changelist' %}" class="sidebar-nav-item" title="Students">
+                        <span class="sidebar-nav-icon bg-sky-100 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400"><i class="fas fa-user-graduate"></i></span>
+                        <span class="sidebar-label flex-1">Students</span>
+                    </a>
+                    <a href="{% url 'admin:accounts_teacher_changelist' %}" class="sidebar-nav-item" title="Teachers">
+                        <span class="sidebar-nav-icon bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"><i class="fas fa-chalkboard-user"></i></span>
+                        <span class="sidebar-label flex-1">Teachers</span>
+                    </a>
+                    <a href="{% url 'accountant_list' %}" class="sidebar-nav-item" title="Accountants">
+                        <span class="sidebar-nav-icon bg-cyan-100 text-cyan-600 dark:bg-cyan-950/50 dark:text-cyan-400"><i class="fas fa-calculator"></i></span>
+                        <span class="sidebar-label flex-1">Accountants</span>
+                    </a>
+                    <a href="{% url 'admin:parents_parent_changelist' %}" class="sidebar-nav-item" title="Parents">
+                        <span class="sidebar-nav-icon bg-teal-100 text-teal-600 dark:bg-teal-950/50 dark:text-teal-400"><i class="fas fa-users"></i></span>
+                        <span class="sidebar-label flex-1">Parents</span>
+                    </a>
+                    <a href="{% url 'admin:accounts_class_changelist' %}" class="sidebar-nav-item" title="Classes">
+                        <span class="sidebar-nav-icon bg-indigo-100 text-indigo-600 dark:bg-indigo-950/50 dark:text-indigo-400"><i class="fas fa-school"></i></span>
+                        <span class="sidebar-label flex-1">Classes</span>
+                    </a>
+                    <a href="{% url 'admin:accounts_subject_changelist' %}" class="sidebar-nav-item" title="Subjects">
+                        <span class="sidebar-nav-icon bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"><i class="fas fa-book"></i></span>
+                        <span class="sidebar-label flex-1">Subjects</span>
+                    </a>
+                    <a href="{% url 'admin:results_result_changelist' %}" class="sidebar-nav-item" title="Results">
+                        <span class="sidebar-nav-icon bg-purple-100 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400"><i class="fas fa-file-alt"></i></span>
+                        <span class="sidebar-label flex-1">Results</span>
+                    </a>
+                    <a href="{% url 'admin:announcements_announcement_changelist' %}" class="sidebar-nav-item" title="Announcements">
+                        <span class="sidebar-nav-icon bg-pink-100 text-pink-600 dark:bg-pink-950/50 dark:text-pink-400"><i class="fas fa-bullhorn"></i></span>
+                        <span class="sidebar-label flex-1">Announcements</span>
+                    </a>
+                    <a href="{% url 'admin_terms' %}" class="sidebar-nav-item" title="Terms">
+                        <span class="sidebar-nav-icon bg-orange-100 text-orange-600 dark:bg-orange-950/50 dark:text-orange-400"><i class="fas fa-calendar-alt"></i></span>
+                        <span class="sidebar-label flex-1">Academic Terms</span>
+                    </a>
+                </div>
+
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Finances</div>
+                <div class="space-y-1">
+                    <a href="{% url 'fees:accountant_dashboard' %}" class="sidebar-nav-item" title="Fees">
+                        <span class="sidebar-nav-icon bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"><i class="fas fa-coins"></i></span>
+                        <span class="sidebar-label flex-1">Fees & Payments</span>
+                    </a>
+                    <a href="{% url 'admin:parents_feestructure_changelist' %}" class="sidebar-nav-item" title="Fee structures">
+                        <span class="sidebar-nav-icon bg-sky-100 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400"><i class="fas fa-file-invoice-dollar"></i></span>
+                        <span class="sidebar-label flex-1">Fee Structures</span>
+                    </a>
+                </div>
+
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Account</div>
+                <div class="space-y-1">
+                    <a href="{% url 'profile' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" title="My Profile">
+                        <span class="sidebar-nav-icon bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"><i class="fas fa-user-circle"></i></span>
+                        <span class="sidebar-label flex-1">My Profile</span>
+                    </a>
+                </div>
+
+            {% elif user|is_accountant %}
+                <!-- Accountant Nav -->
+                <div class="space-y-1">
+                    <a href="{% url 'fees:accountant_dashboard' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'accountant_dashboard' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'accountant_dashboard' %}page{% endif %}">
+                        <span class="sidebar-nav-icon bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"><i class="fas fa-chart-pie"></i></span>
+                        <span class="sidebar-label flex-1">Dashboard</span>
+                    </a>
+                </div>
+
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Fees</div>
+                <div class="space-y-1">
+                    <a href="{% url 'fees:search_student' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'search_student' %}active{% endif %}">
+                        <span class="sidebar-nav-icon bg-brand-100 text-brand-600 dark:bg-brand-950/50 dark:text-brand-400"><i class="fas fa-search"></i></span>
+                        <span class="sidebar-label flex-1">Search Student</span>
+                    </a>
+                    <a href="{% url 'fees:fee_structure_list' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'fee_structure_list' or request.resolver_match.url_name == 'fee_structure_create' %}active{% endif %}">
+                        <span class="sidebar-nav-icon bg-cyan-100 text-cyan-600 dark:bg-cyan-950/50 dark:text-cyan-400"><i class="fas fa-file-invoice-dollar"></i></span>
+                        <span class="sidebar-label flex-1">Fee Structures</span>
+                    </a>
+                    <a href="{% url 'fees:accountant_verify_list' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'accountant_verify_list' or request.resolver_match.url_name == 'verify_payment' %}active{% endif %}">
+                        <span class="sidebar-nav-icon bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"><i class="fas fa-check-double"></i></span>
+                        <span class="sidebar-label flex-1">Verify Payments</span>
+                    </a>
+                    <a href="{% url 'fees:reports' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
+                        <span class="sidebar-nav-icon bg-sky-100 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400"><i class="fas fa-chart-bar"></i></span>
+                        <span class="sidebar-label flex-1">Reports</span>
+                    </a>
+                </div>
+
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Account</div>
+                <div class="space-y-1">
+                    <a href="{% url 'fees:accountant_profile' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'accountant_profile' %}active{% endif %}">
+                        <span class="sidebar-nav-icon bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"><i class="fas fa-user-circle"></i></span>
+                        <span class="sidebar-label flex-1">My Profile</span>
+                    </a>
+                </div>
+
+            {% elif user.teacher %}
+                <!-- Teacher Nav -->
+                <div class="space-y-1">
+                    <a href="{% url 'teacher_dashboard' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'teacher_dashboard' %}page{% endif %}" title="Dashboard">
+                        <span class="sidebar-nav-icon bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"><i class="fas fa-th-large"></i></span>
+                        <span class="sidebar-label flex-1">Dashboard</span>
+                    </a>
+                    <a href="{% url 'announcement_list' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}" title="Announcements">
+                        <span class="sidebar-nav-icon bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"><i class="fas fa-bullhorn"></i></span>
+                        <span class="sidebar-label flex-1">Announcements</span>
+                    </a>
+                </div>
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Account</div>
+                <div class="space-y-1">
+                    <a href="{% url 'profile' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" title="My Profile">
+                        <span class="sidebar-nav-icon bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"><i class="fas fa-user-circle"></i></span>
+                        <span class="sidebar-label flex-1">My Profile</span>
+                    </a>
+                </div>
+
+            {% elif user.student %}
+                <!-- Student Nav -->
+                <div class="space-y-1">
+                    <a href="{% url 'student_dashboard' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'student_dashboard' %}page{% endif %}" title="Dashboard">
+                        <span class="sidebar-nav-icon bg-brand-100 text-brand-600 dark:bg-brand-950/50 dark:text-brand-400"><i class="fas fa-th-large"></i></span>
+                        <span class="sidebar-label flex-1">Dashboard</span>
+                    </a>
+                    <a href="{% url 'register_subjects' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'register_subjects' %}active{% endif %}" title="Choose your subjects each term">
+                        <span class="sidebar-nav-icon bg-purple-100 text-purple-600 dark:bg-purple-950/50 dark:text-purple-400"><i class="fas fa-pen"></i></span>
+                        <span class="sidebar-label flex-1">Register Subjects</span>
+                    </a>
+                    <a href="{% url 'student_results' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'student_results' %}active{% endif %}" title="My Results">
+                        <span class="sidebar-nav-icon bg-sky-100 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400"><i class="fas fa-chart-bar"></i></span>
+                        <span class="sidebar-label flex-1">My Results</span>
+                    </a>
+                    <a href="{% url 'fees:student_fees' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'student_fees' %}active{% endif %}" title="My Fees">
+                        <span class="sidebar-nav-icon bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"><i class="fas fa-coins"></i></span>
+                        <span class="sidebar-label flex-1">My Fees</span>
+                    </a>
+                    <a href="{% url 'announcement_list' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}" title="Announcements">
+                        <span class="sidebar-nav-icon bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"><i class="fas fa-bullhorn"></i></span>
+                        <span class="sidebar-label flex-1">Announcements</span>
+                    </a>
+                </div>
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Account</div>
+                <div class="space-y-1">
+                    <a href="{% url 'profile' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'profile' %}active{% endif %}" title="My Profile">
+                        <span class="sidebar-nav-icon bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"><i class="fas fa-user-circle"></i></span>
+                        <span class="sidebar-label flex-1">My Profile</span>
+                    </a>
+                </div>
+
+            {% elif user.parent %}
+                <!-- Parent Nav -->
+                <div class="space-y-1">
+                    <a href="{% url 'parent_dashboard' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'parent_dashboard' %}active{% endif %}" aria-current="{% if request.resolver_match.url_name == 'parent_dashboard' %}page{% endif %}" title="Dashboard">
+                        <span class="sidebar-nav-icon bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400"><i class="fas fa-th-large"></i></span>
+                        <span class="sidebar-label flex-1">Dashboard</span>
+                    </a>
+                    <a href="{% url 'parent_invoices' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'parent_invoices' or request.resolver_match.url_name == 'parent_child_fees' %}active{% endif %}" title="Fees & Invoices">
+                        <span class="sidebar-nav-icon bg-amber-100 text-amber-600 dark:bg-amber-950/50 dark:text-amber-400"><i class="fas fa-coins"></i></span>
+                        <span class="sidebar-label flex-1">Fees & Invoices</span>
+                    </a>
+                    <a href="{% url 'parent_announcements' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'parent_announcements' %}active{% endif %}" title="Announcements">
+                        <span class="sidebar-nav-icon bg-pink-100 text-pink-600 dark:bg-pink-950/50 dark:text-pink-400"><i class="fas fa-bullhorn"></i></span>
+                        <span class="sidebar-label flex-1">Announcements</span>
+                        {% if unread_announcements > 0 %}<span class="ml-auto tag bg-red-500 text-white sidebar-label">{{ unread_announcements }}</span>{% endif %}
+                    </a>
+                    <a href="{% url 'parent_notifications' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'parent_notifications' %}active{% endif %}" title="Notifications">
+                        <span class="sidebar-nav-icon bg-sky-100 text-sky-600 dark:bg-sky-950/50 dark:text-sky-400"><i class="fas fa-bell"></i></span>
+                        <span class="sidebar-label flex-1">Notifications</span>
+                    </a>
+                </div>
+                <div class="mt-5 mb-2 px-3 text-[10px] font-bold text-surface-400 dark:text-surface-500 uppercase tracking-[0.15em] sidebar-section-title sidebar-label">Account</div>
+                <div class="space-y-1">
+                    <a href="{% url 'parent_profile' %}" class="sidebar-nav-item {% if request.resolver_match.url_name == 'parent_profile' %}active{% endif %}" title="My Profile">
+                        <span class="sidebar-nav-icon bg-surface-100 text-surface-600 dark:bg-surface-800 dark:text-surface-400"><i class="fas fa-user-circle"></i></span>
+                        <span class="sidebar-label flex-1">My Profile</span>
+                    </a>
+                </div>
+            {% endif %}
+        </nav>
+
+        <!-- User Section -->
+        <div class="flex-shrink-0 border-t border-surface-200 dark:border-surface-800 p-3 bg-surface-50/50 dark:bg-transparent">
+
+            {% block sidebar_footer_extra %}{% endblock %}
+
+            <div class="flex items-center gap-3 px-2 py-2.5 rounded-xl hover:bg-surface-100 dark:hover:bg-surface-800/50 transition-colors cursor-pointer sidebar-user-info" onclick="toggleUserMenu()">
+                <div class="w-9 h-9 rounded-full bg-gradient-to-br from-brand-400 to-brand-600 flex items-center justify-center text-white text-xs font-bold flex-shrink-0" aria-hidden="true">
+                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                </div>
+                <div class="min-w-0 flex-1">
+                    <p class="text-sm font-semibold text-surface-900 dark:text-white truncate leading-tight">{{ user.get_full_name|default:user.username }}</p>
+                    <p class="text-[11px] text-surface-500 dark:text-surface-400 truncate mt-0.5">
+                        {% if user.is_staff %}Administrator{% elif user.teacher %}Teacher{% elif user.accountant %}Accountant{% elif user.student %}Student{% elif user.parent %}Parent/Guardian{% endif %}
+                    </p>
+                </div>
+                <i class="fas fa-ellipsis-v text-[10px] text-surface-400 flex-shrink-0"></i>
+            </div>
+            <div id="userMenu" class="hidden mt-1 bg-surface-50 dark:bg-surface-800/50 rounded-xl border border-surface-200 dark:border-surface-700 py-1" role="menu">
+                {% if user.parent %}
+                <a href="{% url 'parent_profile' %}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-white dark:hover:bg-surface-700 transition-colors rounded-lg mx-1" role="menuitem">
+                    <i class="fas fa-user-circle w-4 text-center text-surface-400"></i> My Profile
+                </a>
+                {% else %}
+                <a href="{% url 'profile' %}" class="flex items-center gap-2.5 px-3 py-2 text-sm text-surface-700 dark:text-surface-300 hover:bg-white dark:hover:bg-surface-700 transition-colors rounded-lg mx-1" role="menuitem">
+                    <i class="fas fa-user-circle w-4 text-center text-surface-400"></i> My Profile
+                </a>
+                {% endif %}
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="flex items-center gap-2.5 px-3 py-2 text-sm text-red-600 dark:text-red-400 hover:bg-white dark:hover:bg-surface-700 transition-colors rounded-lg mx-1 w-full" role="menuitem">
+                        <i class="fas fa-sign-out-alt w-4 text-center"></i> Sign Out
+                    </button>
+                </form>
+            </div>
+        </div>
+    </aside>
+    {% endif %}
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <div id="mainContent" class="{% if user.is_authenticated %}lg:ml-64{% endif %} min-h-full flex flex-col transition-all duration-300 has-bottom-nav">
+
+        <!-- Top Bar -->
+        <header class="sticky top-0 z-30 bg-white/80 dark:bg-surface-900/80 backdrop-blur-xl border-b border-surface-200/50 dark:border-surface-800/50 shadow-sm dark:shadow-none no-print">
+            <div class="flex items-center justify-between h-16 px-4 sm:px-6">
+                <div class="flex items-center gap-3">
+                    {% if user.is_authenticated %}
+                    <button onclick="toggleSidebar()" class="lg:hidden p-2 rounded-xl hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors" aria-label="Toggle navigation menu">
+                        <i class="fas fa-bars text-surface-600 dark:text-surface-400 text-lg"></i>
+                    </button>
+                    {% endif %}
+                    <div class="hidden sm:flex items-center gap-2">
+                        <div class="w-6 h-6 rounded-md bg-gradient-to-br from-brand-500 to-brand-600 flex items-center justify-center">
+                            <i class="fas fa-graduation-cap text-white text-[10px]"></i>
+                        </div>
+                        <h2 class="text-base sm:text-lg font-bold text-surface-900 dark:text-white tracking-tight">
+                            {% block page_title %}{% endblock %}
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-1 sm:gap-2">
+                    <!-- Dark Mode Toggle -->
+                    <button id="darkModeToggle" onclick="toggleDarkMode()" class="p-2.5 rounded-xl hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors" title="Toggle dark mode" aria-label="Toggle dark mode">
+                        <i id="darkModeIcon" class="fas fa-moon text-surface-500 dark:text-yellow-400 text-sm"></i>
+                    </button>
+
+                    {% if user.is_authenticated %}
+                    <!-- Notifications Bell -->
+                    <div class="relative">
+                        <button onclick="toggleNotifications()" class="relative p-2.5 rounded-xl hover:bg-surface-100 dark:hover:bg-surface-800 transition-colors" aria-label="Notifications" aria-expanded="false">
+                            <i class="fas fa-bell text-surface-500 dark:text-surface-400 text-sm"></i>
+                            {% if unread_notification_count > 0 %}
+                            <span class="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full ring-2 ring-white dark:ring-surface-900 animate-pulse"></span>
+                            {% endif %}
+                        </button>
+                        <!-- Notification Dropdown -->
+                        <div id="notificationDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 bg-white dark:bg-surface-800 rounded-2xl shadow-2xl dark:shadow-2xl dark:shadow-black/50 border border-surface-200 dark:border-surface-700 z-50 animate-scale-in overflow-hidden">
+                            <div class="px-4 py-3 border-b border-surface-200 dark:border-surface-700 flex items-center justify-between">
+                                <h3 class="text-sm font-bold text-surface-900 dark:text-white">Notifications</h3>
+                                {% if unread_notification_count > 0 %}
+                                <span class="tag bg-brand-100 text-brand-700 dark:bg-brand-950/50 dark:text-brand-400">{{ unread_notification_count }} new</span>
+                                {% endif %}
+                            </div>
+                            <div class="max-h-72 overflow-y-auto divide-y divide-surface-100 dark:divide-surface-700/50">
+                                {% if recent_notifications %}
+                                {% for n in recent_notifications %}
+                                <div class="flex items-start gap-3 px-4 py-3 hover:bg-surface-50 dark:hover:bg-surface-700/50 transition-colors {% if n.status == 'sent' %}notif-unread{% endif %}">
+                                    <div class="w-8 h-8 rounded-lg {% if n.notification_type == 'result' %}bg-emerald-100 dark:bg-emerald-950/50{% elif n.notification_type == 'fee' %}bg-amber-100 dark:bg-amber-950/50{% else %}bg-brand-100 dark:bg-brand-950/50{% endif %} flex items-center justify-center flex-shrink-0">
+                                        {% if n.notification_type == 'result' %}<i class="fas fa-file-alt {% if n.status == 'sent' %}text-emerald-600 dark:text-emerald-400{% else %}text-surface-400{% endif %} text-xs"></i>
+                                        {% elif n.notification_type == 'fee' %}<i class="fas fa-coins {% if n.status == 'sent' %}text-amber-600 dark:text-amber-400{% else %}text-surface-400{% endif %} text-xs"></i>
+                                        {% elif n.notification_type == 'attendance' %}<i class="fas fa-calendar-check {% if n.status == 'sent' %}text-sky-600 dark:text-sky-400{% else %}text-surface-400{% endif %} text-xs"></i>
+                                        {% else %}<i class="fas fa-bell {% if n.status == 'sent' %}text-brand-600 dark:text-brand-400{% else %}text-surface-400{% endif %} text-xs"></i>{% endif %}
+                                    </div>
+                                    <div class="min-w-0 flex-1">
+                                        <p class="text-sm font-medium text-surface-900 dark:text-white">{{ n.title }}</p>
+                                        <p class="text-xs text-surface-500 dark:text-surface-400 mt-0.5 line-clamp-1">{{ n.message }}</p>
+                                        <p class="text-[10px] text-surface-400 dark:text-surface-500 mt-1">{{ n.sent_at|timesince|default:n.created_at|timesince }} ago</p>
+                                    </div>
+                                    {% if n.status == 'sent' %}
+                                    <span class="w-2 h-2 rounded-full bg-brand-500 mt-1.5 flex-shrink-0"></span>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                                {% else %}
+                                <div class="px-5 py-10 text-center">
+                                    <div class="w-10 h-10 rounded-xl bg-surface-100 dark:bg-surface-800 flex items-center justify-center text-surface-400 mx-auto mb-2">
+                                        <i class="fas fa-bell text-sm"></i>
+                                    </div>
+                                    <p class="text-sm font-medium text-surface-900 dark:text-white">No notifications yet</p>
+                                    <p class="text-xs text-surface-500 dark:text-surface-400 mt-1">We'll notify you when something arrives.</p>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% if recent_notifications %}
+                            <a href="{% if user.parent %}{% url 'parent_notifications' %}{% else %}#{% endif %}" class="block px-4 py-3 text-center text-sm font-medium text-brand-600 dark:text-brand-400 hover:bg-surface-50 dark:hover:bg-surface-700/50 border-t border-surface-200 dark:border-surface-700 transition-colors">
+                                View all notifications
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </header>
+
+        <!-- Page Content -->
+        <main id="main-content" class="flex-1 px-4 sm:px-6 py-6 sm:py-8" role="main">
+            <!-- Toast Messages -->
+            {% if messages %}
+            <div id="toastContainer" class="fixed top-5 right-5 z-[9999] flex flex-col gap-2 max-w-[calc(100vw-2.5rem)]">
+                {% for message in messages %}
+                <div class="flex items-center gap-3 px-5 py-3.5 rounded-xl text-white font-medium text-sm shadow-2xl animate-slide-in
+                    {% if message.tags == 'success' %}bg-gradient-to-r from-emerald-600 to-emerald-700
+                    {% elif message.tags == 'error' %}bg-gradient-to-r from-red-600 to-red-700
+                    {% elif message.tags == 'warning' %}bg-gradient-to-r from-amber-500 to-amber-600
+                    {% else %}bg-gradient-to-r from-blue-600 to-blue-700{% endif %}" role="alert">
+                    {% if message.tags == 'success' %}<i class="fas fa-check-circle text-lg"></i>
+                    {% elif message.tags == 'error' %}<i class="fas fa-exclamation-circle text-lg"></i>
+                    {% elif message.tags == 'warning' %}<i class="fas fa-exclamation-triangle text-lg"></i>
+                    {% else %}<i class="fas fa-info-circle text-lg"></i>{% endif %}
+                    <span class="flex-1">{{ message }}</span>
+                    <button onclick="this.parentElement.remove()" class="p-1 hover:bg-white/20 rounded-lg transition-colors ml-2" aria-label="Dismiss">
+                        <i class="fas fa-times text-xs"></i>
+                    </button>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %}
+
+            {% block content %}{% endblock %}
+        </main>
+
+        <!-- Footer -->
+        <footer class="border-t border-surface-200 dark:border-surface-800 bg-white dark:bg-surface-900 px-6 py-4 shadow-inner dark:shadow-none no-print">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-surface-500 dark:text-surface-400">
+                <p>&copy; {% now "Y" %} Nazarene Secondary School. All rights reserved.</p>
+                <div class="flex items-center gap-4">
+                    <span><i class="fas fa-envelope mr-1"></i> info@nazarene.edu</span>
+                    <span><i class="fas fa-phone mr-1"></i> +254 700 123456</span>
+                </div>
+            </div>
+        </footer>
     </div>
 
-    <!-- Navigation -->
-    <nav class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 shadow-sm sticky top-0 z-30">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between items-center h-16">
-                <div class="flex items-center gap-3">
-                    <div class="text-2xl font-bold text-blue-600 dark:text-blue-400">
-                        <i class="fas fa-graduation-cap"></i>
-                    </div>
-                    <div>
-                        <h1 class="text-lg font-bold text-gray-900 dark:text-white">Nazarene School</h1>
-                        <p class="text-xs text-blue-600 dark:text-blue-400">Excellence & Integrity</p>
-                    </div>
-                </div>
-                
-                <div class="hidden md:flex items-center space-x-6">
-                    {% if user.is_authenticated %}
-                        <a href="{% url 'dashboard_redirect' %}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                            <i class="fas fa-chart-line"></i> Dashboard
-                        </a>
-                        {% if user.student %}
-                            <a href="{% url 'student_results' %}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fas fa-file-chart-line"></i> Results
-                            </a>
-                        {% endif %}
-                        {% if user.teacher or user.is_staff %}
-                            <a href="{% url 'announcement_list' %}" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fas fa-bell"></i> Announcements
-                            </a>
-                        {% endif %}
-                        {% if user.is_staff %}
-                            <a href="/admin/" class="text-gray-700 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition">
-                                <i class="fas fa-cog"></i> Admin
-                            </a>
-                        {% endif %}
-                    {% endif %}
-                </div>
-
-                <div class="flex items-center gap-3">
-                    {% if user.is_authenticated %}
-                        <div class="hidden sm:flex items-center gap-2 bg-blue-100 dark:bg-blue-900 px-3 py-1 rounded-full">
-                            <i class="fas fa-user-circle text-blue-600 dark:text-blue-400"></i>
-                            <span class="text-sm font-medium text-gray-700 dark:text-gray-300">{{ user.first_name|default:user.username }}</span>
-                        </div>
-                        <form method="post" action="{% url 'logout' %}" class="inline">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-secondary btn-sm">
-                                <i class="fas fa-sign-out-alt"></i> Logout
-                            </button>
-                        </form>
-                    {% else %}
-                        <a href="{% url 'login' %}" class="btn btn-primary btn-sm">
-                            <i class="fas fa-sign-in-alt"></i> Login
-                        </a>
-                    {% endif %}
-                    
-                    <!-- Mobile Menu Toggle -->
-                    <button id="mobileMenuToggle" class="md:hidden text-gray-700 dark:text-gray-300">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
-                </div>
-            </div>
-            
-            <!-- Mobile Menu -->
-            <div id="mobileMenu" class="hidden md:hidden pb-4 space-y-2 border-t border-gray-200 dark:border-gray-700 pt-4">
-                {% if user.is_authenticated %}
-                    <a href="{% url 'dashboard_redirect' %}" class="block px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <i class="fas fa-chart-line"></i> Dashboard
-                    </a>
-                    {% if user.student %}
-                        <a href="{% url 'student_results' %}" class="block px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="fas fa-file-chart-line"></i> Results
-                        </a>
-                    {% endif %}
-                    {% if user.teacher or user.is_staff %}
-                        <a href="{% url 'announcement_list' %}" class="block px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="fas fa-bell"></i> Announcements
-                        </a>
-                    {% endif %}
-                    {% if user.is_staff %}
-                        <a href="/admin/" class="block px-3 py-2 rounded hover:bg-gray-100 dark:hover:bg-gray-700">
-                            <i class="fas fa-cog"></i> Admin
-                        </a>
-                    {% endif %}
-                {% endif %}
-            </div>
-        </div>
-    </nav>
-
-    <!-- Main Content -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {% if messages %}
-            {% for message in messages %}
-                <div class="toast toast-{% if message.tags %}{{ message.tags }}{% else %}info{% endif %} animate-slide-in" role="alert">
-                    <i class="fas fa-info-circle"></i>
-                    <span>{{ message }}</span>
-                    <button class="ml-auto" onclick="this.parentElement.style.display='none';">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            {% endfor %}
-        {% endif %}
-        {% block content %}{% endblock %}
-    </main>
-
-    <!-- Footer -->
-    <footer class="bg-gray-900 dark:bg-black text-white py-8 mt-12">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div>
-                    <h3 class="font-bold text-lg mb-3 flex items-center gap-2">
-                        <i class="fas fa-graduation-cap text-blue-400"></i> Nazarene School
-                    </h3>
-                    <p class="text-gray-400 text-sm">Excellence & Integrity</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3"><i class="fas fa-phone"></i> Contact</h4>
-                    <p class="text-gray-400 text-sm">Email: info@nazarene.edu</p>
-                    <p class="text-gray-400 text-sm">Phone: +254 700 123456</p>
-                </div>
-                <div>
-                    <h4 class="font-bold mb-3"><i class="fas fa-link"></i> Follow us</h4>
-                    <div class="flex gap-3">
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-facebook"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-twitter"></i></a>
-                        <a href="#" class="text-gray-400 hover:text-blue-400 transition"><i class="fab fa-instagram"></i></a>
-                    </div>
-                </div>
-            </div>
-            <div class="border-t border-gray-700 pt-8 text-center text-gray-400">
-                <p>&copy; {% now "Y" %} Nazarene Secondary School. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Toast Container for JS notifications -->
-    <div id="toastContainer"></div>
-
+    <script src="{% static 'js/ui-utilities.js' %}"></script>
     <script>
-        // Dark Mode Toggle
-        const darkModeToggle = document.getElementById('darkModeToggle');
-        const html = document.documentElement;
-        
-        // Load dark mode preference
-        if (localStorage.getItem('darkMode') === 'true') {
-            html.classList.add('dark');
-            darkModeToggle.innerHTML = '<i class="fas fa-sun text-yellow-400"></i>';
-        }
-        
-        darkModeToggle.addEventListener('click', () => {
-            html.classList.toggle('dark');
-            localStorage.setItem('darkMode', html.classList.contains('dark'));
-            darkModeToggle.innerHTML = html.classList.contains('dark') 
-                ? '<i class="fas fa-sun text-yellow-400"></i>'
-                : '<i class="fas fa-moon text-gray-800"></i>';
-        });
-        
-        // Mobile Menu Toggle
-        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
-        const mobileMenu = document.getElementById('mobileMenu');
-        
-        if (mobileMenuToggle) {
-            mobileMenuToggle.addEventListener('click', () => {
-                mobileMenu.classList.toggle('hidden');
-            });
-        }
-        
-        // Initialize AOS
-        AOS.init({
-            duration: 600,
-            once: true
-        });
-        
-        // Toast notification function
-        function showToast(message, type = 'info') {
-            const container = document.getElementById('toastContainer');
-            const toast = document.createElement('div');
-            toast.className = `toast toast-${type} animate-slide-in`;
-            toast.innerHTML = `
-                <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i>
-                <span>${message}</span>
-                <button class="ml-auto" onclick="this.parentElement.remove();">
-                    <i class="fas fa-times"></i>
-                </button>
-            `;
-            container.appendChild(toast);
-            
-            // Auto-remove after 5 seconds
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.classList.add('opacity-0');
-                    setTimeout(() => toast.remove(), 300);
+        // CDN Fallback Detection
+        (function() {
+
+            var faLoaded = false;
+            var testEl = document.createElement('i');
+            testEl.className = 'fas fa-fw fa-font-awesome-logo-full';
+            testEl.style.position = 'absolute';
+            testEl.style.opacity = '0';
+            testEl.style.pointerEvents = 'none';
+            document.body.appendChild(testEl);
+
+            var checkFA = function() {
+                var computed = getComputedStyle(testEl);
+                faLoaded = computed.fontFamily && computed.fontFamily.indexOf('Font Awesome') !== -1;
+                if (!faLoaded) {
+                    document.documentElement.classList.add('fa-icons-missing');
                 }
-            }, 5000);
-        }
-        
-        // Auto-remove Django messages
-        document.querySelectorAll('.toast').forEach(toast => {
-            setTimeout(() => {
-                if (toast.parentElement) {
-                    toast.classList.add('opacity-0');
-                    setTimeout(() => toast.remove(), 300);
-                }
-            }, 5000);
+                testEl.remove();
+            };
+            setTimeout(checkFA, 1000);
+        })();
+
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Chart === 'undefined') {
+                document.querySelectorAll('canvas').forEach(function(c) {
+                    var parent = c.parentElement;
+                    if (parent) {
+                        var msg = document.createElement('div');
+                        msg.className = 'flex items-center justify-center py-12 text-surface-400 text-sm';
+                        msg.innerHTML = '<i class="fas fa-chart-simple mr-2"></i> Chart library could not be loaded.';
+                        parent.appendChild(msg);
+                    }
+                });
+            }
         });
     </script>
-    <!-- UI Utilities -->
-    <script src="{% static 'js/ui-utilities.js' %}"></script>
+    <script src="{% static 'js/theme.js' %}"></script>
     {% block extra_js %}{% endblock %}
+
+    {# ===== BOTTOM MOBILE NAV (md:hidden via CSS) ===== #}
+    {% if user.is_authenticated %}
+    <nav class="bottom-nav md:hidden" aria-label="Mobile navigation">
+        {% if user.student %}
+            <a href="{% url 'student_dashboard' %}" class="{% if request.resolver_match.url_name == 'student_dashboard' %}active{% endif %}">
+                <i class="fas fa-th-large"></i><span>Home</span>
+            </a>
+            <a href="{% url 'register_subjects' %}" class="{% if request.resolver_match.url_name == 'register_subjects' %}active{% endif %}">
+                <i class="fas fa-pen"></i><span>Register</span>
+            </a>
+            <a href="{% url 'student_results' %}" class="{% if request.resolver_match.url_name == 'student_results' %}active{% endif %}">
+                <i class="fas fa-chart-bar"></i><span>Results</span>
+            </a>
+            <a href="{% url 'fees:student_fees' %}" class="{% if request.resolver_match.url_name == 'student_fees' %}active{% endif %}">
+                <i class="fas fa-coins"></i><span>Fees</span>
+            </a>
+            <a href="{% url 'announcement_list' %}" class="{% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}">
+                <i class="fas fa-bullhorn"></i><span>News</span>
+            </a>
+        {% elif user.teacher %}
+            <a href="{% url 'teacher_dashboard' %}" class="{% if request.resolver_match.url_name == 'teacher_dashboard' %}active{% endif %}">
+                <i class="fas fa-th-large"></i><span>Home</span>
+            </a>
+            <a href="{% url 'announcement_list' %}" class="{% if request.resolver_match.url_name == 'announcement_list' %}active{% endif %}">
+                <i class="fas fa-bullhorn"></i><span>News</span>
+            </a>
+            <a href="{% url 'announcement_create' %}" class="{% if request.resolver_match.url_name == 'announcement_create' %}active{% endif %}">
+                <i class="fas fa-plus"></i><span>Post</span>
+            </a>
+            <a href="{% url 'profile' %}" class="{% if request.resolver_match.url_name == 'profile' %}active{% endif %}">
+                <i class="fas fa-user"></i><span>Profile</span>
+            </a>
+        {% elif user.parent %}
+            <a href="{% url 'parent_dashboard' %}" class="{% if request.resolver_match.url_name == 'parent_dashboard' %}active{% endif %}">
+                <i class="fas fa-th-large"></i><span>Home</span>
+            </a>
+            <a href="{% url 'parent_invoices' %}" class="{% if 'invoice' in request.resolver_match.url_name or 'fees' in request.resolver_match.url_name or 'parent_child_fees' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-coins"></i><span>Fees</span>
+            </a>
+            <a href="{% url 'parent_announcements' %}" class="{% if request.resolver_match.url_name == 'parent_announcements' %}active{% endif %}">
+                <i class="fas fa-bullhorn"></i><span>News</span>
+            </a>
+            <a href="{% url 'parent_notifications' %}" class="{% if request.resolver_match.url_name == 'parent_notifications' %}active{% endif %}">
+                <i class="fas fa-bell"></i><span>Alerts</span>
+            </a>
+            <a href="{% url 'parent_profile' %}" class="{% if request.resolver_match.url_name == 'parent_profile' %}active{% endif %}">
+                <i class="fas fa-user"></i><span>Profile</span>
+            </a>
+        {% elif user|is_accountant %}
+            <a href="{% url 'fees:accountant_dashboard' %}" class="{% if request.resolver_match.url_name == 'accountant_dashboard' %}active{% endif %}">
+                <i class="fas fa-th-large"></i><span>Home</span>
+            </a>
+            <a href="{% url 'fees:accountant_verify_list' %}" class="{% if 'verify' in request.resolver_match.url_name %}active{% endif %}">
+                <i class="fas fa-check-double"></i><span>Verify</span>
+            </a>
+            <a href="{% url 'fees:reports' %}" class="{% if request.resolver_match.url_name == 'reports' %}active{% endif %}">
+                <i class="fas fa-chart-bar"></i><span>Reports</span>
+            </a>
+            <a href="{% url 'fees:accountant_profile' %}" class="{% if request.resolver_match.url_name == 'accountant_profile' %}active{% endif %}">
+                <i class="fas fa-user"></i><span>Profile</span>
+            </a>
+        {% endif %}
+    </nav>
+    {% endif %}
 </body>
 </html>

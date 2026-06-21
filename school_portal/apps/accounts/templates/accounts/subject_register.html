@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+{% block title %}Subject Registration — Nazarene School{% endblock %}
+{% block page_title %}Subject Registration{% endblock %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <div class="scholarly-glass">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-book text-scholarly-primary"></i>
+                <h2 class="text-base font-bold text-slate-900 dark:text-white">{{ selected_term.name }}</h2>
+            </div>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                Select the subjects you want to take this term.
+                Core subjects are pre-selected and required.
+            </p>
+            {% if selected_term.registration_deadline %}
+            <p class="text-xs text-amber-600 dark:text-amber-400 mt-2 flex items-center gap-1">
+                <i class="fas fa-clock"></i> Registration closes {{ selected_term.registration_deadline|date:"M d, Y H:i" }}
+            </p>
+            {% endif %}
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="term_id" value="{{ selected_term.id }}">
+
+            <div class="p-5 sm:p-6 space-y-5">
+                {% if not subjects_by_category %}
+                <div class="py-8 text-center">
+                    <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl text-slate-400 mx-auto mb-3">
+                        <i class="fas fa-book"></i>
+                    </div>
+                    <p class="text-sm font-medium text-slate-900 dark:text-white">No subjects available yet</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Your subjects have not been set up yet. Please contact your administrator.</p>
+                </div>
+                {% endif %}
+                {% for group in subjects_by_category %}
+                <div>
+                    <h3 class="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        {% if group.code == 'CORE' %}
+                        <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                        <span class="text-emerald-600 dark:text-emerald-400">{{ group.label }}</span>
+                        <span class="text-slate-400 font-normal normal-case">(required)</span>
+                        {% elif group.code == 'SCIENCE' %}
+                        <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                        <span class="text-sky-600 dark:text-sky-400">{{ group.label }}</span>
+                        {% elif group.code == 'HUMANITIES' %}
+                        <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                        <span class="text-amber-600 dark:text-amber-400">{{ group.label }}</span>
+                        {% elif group.code == 'COMMERCIAL' %}
+                        <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                        <span class="text-purple-600 dark:text-purple-400">{{ group.label }}</span>
+                        {% elif group.code == 'TECHNICAL' %}
+                        <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                        <span class="text-rose-600 dark:text-rose-400">{{ group.label }}</span>
+                        {% else %}
+                        <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                        <span class="text-slate-600 dark:text-slate-400">{{ group.label }}</span>
+                        {% endif %}
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                        {% for s in group.subjects %}
+                        <label class="flex items-center gap-3 p-3 rounded-xl border cursor-pointer transition-all
+                            {% if s.id in group.registered_ids %}border-scholarly-primary bg-scholarly-primary-container/30 dark:border-scholarly-primary dark:bg-scholarly-primary-container/20
+                            {% elif group.code == 'CORE' %}border-emerald-200 bg-emerald-50/50 dark:border-emerald-900 dark:bg-emerald-950/20
+                            {% else %}border-slate-200/60 dark:border-slate-700/60 hover:border-slate-300 dark:hover:border-slate-600{% endif %}">
+                            <input type="checkbox" name="subjects" value="{{ s.id }}"
+                                {% if s.id in registered_ids or group.code == 'CORE' %}checked{% endif %}
+                                class="w-4 h-4 rounded border-slate-300 text-scholarly-primary focus:ring-scholarly-primary/40">
+                            <div class="min-w-0 flex-1">
+                                <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ s.name }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ s.code }}</p>
+                            </div>
+                            {% if group.code == 'CORE' %}
+                            <span class="status-chip status-chip-verified text-[10px]">Required</span>
+                            {% endif %}
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+
+            <div class="px-5 sm:px-6 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <i class="fas fa-info-circle mr-1"></i>
+                    Core subjects are mandatory and always included.
+                </p>
+                <button type="submit" class="scholarly-btn-primary">
+                    <i class="fas fa-save"></i> Save Registration
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% block title %}Subjects — Nazarene School{% endblock %}
+{% block page_title %}Subjects{% endblock %}
+
+{% block content %}
+<div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-surface-900 dark:text-white">Subjects</h1>
+        <p class="text-surface-500 dark:text-surface-400 mt-1 text-sm">Manage academic subjects</p>
+    </div>
+    <a href="{% url 'school_subject_create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Subject
+    </a>
+</div>
+
+<div class="content-card">
+    {% if subjects %}
+    <div class="table-container rounded-none border-0">
+        <table class="table-modern">
+            <thead>
+                <tr>
+                    <th>Subject Name</th>
+                    <th>Code</th>
+                    <th>Class</th>
+                    <th class="text-right">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for subject in subjects %}
+                <tr>
+                    <td class="font-semibold text-surface-900 dark:text-white">{{ subject.name }}</td>
+                    <td class="font-mono text-xs text-surface-500">{{ subject.code }}</td>
+                    <td><span class="badge badge-info">{{ subject.assigned_class }}</span></td>
+                    <td class="text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <a href="{% url 'subject_edit' subject.pk %}" class="btn btn-ghost btn-sm"><i class="fas fa-edit"></i> Edit</a>
+                            <a href="{% url 'subject_delete' subject.pk %}" class="btn btn-ghost btn-sm text-red-500 hover:text-red-600"><i class="fas fa-trash"></i></a>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="content-card-body">
+        <div class="empty-state py-12">
+            <div class="empty-state-icon"><i class="fas fa-book"></i></div>
+            <p class="text-sm font-medium text-surface-900 dark:text-white">No subjects created yet</p>
+            <p class="text-xs text-surface-500 dark:text-surface-400 mt-1 mb-4">Create your first subject to get started.</p>
+            <a href="{% url 'school_subject_create' %}" class="btn btn-primary btn-sm"><i class="fas fa-plus"></i> Create Subject</a>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

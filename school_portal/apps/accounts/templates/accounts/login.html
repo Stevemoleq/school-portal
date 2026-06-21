@@ -1,29 +1,329 @@
-{% extends 'base.html' %}
-{% block title %}Login - Nazarene School{% endblock %}
-{% block content %}
-<div class="max-w-md mx-auto mt-10 bg-white rounded-xl shadow-md overflow-hidden p-8">
-    <h2 class="text-3xl font-bold text-center text-[#1e3c72] mb-6">Login to Portal</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="mb-4">
-            <label class="block text-gray-700 text-sm font-semibold mb-2">Username</label>
-            <input type="text" name="username" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f39c12]">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In — Nazarene School Portal</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    {% load static %}<link rel="stylesheet" href="{% static 'css/components.css' %}">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+                    colors: {
+                        scholarly: {
+                            primary: '#00288e', 'primary-container': '#1e40af',
+                            secondary: '#4e45d5', 'secondary-container': '#6860ef',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * { font-family: 'Inter', system-ui, sans-serif; }
+        .scholarly-bg {
+            background-color: #f8f9ff;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(30, 64, 175, 0.06) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(78, 69, 213, 0.06) 0px, transparent 50%);
+        }
+        html.dark .scholarly-bg {
+            background-color: #0b1c30;
+            background-image:
+                radial-gradient(at 0% 0%, rgba(184, 196, 255, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(195, 192, 255, 0.05) 0px, transparent 50%);
+        }
+        .input-field {
+            width: 100%;
+            padding: 0.875rem 1rem 0.875rem 2.75rem;
+            background: var(--scholarly-surface-lowest, #ffffff);
+            border: 1px solid var(--scholarly-outline-variant, #c4c5d5);
+            border-radius: 0.75rem;
+            color: var(--scholarly-on-surface, #0b1c30);
+            font-size: 0.875rem;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+        .input-field::placeholder { color: #94a3b8; }
+        .input-field:focus {
+            border-color: var(--scholarly-primary, #00288e);
+            background: #fff;
+            box-shadow: 0 0 0 3px rgba(0, 40, 142, 0.12);
+        }
+        html.dark .input-field:focus { background: #1e293b; }
+        .input-field.error {
+            border-color: #ef4444;
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+        }
+        .input-icon {
+            position: absolute;
+            left: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--scholarly-outline, #757684);
+            font-size: 0.875rem;
+            pointer-events: none;
+            transition: color 0.2s;
+        }
+        .input-group:focus-within .input-icon { color: var(--scholarly-primary, #00288e); }
+        .scholarly-glass {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(196, 197, 213, 0.35);
+        }
+        html.dark .scholarly-glass {
+            background: rgba(33, 49, 69, 0.85);
+            border: 1px solid rgba(196, 197, 213, 0.15);
+        }
+        .panel-bg {
+            background: linear-gradient(135deg, #001453 0%, #00288e 50%, #4e45d5 100%);
+        }
+        @keyframes scholarly-float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .float-icon { animation: scholarly-float 4s ease-in-out infinite; }
+    </style>
+</head>
+<body class="min-h-screen flex scholarly-bg">
+    <!-- ===== LEFT PANEL — Branding ===== -->
+    <div class="hidden lg:flex flex-1 flex-col justify-between p-12 panel-bg relative overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-1/4 -right-16 w-96 h-96 bg-white/5 rounded-full blur-3xl"></div>
+            <div class="absolute -bottom-20 -left-20 w-[30rem] h-[30rem] bg-white/[0.03] rounded-full blur-3xl"></div>
+            <div class="absolute top-1/2 left-1/4 w-64 h-64 bg-amber-500/[0.04] rounded-full blur-3xl"></div>
         </div>
-        <div class="mb-6">
-            <label class="block text-gray-700 text-sm font-semibold mb-2">Password</label>
-            <input type="password" name="password" required class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#f39c12]">
+
+        <!-- Decorative floating motifs -->
+        <div class="absolute top-16 left-8 text-white/10 float-icon" style="animation-delay: 0s;" aria-hidden="true">
+            <i class="fas fa-school" style="font-size: 4rem;"></i>
         </div>
-        <button type="submit" class="w-full bg-[#1e3c72] hover:bg-[#2c4a8c] text-white font-bold py-2 px-4 rounded-lg transition duration-300">
-            Log In
-        </button>
-    </form>
-    <div class="text-center mt-4">
-        <a href="{% url 'password_reset' %}" class="text-[#f39c12] hover:text-[#e67e22] text-sm font-semibold">
-            Forgot your password?
-        </a>
+        <div class="absolute bottom-24 right-8 text-white/10 float-icon" style="animation-delay: 1.5s;" aria-hidden="true">
+            <i class="fas fa-book-open" style="font-size: 5rem;"></i>
+        </div>
+
+        <div class="relative z-10">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center">
+                    <i class="fas fa-graduation-cap text-white/90 text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-white font-extrabold text-lg tracking-tight">NAZARENE</h1>
+                    <p class="text-indigo-200/70 text-[10px] uppercase tracking-[0.2em] font-medium">Secondary School</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative z-10 max-w-lg">
+            <h2 class="text-4xl sm:text-5xl font-extrabold text-white leading-[1.15] mb-5">
+                Welcome to the<br>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-amber-400">School Portal</span>
+            </h2>
+            <p class="text-indigo-200/70 text-lg leading-relaxed">
+                Access your academic records, track performance, and stay connected with your school community.
+            </p>
+
+            <div class="flex gap-10 mt-12">
+                <div>
+                    <p class="text-3xl font-bold text-white">100+</p>
+                    <p class="text-indigo-200/60 text-sm font-medium mt-1">Students</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white">20+</p>
+                    <p class="text-indigo-200/60 text-sm font-medium mt-1">Teachers</p>
+                </div>
+                <div>
+                    <p class="text-3xl font-bold text-white">5+</p>
+                    <p class="text-indigo-200/60 text-sm font-medium mt-1">Classes</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative z-10">
+            <p class="text-indigo-300/40 text-xs">&copy; {% now "Y" %} Nazarene Secondary School. All rights reserved.</p>
+        </div>
     </div>
-    <p class="text-center text-gray-500 text-sm mt-4">
-        Students: Use your registration number as username.
-    </p>
-</div>
-{% endblock %}
+
+    <!-- ===== RIGHT PANEL — Login Form ===== -->
+    <div class="flex-1 flex items-center justify-center p-6 sm:p-12 relative">
+        <!-- Dark Mode Toggle (top right of right panel) -->
+        <button id="darkModeToggle" onclick="toggleDarkMode()"
+                class="absolute top-6 right-6 p-2.5 rounded-full scholarly-glass shadow-sm hover:scale-110 transition-transform"
+                title="Toggle dark mode" aria-label="Toggle dark mode">
+            <i id="darkModeIcon" class="fas fa-moon text-scholarly-primary text-sm"></i>
+        </button>
+
+        <div class="w-full max-w-md">
+
+            <!-- Mobile Header -->
+            <div class="lg:hidden text-center mb-10">
+                <div class="w-14 h-14 bg-gradient-to-br from-scholarly-primary to-scholarly-secondary rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg" style="box-shadow: 0 10px 25px rgba(0,40,142,0.25);">
+                    <i class="fas fa-graduation-cap text-white text-xl"></i>
+                </div>
+                <h1 class="font-extrabold text-xl tracking-tight text-slate-900 dark:text-white">Nazarene Secondary School</h1>
+                <p class="text-slate-500 dark:text-slate-400 text-sm mt-0.5">School Portal</p>
+            </div>
+
+            <!-- Form Card (glass) -->
+            <div class="scholarly-glass rounded-3xl shadow-2xl p-8 sm:p-10 relative overflow-hidden">
+                <div class="text-center mb-8">
+                    <div class="hidden lg:inline-flex w-16 h-16 rounded-2xl bg-scholarly-primary-container text-white mb-4 items-center justify-center shadow-inner" style="background: #1e40af;">
+                        <i class="fas fa-book-open text-2xl"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-slate-900 dark:text-white">Sign in to your account</h2>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Welcome back! Please enter your credentials.</p>
+                </div>
+
+                <form method="post" class="space-y-5" novalidate>
+                    {% csrf_token %}
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    <div class="{% if message.tags == 'error' %}bg-red-50 border-red-200 text-red-700{% else %}bg-emerald-50 border-emerald-200 text-emerald-700{% endif %} border rounded-xl px-4 py-3 flex items-center gap-3 fade-in" role="alert">
+                        <div class="w-8 h-8 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-500{% else %}bg-emerald-100 text-emerald-500{% endif %} flex items-center justify-center flex-shrink-0">
+                            <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
+                        </div>
+                        <p class="text-sm font-medium">{{ message }}</p>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+
+                    <!-- Username / Student ID -->
+                    <div class="input-group">
+                        <label for="id_username" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Student ID / Username
+                        </label>
+                        <div class="relative">
+                            <input type="text" name="username" id="id_username" required autofocus autocomplete="username"
+                                   class="input-field {% if form.errors %}error{% endif %}"
+                                   placeholder="e.g., NZS-26-F1-0001"
+                                   value="{{ form.username.value|default:'' }}">
+                            <i class="fas fa-id-card input-icon"></i>
+                        </div>
+                    </div>
+
+                    <!-- Password -->
+                    <div class="input-group">
+                        <label for="id_password" class="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+                            Password
+                        </label>
+                        <div class="relative">
+                            <input type="password" name="password" id="id_password" required autocomplete="current-password"
+                                   class="input-field {% if form.errors %}error{% endif %} pr-12"
+                                   placeholder="Enter your password">
+                            <i class="fas fa-lock input-icon"></i>
+                            <button type="button" onclick="togglePassword()"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-scholarly-primary transition-colors p-1"
+                                    aria-label="Toggle password visibility"
+                                    tabindex="-1">
+                                <i id="passwordIcon" class="fas fa-eye text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Remember Me & Forgot Password -->
+                    <div class="flex items-center justify-between">
+                        <label class="flex items-center gap-2.5 cursor-pointer group">
+                            <input type="checkbox" name="remember_me" id="id_remember_me"
+                                   class="w-4 h-4 rounded border-slate-300 text-scholarly-primary focus:ring-scholarly-primary cursor-pointer"
+                                   style="accent-color: #00288e;">
+                            <span class="text-sm text-slate-600 dark:text-slate-300 group-hover:text-slate-800 dark:group-hover:text-white transition-colors select-none">Remember me</span>
+                        </label>
+                        <a href="{% url 'password_reset' %}" class="text-sm text-scholarly-primary hover:underline underline-offset-4 decoration-2 font-medium transition-colors">
+                            Forgot password?
+                        </a>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full inline-flex items-center justify-center gap-2 px-7 py-3 rounded-xl font-semibold text-base text-white transition-all duration-200 active:scale-[0.98] mt-2"
+                            style="background: #00288e; box-shadow: 0 8px 20px rgba(0,40,142,0.25);"
+                            onmouseover="this.style.background='#001f6e';"
+                            onmouseout="this.style.background='#00288e';">
+                        Sign In
+                        <i class="fas fa-arrow-right text-sm"></i>
+                    </button>
+                </form>
+
+                <!-- Footer Links -->
+                <div class="mt-8 pt-6 border-t border-slate-200/60 dark:border-slate-700/60 text-center space-y-3">
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">
+                        Need an account?
+                        <span class="text-scholarly-primary font-bold">Contact the school office</span>
+                    </p>
+                    <p class="text-slate-500 dark:text-slate-400 text-sm">
+                        Are you a parent or guardian?
+                        <a href="{% url 'parent_login' %}" class="text-scholarly-secondary hover:underline font-bold">Sign in here</a>
+                    </p>
+                </div>
+            </div>
+
+            <!-- System Status Footer (Stich-inspired) -->
+            <div class="mt-8 flex flex-wrap items-center justify-center gap-6 text-xs">
+                <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                    <span class="font-semibold uppercase tracking-wider">System Operational</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                    <i class="fas fa-globe text-xs"></i>
+                    <span class="font-semibold uppercase tracking-wider">English (US)</span>
+                </div>
+                <div class="flex items-center gap-1.5 text-slate-600 dark:text-slate-400">
+                    <i class="fas fa-shield-halved text-xs"></i>
+                    <span class="font-semibold uppercase tracking-wider">Secure Login</span>
+                </div>
+            </div>
+
+            <p class="text-center text-slate-400 dark:text-slate-500 text-xs mt-6">
+                &copy; {% now "Y" %} Nazarene Secondary School
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('darkMode', isDark ? 'true' : 'false');
+            const icon = document.getElementById('darkModeIcon');
+            if (icon) {
+                icon.className = isDark ? 'fas fa-sun text-amber-400 text-sm' : 'fas fa-moon text-scholarly-primary text-sm';
+            }
+        }
+        (function() {
+            const stored = localStorage.getItem('darkMode');
+            if (stored === 'true' || (!stored && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+                const icon = document.getElementById('darkModeIcon');
+                if (icon) icon.className = 'fas fa-sun text-amber-400 text-sm';
+            }
+        })();
+
+        function togglePassword() {
+            const input = document.getElementById('id_password');
+            const icon = document.getElementById('passwordIcon');
+            if (!input || !icon) return;
+            const isPassword = input.type === 'password';
+            input.type = isPassword ? 'text' : 'password';
+            icon.className = isPassword ? 'fas fa-eye-slash text-sm' : 'fas fa-eye text-sm';
+        }
+
+        (function() {
+            const checkbox = document.getElementById('id_remember_me');
+            if (checkbox) {
+                const remembered = localStorage.getItem('rememberMe');
+                if (remembered === 'true') checkbox.checked = true;
+                checkbox.addEventListener('change', function() {
+                    localStorage.setItem('rememberMe', this.checked ? 'true' : 'false');
+                });
+            }
+        })();
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% block title %}{{ announcement.title }} — Nazarene School{% endblock %}
+{% block page_title %}Announcement{% endblock %}
+
+{% block content %}
+<!-- Back Link -->
+<a href="{% url 'parent_announcements' %}" class="inline-flex items-center gap-2 text-sm text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 mb-6 transition-colors">
+    <i class="fas fa-arrow-left"></i> Back to Announcements
+</a>
+
+<div class="scholarly-glass overflow-hidden">
+    <div class="px-5 sm:px-6 py-5 border-b border-slate-200/60 dark:border-slate-700/60">
+        <div class="flex items-start gap-4">
+            <div class="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0" style="background: rgba(0,40,142,0.10); color: #00288e;">
+                <i class="fas fa-bullhorn text-lg"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+                <h1 class="text-xl font-bold text-slate-900 dark:text-white">{{ announcement.title }}</h1>
+                <div class="flex items-center gap-3 mt-2 text-xs text-slate-500 dark:text-slate-400 flex-wrap">
+                    <span><i class="far fa-user mr-1"></i>{{ announcement.author.get_full_name|default:announcement.author.username }}</span>
+                    <span><i class="far fa-clock mr-1"></i>{{ announcement.created_at|date:"F j, Y" }}</span>
+                    <span class="status-chip status-chip-approved text-[10px]">{{ announcement.get_target_audience_display }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="px-5 sm:px-6 py-6">
+        <div class="prose prose-sm max-w-none text-slate-700 dark:text-slate-300 leading-relaxed whitespace-pre-line">
+            {{ announcement.content }}
+        </div>
+    </div>
+    <div class="px-5 sm:px-6 py-4 border-t border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+        <p class="text-xs text-slate-500 dark:text-slate-400">
+            Last updated: {{ announcement.updated_at|date:"M d, Y H:i" }}
+        </p>
+    </div>
+</div>
+{% endblock %}

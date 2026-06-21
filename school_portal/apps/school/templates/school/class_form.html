@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{% if form.instance.pk %}Edit Class{% else %}New Class{% endif %} — Nazarene School{% endblock %}
+{% block page_title %}{% if form.instance.pk %}Edit Class{% else %}New Class{% endif %}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <a href="{% url 'class_list' %}" class="inline-flex items-center gap-1.5 text-sm text-surface-500 dark:text-surface-400 hover:text-brand-600 dark:hover:text-brand-400 mb-6 transition-colors">
+        <i class="fas fa-arrow-left text-xs"></i> Back to Classes
+    </a>
+
+    <div class="content-card">
+        <div class="content-card-header">
+            <h2 class="text-base font-bold text-surface-900 dark:text-white flex items-center gap-2">
+                <i class="fas fa-school text-brand-500 text-xs"></i>
+                {% if form.instance.pk %}Edit Class{% else %}Create New Class{% endif %}
+            </h2>
+        </div>
+        <div class="content-card-body">
+            {% if form.errors %}
+            <div class="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-5 text-sm text-red-700 dark:text-red-400">
+                <p class="font-semibold mb-1">Please fix the errors below:</p>
+                {% for field in form %}{% for error in field.errors %}<p class="ml-4">{{ field.label }}: {{ error }}</p>{% endfor %}{% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" class="space-y-5">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label class="form-label">Class Name *</label>
+                    <input type="text" name="name" value="{{ form.name.value|default:'' }}" required placeholder="e.g., Senior One, Grade 10" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Section / Room</label>
+                    <input type="text" name="section" value="{{ form.section.value|default:'' }}" placeholder="e.g., A, West Wing" class="form-input">
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-4 border-t border-surface-200/60 dark:border-surface-800">
+                    <a href="{% url 'class_list' %}" class="btn btn-secondary">Cancel</a>
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Class</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

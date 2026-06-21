@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}Manage Terms — Nazarene School{% endblock %}
+{% block page_title %}Manage Academic Terms{% endblock %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto space-y-6">
+    <div class="scholarly-glass">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h2 class="scholarly-section-title"><i class="fas fa-calendar-plus text-scholarly-primary"></i> Create New Term</h2>
+        </div>
+        <form method="post" class="p-5 sm:p-6">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            <div class="flex flex-col sm:flex-row gap-3 items-end">
+                <div class="flex-1">
+                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Term</label>
+                    <select name="term" class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                        {% for code, label in term_choices %}
+                        <option value="{{ code }}">{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="flex-1">
+                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1">Session</label>
+                    <input type="text" name="session" placeholder="e.g. 2025-2026" required class="w-full px-3 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                </div>
+                <button type="submit" class="scholarly-btn-primary whitespace-nowrap">
+                    <i class="fas fa-plus"></i> Create
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h2 class="scholarly-section-title"><i class="fas fa-list text-scholarly-primary"></i> All Terms</h2>
+        </div>
+        <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% for t in terms %}
+            <div class="px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+                <div class="flex-1 min-w-0">
+                    <div class="flex items-center gap-2">
+                        <span class="text-sm font-semibold text-slate-900 dark:text-white">{{ t.name }}</span>
+                        {% if t.is_active %}
+                        <span class="status-chip status-chip-verified text-[10px]">Active</span>
+                        {% endif %}
+                    </div>
+                    <div class="flex flex-wrap items-center gap-3 mt-1 text-xs text-slate-500 dark:text-slate-400">
+                        <span>Registrations: {{ t.registrations.count }}</span>
+                        {% if t.registration_open %}
+                        <span class="text-amber-600 dark:text-amber-400"><i class="fas fa-door-open"></i> Registration open</span>
+                        {% endif %}
+                        {% if t.registration_deadline %}
+                        <span>Deadline: {{ t.registration_deadline|date:"M d, Y H:i" }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="flex items-center gap-2 flex-shrink-0">
+                    <form method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="term_id" value="{{ t.id }}">
+                        <input type="hidden" name="action" value="toggle_active">
+                        <button type="submit" class="px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors
+                            {% if t.is_active %}border-red-200 text-red-600 hover:bg-red-50 dark:border-red-900 dark:text-red-400 dark:hover:bg-red-950/20
+                            {% else %}border-emerald-200 text-emerald-600 hover:bg-emerald-50 dark:border-emerald-900 dark:text-emerald-400 dark:hover:bg-emerald-950/20{% endif %}">
+                            {% if t.is_active %}<i class="fas fa-times"></i> Deactivate{% else %}<i class="fas fa-check"></i> Activate{% endif %}
+                        </button>
+                    </form>
+                    <form method="post" class="inline">
+                        {% csrf_token %}
+                        <input type="hidden" name="term_id" value="{{ t.id }}">
+                        <input type="hidden" name="action" value="toggle_registration">
+                        <button type="submit" class="px-3 py-1.5 text-xs font-semibold rounded-lg border transition-colors
+                            {% if t.registration_open %}border-amber-200 text-amber-600 hover:bg-amber-50 dark:border-amber-900 dark:text-amber-400 dark:hover:bg-amber-950/20
+                            {% else %}border-sky-200 text-sky-600 hover:bg-sky-50 dark:border-sky-900 dark:text-sky-400 dark:hover:bg-sky-950/20{% endif %}">
+                            {% if t.registration_open %}<i class="fas fa-lock"></i> Close Reg.{% else %}<i class="fas fa-door-open"></i> Open Reg.{% endif %}
+                        </button>
+                    </form>
+                </div>
+            </div>
+            {% empty %}
+            <div class="px-6 py-12 text-center">
+                <div class="w-12 h-12 rounded-xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-xl text-slate-400 mx-auto mb-2">
+                    <i class="fas fa-calendar"></i>
+                </div>
+                <p class="text-sm font-medium text-slate-900 dark:text-white">No terms created yet</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Create your first academic term above.</p>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

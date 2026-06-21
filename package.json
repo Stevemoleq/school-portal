@@ -1,0 +1,25 @@
+{
+  "name": "schoo_portal",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build:css": "tailwindcss -i ./school_portal/static/css/input.css -o ./school_portal/static/css/output.css",
+    "watch:css": "tailwindcss -i ./school_portal/static/css/input.css -o ./school_portal/static/css/output.css --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Stevemoleq/school-portal.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Stevemoleq/school-portal/issues"
+  },
+  "homepage": "https://github.com/Stevemoleq/school-portal#readme",
+  "devDependencies": {
+    "tailwindcss": "^3.4.19"
+  }
+}

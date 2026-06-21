@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Delete Accountant — Nazarene School{% endblock %}
+{% block page_title %}Delete Accountant{% endblock %}
+
+{% block content %}
+<div class="max-w-lg mx-auto">
+    <div class="scholarly-glass text-center p-8" style="border-color: rgba(220,38,38,0.3);">
+        <div class="w-16 h-16 rounded-2xl bg-red-100 dark:bg-red-950/40 flex items-center justify-center text-2xl text-red-600 dark:text-red-400 mx-auto mb-4">
+            <i class="fas fa-exclamation-triangle"></i>
+        </div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white">Delete Accountant?</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-2">
+            Are you sure you want to delete
+            <strong class="text-slate-900 dark:text-white">{{ accountant.user.get_full_name|default:accountant.user.username }}</strong>
+            ({{ accountant.accountant_id }})?
+            This will also delete their user account and all associated data.
+        </p>
+        <form method="post" class="mt-6 flex justify-center gap-3">
+            {% csrf_token %}
+            <a href="{% url 'accountant_list' %}" class="scholarly-btn-ghost">Cancel</a>
+            <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold text-sm transition-colors">
+                <i class="fas fa-trash"></i> Delete
+            </button>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — Accountant{% endblock %}
+{% block page_title %}Accountant Profile{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">My Profile</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">{{ accountant.accountant_id }}</p>
+</div>
+
+<div class="scholarly-glass p-5 sm:p-6 max-w-2xl">
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">First Name</label>
+                {{ form.first_name }}
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Last Name</label>
+                {{ form.last_name }}
+            </div>
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Email</label>
+            {{ form.email }}
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Phone</label>
+            {{ form.phone }}
+        </div>
+        <div class="pt-2">
+            <button type="submit" class="scholarly-btn-primary">
+                <i class="fas fa-save"></i> Save
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

@@ -1,13 +1,52 @@
 {% extends 'base.html' %}
-{% block title %}{% if form.instance.pk %}Edit{% else %}Create{% endif %} Announcement{% endblock %}
+{% block title %}{% if form.instance.pk %}Edit{% else %}New{% endif %} Announcement — Nazarene School{% endblock %}
+{% block page_title %}{% if form.instance.pk %}Edit Announcement{% else %}New Announcement{% endif %}{% endblock %}
+
 {% block content %}
-<div class="card" style="max-width: 700px; margin: 2rem auto;">
-    <h2 style="color: #1e3c72;">{% if form.instance.pk %}Edit Announcement{% else %}New Announcement{% endif %}</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn">Save</button>
-        <a href="{% url 'announcement_list' %}" class="btn btn-sm" style="background: #7f8c8d;">Cancel</a>
-    </form>
+<div class="max-w-2xl mx-auto">
+    <a href="{% url 'announcement_list' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-scholarly-primary mb-6 transition-colors" data-animate>
+        <i class="fas fa-arrow-left text-xs"></i> Back to Announcements
+    </a>
+
+    <div class="scholarly-glass" data-animate>
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h2 class="scholarly-section-title"><i class="fas fa-bullhorn text-scholarly-primary"></i> {% if form.instance.pk %}Edit Announcement{% else %}Create New Announcement{% endif %}</h2>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{% if form.instance.pk %}Update the announcement details{% else %}Share news with the school community{% endif %}</p>
+        </div>
+        <div class="p-5 sm:p-6">
+            {% if form.errors %}
+            <div class="mb-5 p-4 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200/60 dark:border-red-800/60 text-sm text-red-700 dark:text-red-400">
+                <p class="font-semibold mb-1 flex items-center gap-2"><i class="fas fa-exclamation-circle"></i> Please fix the errors below:</p>
+                {% for field in form %}{% for error in field.errors %}<p class="ml-5">{{ field.label }}: {{ error }}</p>{% endfor %}{% endfor %}
+            </div>
+            {% endif %}
+
+            <form method="post" class="space-y-5">
+                {% csrf_token %}
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Title *</label>
+                    <input type="text" name="title" value="{{ form.title.value|default:'' }}" required placeholder="e.g., Mid-term Break Announcement" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Content *</label>
+                    <textarea name="content" rows="8" required placeholder="Write your announcement here..." class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">{{ form.content.value|default:'' }}</textarea>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Provide clear and concise information for the recipients.</p>
+                </div>
+                <div>
+                    <label class="block text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Target Audience</label>
+                    <select name="target_audience" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                        <option value="all" {% if form.target_audience.value == 'all' %}selected{% endif %}>Everyone</option>
+                        <option value="students" {% if form.target_audience.value == 'students' %}selected{% endif %}>Students Only</option>
+                        <option value="teachers" {% if form.target_audience.value == 'teachers' %}selected{% endif %}>Teachers Only</option>
+                        <option value="parents" {% if form.target_audience.value == 'parents' %}selected{% endif %}>Parents Only</option>
+                    </select>
+                </div>
+                <div class="flex flex-col sm:flex-row sm:justify-end gap-3 pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
+                    <a href="{% url 'announcement_list' %}" class="scholarly-btn-ghost text-center">Cancel</a>
+                    <button type="submit" class="scholarly-btn-primary"><i class="fas fa-save"></i> Save Announcement</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

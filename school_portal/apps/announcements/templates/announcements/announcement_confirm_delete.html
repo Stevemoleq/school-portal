@@ -1,13 +1,29 @@
 {% extends 'base.html' %}
-{% block title %}Delete Announcement{% endblock %}
+{% block title %}Delete Announcement — Nazarene School{% endblock %}
+{% block page_title %}Delete Announcement{% endblock %}
+
 {% block content %}
-<div class="card" style="max-width: 500px; margin: 3rem auto; text-align: center;">
-    <h2 style="color: #c0392b;">Confirm Deletion</h2>
-    <p>Are you sure you want to delete "<strong>{{ object.title }}</strong>"?</p>
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit" class="btn" style="background: #c0392b;">Yes, Delete</button>
-        <a href="{% url 'announcement_list' %}" class="btn btn-sm">Cancel</a>
-    </form>
+<div class="max-w-xl mx-auto">
+    <a href="{% url 'announcement_list' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-scholarly-primary mb-6 transition-colors">
+        <i class="fas fa-arrow-left text-xs"></i> Back to Announcements
+    </a>
+
+    <div class="scholarly-glass text-center py-10" style="border-color: rgba(220,38,38,0.3);">
+        <div class="w-16 h-16 rounded-2xl bg-red-100 dark:bg-red-950/40 flex items-center justify-center mx-auto mb-4">
+            <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+        </div>
+        <h2 class="text-lg font-bold text-slate-900 dark:text-white mb-2">Delete Announcement?</h2>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mb-1">You are about to delete</p>
+        <p class="text-sm font-semibold text-slate-900 dark:text-white mb-6">"{{ announcement.title }}"</p>
+        <div class="flex items-center justify-center gap-3">
+            <a href="{% url 'announcement_list' %}" class="scholarly-btn-ghost">Cancel</a>
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="inline-flex items-center gap-2 px-5 py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-semibold text-sm transition-colors">
+                    <i class="fas fa-trash"></i> Yes, Delete
+                </button>
+            </form>
+        </div>
+    </div>
 </div>
 {% endblock %}

@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% block title %}Announcements — Parent Portal — Nazarene School{% endblock %}
+{% block page_title %}Announcements{% endblock %}
+
+{% block content %}
+<!-- Header -->
+<div class="mb-6">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">School Announcements</h1>
+            <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Stay informed with school news and updates</p>
+        </div>
+    </div>
+
+    <!-- Search -->
+    <form method="get" class="mt-4">
+        <div class="flex gap-3">
+            <div class="flex-1 relative">
+                <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="fas fa-search text-sm"></i></span>
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search announcements..."
+                       class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+            </div>
+            <button type="submit" class="scholarly-btn-primary"><i class="fas fa-search"></i></button>
+            {% if search_query %}
+            <a href="{% url 'parent_announcements' %}" class="scholarly-btn-ghost"><i class="fas fa-times"></i></a>
+            {% endif %}
+        </div>
+    </form>
+</div>
+
+<!-- Announcements List -->
+{% if page_obj %}
+<div class="space-y-4">
+    {% for ann in page_obj %}
+    <div class="scholarly-glass hover:shadow-md transition-shadow {% if ann.id not in read_ids %}border-l-4 border-l-scholarly-primary{% endif %}">
+        <div class="p-5 sm:p-6">
+            <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-xl {% if ann.id not in read_ids %}bg-scholarly-primary-container text-scholarly-primary{% else %}bg-slate-100 dark:bg-slate-800 text-slate-500{% endif %} flex items-center justify-center flex-shrink-0" {% if ann.id not in read_ids %}style="background: rgba(0,40,142,0.10); color: #00288e;"{% endif %}>
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                        <h3 class="text-base font-bold text-slate-900 dark:text-white">
+                            {% if ann.id not in read_ids %}
+                            <span class="inline-block w-2 h-2 bg-scholarly-primary rounded-full mr-2"></span>
+                            {% endif %}
+                            {{ ann.title }}
+                        </h3>
+                        <span class="status-chip status-chip-approved text-[10px] flex-shrink-0 whitespace-nowrap">{{ ann.get_target_audience_display }}</span>
+                    </div>
+                    <div class="flex items-center gap-3 mt-2 text-xs text-slate-500 dark:text-slate-400">
+                        <span><i class="far fa-clock mr-1"></i>{{ ann.created_at|date:"M d, Y" }}</span>
+                        <span><i class="far fa-user mr-1"></i>{{ ann.author.get_full_name|default:ann.author.username }}</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">{{ ann.content|truncatewords:50 }}</p>
+                    <div class="mt-4">
+                        <a href="{% url 'parent_announcement_detail' ann.pk %}" class="text-sm font-semibold text-scholarly-primary hover:text-scholarly-secondary transition-colors">
+                            Read more <i class="fas fa-arrow-right text-[10px] ml-1"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- Pagination -->
+{% if page_obj.has_other_pages %}
+<div class="flex items-center justify-center gap-2 mt-8">
+    {% if page_obj.has_previous %}
+    <a href="?page={{ page_obj.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="scholarly-btn-ghost">
+        <i class="fas fa-chevron-left text-xs"></i> Previous
+    </a>
+    {% endif %}
+    <span class="text-sm text-slate-500 dark:text-slate-400 px-3">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+    {% if page_obj.has_next %}
+    <a href="?page={{ page_obj.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}" class="scholarly-btn-ghost">
+        Next <i class="fas fa-chevron-right text-xs"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="scholarly-glass p-12 text-center">
+    <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+        <i class="fas fa-bullhorn"></i>
+    </div>
+    <p class="text-sm font-medium text-slate-900 dark:text-white">No announcements yet</p>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Check back later for updates from the school.</p>
+</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block title %}{{ student.user.get_full_name }} — Fees{% endblock %}
+{% block page_title %}Student Fees{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+        <p class="text-xs text-slate-500 dark:text-slate-400"><a href="{% url 'fees:search_student' %}" class="hover:underline">Search</a> / Student Fees</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-1">{{ student.user.get_full_name }}</h1>
+        <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">{{ student.student_id }} · {{ student.current_class.name|default:"No class" }}</p>
+    </div>
+    <a href="{% url 'fees:record_payment' student.student_id %}" class="scholarly-btn-primary self-start sm:self-auto">
+        <i class="fas fa-plus"></i> Record Payment
+    </a>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-file-invoice-dollar"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Total Due</p>
+        <h3 class="text-2xl font-bold text-scholarly-primary tracking-tight">MWK {{ total_due|floatformat:2 }}</h3>
+    </div>
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-emerald-500"><i class="fas fa-check-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Total Paid</p>
+        <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">MWK {{ total_paid|floatformat:2 }}</h3>
+    </div>
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-red-500"><i class="fas fa-exclamation-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Outstanding</p>
+        <h3 class="text-2xl font-bold text-red-600 dark:text-red-400 tracking-tight">MWK {{ total_balance|floatformat:2 }}</h3>
+    </div>
+</div>
+
+{% if per_term %}
+<div class="scholarly-glass overflow-hidden mb-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-calendar text-scholarly-primary"></i> By Term</h3>
+    </div>
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200/60 dark:border-slate-700/60">
+                <tr>
+                    <th class="text-left py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Term</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Due</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Paid</th>
+                    <th class="text-right py-3 px-6 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Balance</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+                {% for t in per_term %}
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                    <td class="py-3 px-6 font-semibold text-slate-900 dark:text-white">{{ t.term }} · {{ t.session }}</td>
+                    <td class="py-3 px-4 text-right text-slate-700 dark:text-slate-300">MWK {{ t.due|floatformat:0 }}</td>
+                    <td class="py-3 px-4 text-right text-emerald-600 dark:text-emerald-400 font-semibold">MWK {{ t.paid|floatformat:0 }}</td>
+                    <td class="py-3 px-6 text-right font-bold {% if t.balance > 0 %}text-red-600 dark:text-red-400{% else %}text-emerald-600 dark:text-emerald-400{% endif %}">MWK {{ t.balance|floatformat:0 }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endif %}
+
+<div class="scholarly-glass overflow-hidden mb-6">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-list text-scholarly-primary"></i> Invoices</h3>
+    </div>
+    {% if invoices %}
+    <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+        {% for inv in invoices %}
+        <div class="px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ inv.fee_structure.name }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{{ inv.fee_structure.get_term_display }} · {{ inv.fee_structure.session }}</p>
+            </div>
+            <div class="flex items-center gap-6 text-sm">
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase">Total</p>
+                    <p class="font-semibold text-slate-900 dark:text-white">MWK {{ inv.total_amount|floatformat:0 }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase">Paid</p>
+                    <p class="font-semibold text-emerald-600 dark:text-emerald-400">MWK {{ inv.paid_amount|floatformat:0 }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] text-slate-500 uppercase">Balance</p>
+                    <p class="font-bold {% if inv.balance > 0 %}text-red-600 dark:text-red-400{% else %}text-emerald-600 dark:text-emerald-400{% endif %}">MWK {{ inv.balance|floatformat:0 }}</p>
+                </div>
+                {% if inv.status == 'paid' %}<span class="status-chip status-chip-paid">{{ inv.get_status_display }}</span>
+                {% elif inv.status == 'partially_paid' %}<span class="status-chip status-chip-partial">{{ inv.get_status_display }}</span>
+                {% else %}<span class="status-chip status-chip-unpaid">{{ inv.get_status_display }}</span>{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No invoices yet — create fee structures in the admin panel.</div>
+    {% endif %}
+</div>
+
+<div class="scholarly-glass overflow-hidden">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-history text-scholarly-primary"></i> Payment History</h3>
+    </div>
+    {% if receipts %}
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200/60 dark:border-slate-700/60">
+                <tr>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Date</th>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Reference</th>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bank</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Amount</th>
+                    <th class="text-center py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Status</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Receipt</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+                {% for r in receipts %}
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                    <td class="py-3 px-4 text-slate-700 dark:text-slate-300">{{ r.payment_date|date:"M d, Y" }}</td>
+                    <td class="py-3 px-4 font-mono text-xs text-slate-700 dark:text-slate-300">{{ r.transaction_reference }}</td>
+                    <td class="py-3 px-4 text-slate-700 dark:text-slate-300">{{ r.get_bank_name_display }}</td>
+                    <td class="py-3 px-4 text-right font-bold text-slate-900 dark:text-white">MWK {{ r.amount_paid|floatformat:0 }}</td>
+                    <td class="py-3 px-4 text-center">
+                        {% if r.status == 'approved' %}<span class="status-chip status-chip-approved">{{ r.get_status_display }}</span>
+                        {% elif r.status == 'rejected' %}<span class="status-chip status-chip-rejected">{{ r.get_status_display }}</span>
+                        {% else %}<span class="status-chip status-chip-pending">{{ r.get_status_display }}</span>{% endif %}
+                    </td>
+                    <td class="py-3 px-4 text-right">
+                        {% if r.receipt %}
+                        <a href="{% url 'fees:receipt_detail' r.receipt.receipt_number %}" class="text-xs font-semibold text-scholarly-primary hover:underline">View</a>
+                        {% else %}—{% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No payments recorded yet.</div>
+    {% endif %}
+</div>
+{% endblock %}

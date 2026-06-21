@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}My Profile — Parent Portal — Nazarene School{% endblock %}
+{% block page_title %}My Profile{% endblock %}
+
+{% block content %}
+<!-- Profile Header (Scholarly hero) -->
+<div class="relative overflow-hidden rounded-2xl mb-6 text-white scholarly-glass"
+     style="background: linear-gradient(135deg, #00288e 0%, #1e40af 40%, #4e45d5 100%); border: none;">
+    <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative px-6 sm:px-8 py-8 sm:py-10">
+        <div class="flex flex-col sm:flex-row items-center gap-5">
+            <div class="w-20 h-20 rounded-2xl bg-white/15 backdrop-blur-md border border-white/20 flex items-center justify-center text-3xl text-white shadow-inner">
+                <i class="fas fa-user"></i>
+            </div>
+            <div class="text-center sm:text-left">
+                <span class="status-chip" style="background: rgba(255,255,255,0.18); color: #fff;">Parent</span>
+                <h1 class="text-2xl font-extrabold text-white mt-1">{{ user.get_full_name|default:user.username }}</h1>
+                <p class="text-white/80 text-sm mt-0.5 font-mono">{{ parent.parent_id }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabs (Scholarly glass) -->
+<div class="scholarly-glass mb-6 overflow-hidden">
+    <div class="flex border-b border-slate-200/60 dark:border-slate-700/60 bg-slate-50/50 dark:bg-slate-800/30 px-2 sm:px-4">
+        <button id="tab-details-btn" onclick="switchTab(true)" class="px-5 py-3.5 font-semibold text-sm border-b-2 border-scholarly-primary text-scholarly-primary transition flex items-center gap-2">
+            <i class="fas fa-user text-xs"></i> Profile Details
+        </button>
+        <button id="tab-password-btn" onclick="switchTab(false)" class="px-5 py-3.5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center gap-2">
+            <i class="fas fa-key text-xs"></i> Password
+        </button>
+    </div>
+
+    <!-- Tab 1: Profile Details -->
+    <div id="tab-details-content" class="p-5 sm:p-6">
+        <h3 class="scholarly-section-title mb-2"><i class="fas fa-pen text-scholarly-primary"></i> Edit Profile</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-5">Update your personal information</p>
+        <form method="post" class="space-y-5">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="update_profile">
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Parent ID</label>
+                    <input type="text" value="{{ parent.parent_id }}" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/50 text-sm text-slate-500 cursor-not-allowed">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Email Address</label>
+                    <input type="email" name="email" value="{{ user.email }}" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">First Name</label>
+                    <input type="text" name="first_name" value="{{ user.first_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Last Name</label>
+                    <input type="text" name="last_name" value="{{ user.last_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Phone Number</label>
+                    <input type="text" name="phone_number" value="{{ parent.phone_number }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary"
+                           placeholder="e.g., 0991234567">
+                    {% if form.phone_number.errors %}
+                    <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.phone_number.errors.0 }}</p>
+                    {% endif %}
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Relationship</label>
+                    <select name="relationship" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                        {% for code, display in form.fields.relationship.choices %}
+                        <option value="{{ code }}" {% if parent.relationship == code %}selected{% endif %}>{{ display }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="flex justify-end pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
+                <button type="submit" class="scholarly-btn-primary">
+                    <i class="fas fa-check"></i> Save Changes
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Tab 2: Password -->
+    <div id="tab-password-content" class="p-5 sm:p-6 hidden">
+        <h3 class="scholarly-section-title mb-2"><i class="fas fa-shield-halved text-scholarly-primary"></i> Change Password</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mb-5">Keep your account secure</p>
+        {% if password_form.errors %}
+        <div class="bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl p-4 mb-5 text-sm text-red-700 dark:text-red-400">
+            <p class="font-semibold flex items-center gap-2 mb-2"><i class="fas fa-exclamation-circle"></i> Please fix the errors below:</p>
+            {% for field in password_form %}
+                {% for error in field.errors %}
+                <p class="ml-5">{{ field.label }}: {{ error }}</p>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="post" class="space-y-5 max-w-lg">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="change_password">
+
+            {% for field in password_form %}
+            <div>
+                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">{{ field.label }}</label>
+                <input type="password" name="{{ field.html_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                {% if field.help_text %}<p class="text-xs text-slate-500 dark:text-slate-400 mt-1">{{ field.help_text }}</p>{% endif %}
+            </div>
+            {% endfor %}
+
+            <div class="flex justify-end pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
+                <button type="submit" class="scholarly-btn-primary">
+                    <i class="fas fa-lock"></i> Update Password
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+function switchTab(showDetails) {
+    var detailsBtn = document.getElementById('tab-details-btn');
+    var passwordBtn = document.getElementById('tab-password-btn');
+    var detailsContent = document.getElementById('tab-details-content');
+    var passwordContent = document.getElementById('tab-password-content');
+
+    if (showDetails) {
+        detailsBtn.className = 'px-5 py-3.5 font-semibold text-sm border-b-2 border-scholarly-primary text-scholarly-primary transition flex items-center gap-2';
+        passwordBtn.className = 'px-5 py-3.5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center gap-2';
+        detailsContent.classList.remove('hidden');
+        passwordContent.classList.add('hidden');
+    } else {
+        passwordBtn.className = 'px-5 py-3.5 font-semibold text-sm border-b-2 border-scholarly-primary text-scholarly-primary transition flex items-center gap-2';
+        detailsBtn.className = 'px-5 py-3.5 font-semibold text-sm border-b-2 border-transparent text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200 transition flex items-center gap-2';
+        passwordContent.classList.remove('hidden');
+        detailsContent.classList.add('hidden');
+    }
+}
+
+{% if password_form.errors %}
+    switchTab(false);
+{% endif %}
+</script>
+{% endblock %}

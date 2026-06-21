@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block title %}Fee Structures — Nazarene School{% endblock %}
+{% block page_title %}Fee Structures{% endblock %}
+
+{% block content %}
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Fee Structures</h1>
+        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Manage fee structures and generate student invoices.</p>
+    </div>
+    <a href="{% url 'fees:fee_structure_create' %}" class="scholarly-btn-primary self-start sm:self-auto">
+        <i class="fas fa-plus"></i> New Fee Structure
+    </a>
+</div>
+
+<div class="scholarly-glass overflow-hidden">
+    {% if structures %}
+    <div class="overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-slate-50/80 dark:bg-slate-800/40 border-b border-slate-200/60 dark:border-slate-700/60">
+                <tr>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Name</th>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Amount (MWK)</th>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Term</th>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Session</th>
+                    <th class="text-left py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Class</th>
+                    <th class="text-right py-3 px-4 text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+                {% for fs in structures %}
+                <tr class="hover:bg-slate-50/50 dark:hover:bg-slate-800/20 transition-colors">
+                    <td class="py-3 px-4 font-medium text-slate-900 dark:text-white">{{ fs.name }}</td>
+                    <td class="py-3 px-4 font-mono text-sm text-slate-900 dark:text-white">{{ fs.amount|floatformat:0 }}</td>
+                    <td class="py-3 px-4 text-sm text-slate-600 dark:text-slate-400">{{ fs.get_term_display }}</td>
+                    <td class="py-3 px-4 text-sm text-slate-600 dark:text-slate-400">{{ fs.session }}</td>
+                    <td class="py-3 px-4 text-sm text-slate-600 dark:text-slate-400">{{ fs.target_class|default:"All Classes" }}</td>
+                    <td class="py-3 px-4 text-right">
+                        <form method="post" action="{% url 'fees:generate_invoices' fs.pk %}" class="inline">
+                            {% csrf_token %}
+                            <button type="submit" class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold text-scholarly-primary hover:bg-scholarly-primary-container/30 rounded-lg transition-colors" title="Generate invoices for all students">
+                                <i class="fas fa-file-invoice"></i> Generate
+                            </button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6" class="text-center py-12 text-slate-500 dark:text-slate-400">No fee structures found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="p-12 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+            <i class="fas fa-file-invoice-dollar"></i>
+        </div>
+        <p class="text-sm font-medium text-slate-900 dark:text-white">No fee structures yet</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Create a fee structure to start generating invoices.</p>
+        <a href="{% url 'fees:fee_structure_create' %}" class="scholarly-btn-primary mt-4"><i class="fas fa-plus"></i> New Fee Structure</a>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

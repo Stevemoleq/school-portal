@@ -1,29 +1,122 @@
 {% extends 'base.html' %}
-{% block title %}Announcements{% endblock %}
-{% block content %}
-<h1 class="text-3xl font-bold text-[#1e3c72] mb-6">School Announcements</h1>
+{% block title %}Announcements — Nazarene School{% endblock %}
+{% block page_title %}Announcements{% endblock %}
 
-<div class="bg-white rounded-xl shadow-md divide-y divide-gray-200">
-    {% for ann in announcements %}
-        <div class="p-6">
-            <h2 class="text-xl font-semibold text-gray-800">{{ ann.title }}</h2>
-            <p class="text-sm text-gray-500 mb-2">Posted on {{ ann.created_at|date:"F j, Y" }} by {{ ann.author.get_full_name|default:ann.author.username }}</p>
-            <p class="text-gray-700">{{ ann.content|linebreaks }}</p>
-            {% if user.is_staff or user == ann.author %}
-                <div class="mt-4 space-x-2">
-                    <a href="{% url 'announcement_edit' ann.pk %}" class="text-[#1e3c72] hover:text-[#f39c12] transition">Edit</a>
-                    <a href="{% url 'announcement_delete' ann.pk %}" class="text-red-600 hover:text-red-800 transition">Delete</a>
+{% block content %}
+<div class="mb-8 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4" data-animate>
+    <div>
+        <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white">Announcements</h1>
+        <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">Stay updated with the latest school news</p>
+    </div>
+    {% if user.is_staff or user.teacher %}
+    <a href="{% url 'announcement_create' %}" class="scholarly-btn-primary">
+        <i class="fas fa-plus"></i> New Announcement
+    </a>
+    {% endif %}
+</div>
+
+<div class="scholarly-glass mb-6" data-animate>
+    <div class="p-5 sm:p-6">
+        <form method="get" class="grid grid-cols-1 sm:grid-cols-12 gap-3">
+            <div class="sm:col-span-{% if user.is_staff %}7{% else %}9{% endif %}">
+                <div class="relative">
+                    <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"><i class="fas fa-search text-sm"></i></span>
+                    <input type="text" name="search" value="{{ search_query }}" placeholder="Search announcements by title or content..." class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
                 </div>
+            </div>
+            {% if user.is_staff %}
+            <div class="sm:col-span-3">
+                <select name="audience" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                    <option value="">All Audiences</option>
+                    <option value="all" {% if audience_filter == 'all' %}selected{% endif %}>Everyone</option>
+                    <option value="students" {% if audience_filter == 'students' %}selected{% endif %}>Students</option>
+                    <option value="teachers" {% if audience_filter == 'teachers' %}selected{% endif %}>Teachers</option>
+                    <option value="parents" {% if audience_filter == 'parents' %}selected{% endif %}>Parents</option>
+                </select>
+            </div>
             {% endif %}
+            <div class="sm:col-span-2 flex gap-2">
+                <button type="submit" class="scholarly-btn-primary flex-1">
+                    <i class="fas fa-filter"></i> Filter
+                </button>
+                {% if search_query or audience_filter %}
+                <a href="{% url 'announcement_list' %}" class="scholarly-btn-ghost" aria-label="Clear filters">
+                    <i class="fas fa-times"></i>
+                </a>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+</div>
+
+{% if announcements %}
+<div class="space-y-4" data-animate>
+    {% for ann in announcements %}
+    <div class="scholarly-glass hover:shadow-lg transition-all duration-200">
+        <div class="p-5 sm:p-6">
+            <div class="flex items-start gap-4">
+                <div class="w-11 h-11 rounded-xl bg-scholarly-primary-container text-scholarly-on-container flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="min-w-0 flex-1">
+                    <div class="flex items-start justify-between gap-3">
+                        <h2 class="text-base font-bold text-slate-900 dark:text-white">{{ ann.title }}</h2>
+                        <span class="status-chip status-chip-verified text-[10px] flex-shrink-0">{{ ann.get_target_audience_display }}</span>
+                    </div>
+                    <div class="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-xs text-slate-500 dark:text-slate-400">
+                        <span><i class="far fa-user mr-1"></i>{{ ann.author.get_full_name|default:ann.author.username }}</span>
+                        <span><i class="far fa-clock mr-1"></i>{{ ann.created_at|date:"M d, Y" }}</span>
+                        <span><i class="far fa-calendar mr-1"></i>{{ ann.created_at|date:"g:i A" }}</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-3 leading-relaxed">{{ ann.content|truncatewords:60 }}</p>
+                    <div class="flex items-center gap-3 mt-4">
+                        <a href="{% url 'announcement_detail' ann.pk %}" class="inline-flex items-center gap-1.5 text-sm font-medium text-scholarly-primary hover:text-blue-900 transition-colors">
+                            Read more <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
+                        {% if user == ann.author or user.is_staff %}
+                        <span class="text-slate-300 dark:text-slate-600">|</span>
+                        <a href="{% url 'announcement_edit' ann.pk %}" class="text-xs text-slate-500 hover:text-scholarly-primary transition-colors"><i class="fas fa-edit mr-1"></i>Edit</a>
+                        <a href="{% url 'announcement_delete' ann.pk %}" class="text-xs text-slate-500 hover:text-red-600 transition-colors"><i class="fas fa-trash mr-1"></i>Delete</a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
         </div>
-    {% empty %}
-        <p class="p-6 text-gray-500">No announcements yet.</p>
+    </div>
     {% endfor %}
 </div>
 
-{% if user.is_staff or user.teacher %}
-    <div class="mt-6">
-        <a href="{% url 'announcement_create' %}" class="bg-[#1e3c72] hover:bg-[#2c4a8c] text-white px-6 py-2 rounded-lg transition">➕ Create New Announcement</a>
+{% if announcements.has_other_pages %}
+<div class="flex items-center justify-center gap-2 mt-8">
+    {% if announcements.has_previous %}
+    <a href="?page={{ announcements.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if audience_filter %}&audience={{ audience_filter }}{% endif %}" class="scholarly-btn-ghost btn-sm">
+        <i class="fas fa-chevron-left text-xs"></i> Previous
+    </a>
+    {% endif %}
+    <span class="text-sm text-slate-500 dark:text-slate-400 px-3">
+        Page {{ announcements.number }} of {{ announcements.paginator.num_pages }}
+    </span>
+    {% if announcements.has_next %}
+    <a href="?page={{ announcements.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if audience_filter %}&audience={{ audience_filter }}{% endif %}" class="scholarly-btn-ghost btn-sm">
+        Next <i class="fas fa-chevron-right text-xs"></i>
+    </a>
+    {% endif %}
+</div>
+{% endif %}
+
+{% else %}
+<div class="scholarly-glass">
+    <div class="p-16 text-center">
+        <div class="w-16 h-16 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+            <i class="fas fa-bullhorn"></i>
+        </div>
+        <p class="text-sm font-medium text-slate-900 dark:text-white">
+            {% if search_query %}No announcements match your search{% else %}No announcements yet{% endif %}
+        </p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+            {% if search_query %}Try a different keyword.{% else %}Check back later for updates from your school.{% endif %}
+        </p>
     </div>
+</div>
 {% endif %}
 {% endblock %}

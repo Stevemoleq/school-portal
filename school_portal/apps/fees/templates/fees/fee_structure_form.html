@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% block title %}New Fee Structure — Nazarene School{% endblock %}
+{% block page_title %}New Fee Structure{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <a href="{% url 'fees:fee_structure_list' %}" class="inline-flex items-center gap-1.5 text-sm text-slate-500 dark:text-slate-400 hover:text-scholarly-primary transition-colors">
+        <i class="fas fa-arrow-left text-xs"></i> Back to Fee Structures
+    </a>
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-2">New Fee Structure</h1>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Create a fee item for a term. After creating, you can generate invoices for students.</p>
+</div>
+
+<div class="scholarly-glass p-5 sm:p-6 max-w-2xl">
+    <form method="post" class="space-y-5">
+        {% csrf_token %}
+
+        {% for field in form %}
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5" for="{{ field.id_for_label }}">{{ field.label }}</label>
+            {% if field.help_text %}
+            <p class="text-xs text-slate-400 mb-1">{{ field.help_text }}</p>
+            {% endif %}
+            {{ field }}
+            {% if field.errors %}
+            <p class="text-xs text-red-500 mt-1">{{ field.errors|striptags }}</p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <div class="flex flex-col sm:flex-row gap-3 sm:justify-end pt-2">
+            <a href="{% url 'fees:fee_structure_list' %}" class="scholarly-btn-ghost text-center">Cancel</a>
+            <button type="submit" class="scholarly-btn-primary">
+                <i class="fas fa-save"></i> Save Fee Structure
+            </button>
+        </div>
+    </form>
+</div>
+{% endblock %}

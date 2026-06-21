@@ -1,14 +1,15 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib import messages
 from .models import Class, Subject
-from .forms import ClassForm, SubjectForm   # you'll create these forms
+from .forms import ClassForm, SubjectForm
+
 
 @staff_member_required
 def class_list(request):
-    classes = Class.objects.all()
+    classes = Class.objects.prefetch_related('students', 'subjects').all()
     return render(request, 'school/class_list.html', {'classes': classes})
+
 
 @staff_member_required
 def class_create(request):
@@ -21,6 +22,7 @@ def class_create(request):
     else:
         form = ClassForm()
     return render(request, 'school/class_form.html', {'form': form})
+
 
 @staff_member_required
 def class_edit(request, pk):
@@ -35,6 +37,7 @@ def class_edit(request, pk):
         form = ClassForm(instance=cls)
     return render(request, 'school/class_form.html', {'form': form})
 
+
 @staff_member_required
 def class_delete(request, pk):
     cls = get_object_or_404(Class, pk=pk)
@@ -45,11 +48,11 @@ def class_delete(request, pk):
     return render(request, 'school/class_confirm_delete.html', {'class': cls})
 
 
-# Subject views
 @staff_member_required
 def subject_list(request):
-    subjects = Subject.objects.all()
+    subjects = Subject.objects.select_related('assigned_class').all()
     return render(request, 'school/subject_list.html', {'subjects': subjects})
+
 
 @staff_member_required
 def subject_create(request):
@@ -63,6 +66,7 @@ def subject_create(request):
         form = SubjectForm()
     return render(request, 'school/subject_form.html', {'form': form})
 
+
 @staff_member_required
 def subject_edit(request, pk):
     subject = get_object_or_404(Subject, pk=pk)
@@ -75,6 +79,7 @@ def subject_edit(request, pk):
     else:
         form = SubjectForm(instance=subject)
     return render(request, 'school/subject_form.html', {'form': form})
+
 
 @staff_member_required
 def subject_delete(request, pk):

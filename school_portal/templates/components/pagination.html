@@ -1,0 +1,40 @@
+{% if page_obj.has_other_pages %}
+<div class="pagination" role="navigation" aria-label="Pagination">
+    {% if page_obj.has_previous %}
+    <a href="?{% if page_query_params %}{{ page_query_params }}&{% endif %}page={{ page_obj.previous_page_number }}"
+       class="pagination-link" aria-label="Previous page">
+        <i class="fas fa-chevron-left"></i>
+    </a>
+    {% endif %}
+
+    <div class="pagination-list">
+        {% for num in page_obj.paginator.page_range %}
+            {% if num == page_obj.number %}
+            <span class="pagination-link active" aria-current="page">{{ num }}</span>
+            {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+            <a href="?{% if page_query_params %}{{ page_query_params }}&{% endif %}page={{ num }}"
+               class="pagination-link" aria-label="Page {{ num }}">{{ num }}</a>
+            {% endif %}
+        {% endfor %}
+
+        {% if page_obj.paginator.num_pages > page_obj.number|add:'3' %}
+        <span class="pagination-ellipsis">&hellip;</span>
+        <a href="?{% if page_query_params %}{{ page_query_params }}&{% endif %}page={{ page_obj.paginator.num_pages }}"
+           class="pagination-link" aria-label="Last page, Page {{ page_obj.paginator.num_pages }}">
+            {{ page_obj.paginator.num_pages }}
+        </a>
+        {% endif %}
+    </div>
+
+    {% if page_obj.has_next %}
+    <a href="?{% if page_query_params %}{{ page_query_params }}&{% endif %}page={{ page_obj.next_page_number }}"
+       class="pagination-link" aria-label="Next page">
+        <i class="fas fa-chevron-right"></i>
+    </a>
+    {% endif %}
+
+    <span class="pagination-info">
+        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </span>
+</div>
+{% endif %}

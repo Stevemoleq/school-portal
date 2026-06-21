@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% block title %}Accountant Dashboard — Nazarene School{% endblock %}
+{% block page_title %}Fees & Payments{% endblock %}
+
+{% block content %}
+<!-- Welcome hero (Scholarly gradient) -->
+<div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-6 text-white scholarly-glass"
+     style="background: linear-gradient(135deg, #00288e 0%, #1e40af 40%, #4e45d5 100%); border: none;">
+    <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex items-center gap-4 min-w-0">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl sm:text-3xl text-white flex-shrink-0">
+                <i class="fas fa-calculator"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-white/70 text-sm font-medium">Welcome back</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1 truncate">
+                    {{ user.first_name|default:user.username }} — Fees Office
+                </h1>
+                <p class="text-white/80 text-sm mt-2">Record bank payments, verify deposits, and issue official receipts.</p>
+            </div>
+        </div>
+        <div class="flex flex-wrap gap-2">
+            <a href="{% url 'fees:fee_structure_list' %}" class="scholarly-btn-ghost relative" style="background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.25);">
+                <i class="fas fa-cog"></i> Fee Structures
+            </a>
+            <a href="{% url 'fees:reports' %}" class="scholarly-btn-ghost relative" style="background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.25);">
+                <i class="fas fa-chart-pie"></i> Reports
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Quick search (Scholarly glass) -->
+<form method="get" action="{% url 'fees:search_student' %}" class="scholarly-glass p-2 mb-6 flex flex-col sm:flex-row gap-2">
+    <div class="relative flex-1">
+        <span class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400"><i class="fas fa-search text-sm"></i></span>
+        <input type="text" name="q" placeholder="Search by Student ID or name..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/40 text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-scholarly-primary/50 focus:border-scholarly-primary/50">
+    </div>
+    <button type="submit" class="scholarly-btn-primary">
+        <i class="fas fa-search"></i> Find Student
+    </button>
+</form>
+
+<!-- BENTO STATS -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-amber-500"><i class="fas fa-clock"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Pending</p>
+        <h3 class="text-3xl font-bold text-amber-500 tracking-tight">{{ pending|stringformat:"02d" }}</h3>
+        <a href="{% url 'fees:accountant_verify_list' %}" class="inline-flex items-center gap-1 mt-3 text-xs font-semibold text-scholarly-primary hover:text-scholarly-secondary">
+            Verify now <i class="fas fa-arrow-right text-[10px]"></i>
+        </a>
+    </div>
+
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-emerald-500"><i class="fas fa-check-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Today</p>
+        <h3 class="text-3xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">{{ approved_today|stringformat:"02d" }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">payments approved</p>
+    </div>
+
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-money-bill-wave"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Collected</p>
+        <h3 class="text-2xl font-bold text-scholarly-primary tracking-tight">MWK {{ collected_today|floatformat:0 }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">today · MWK {{ collected_month|floatformat:0 }} this month</p>
+    </div>
+
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-red-500"><i class="fas fa-exclamation-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Outstanding</p>
+        <h3 class="text-2xl font-bold text-red-600 dark:text-red-400 tracking-tight">MWK {{ total_outstanding|floatformat:0 }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">across {{ total_students }} students</p>
+    </div>
+</div>
+
+<!-- 7-day chart + status breakdown -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+    <div class="lg:col-span-2 scholarly-glass">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h3 class="scholarly-section-title"><i class="fas fa-chart-bar text-scholarly-primary"></i> Income (last 7 days)</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Daily collection from approved bank payments</p>
+        </div>
+        <div class="p-5 sm:p-6">
+            <div class="relative h-56">
+                <div id="incomeChartSkeleton" class="skeleton skeleton-chart absolute inset-0"></div>
+                <canvas id="incomeChart" class="relative z-10"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="scholarly-glass">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <h3 class="scholarly-section-title"><i class="fas fa-chart-pie text-scholarly-secondary"></i> Student Status</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Payment breakdown</p>
+        </div>
+        <div class="p-5 sm:p-6 space-y-4">
+            <div>
+                <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="status-chip status-chip-paid">
+                        <i class="fas fa-check-circle"></i> Fully Paid
+                    </span>
+                    <span class="font-bold text-slate-900 dark:text-white">{{ paid_count }}</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+                    {% widthratio paid_count total_students 100 as paid_pct %}
+                    <div class="h-full bg-emerald-500" style="width: {{ paid_pct }}%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="status-chip status-chip-partial">
+                        <i class="fas fa-adjust"></i> Partial
+                    </span>
+                    <span class="font-bold text-slate-900 dark:text-white">{{ partial_count }}</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+                    {% widthratio partial_count total_students 100 as partial_pct %}
+                    <div class="h-full bg-amber-500" style="width: {{ partial_pct }}%"></div>
+                </div>
+            </div>
+            <div>
+                <div class="flex items-center justify-between text-sm mb-2">
+                    <span class="status-chip status-chip-unpaid">
+                        <i class="fas fa-exclamation-circle"></i> Unpaid
+                    </span>
+                    <span class="font-bold text-slate-900 dark:text-white">{{ unpaid_count }}</span>
+                </div>
+                <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-2 overflow-hidden">
+                    {% widthratio unpaid_count total_students 100 as unpaid_pct %}
+                    <div class="h-full bg-red-500" style="width: {{ unpaid_pct }}%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Recent payments + pending -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+            <h3 class="scholarly-section-title"><i class="fas fa-check-circle text-emerald-500"></i> Recent Approvals</h3>
+            <a href="{% url 'fees:accountant_verify_list' %}?status=approved" class="text-sm font-medium text-scholarly-primary hover:text-scholarly-secondary">View all</a>
+        </div>
+        {% if recent_payments %}
+        <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% for p in recent_payments %}
+            {% if p.receipt.receipt_number %}
+            <a href="{% url 'fees:receipt_detail' p.receipt.receipt_number %}" class="flex items-center gap-3 px-5 sm:px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+            {% else %}
+            <div class="flex items-center gap-3 px-5 sm:px-6 py-3">
+            {% endif %}
+                <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-check text-emerald-600 dark:text-emerald-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ p.resolved_student.user.get_full_name }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ p.transaction_reference }} · {{ p.payment_date|date:"M d" }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-bold text-emerald-700 dark:text-emerald-400">MWK {{ p.amount_paid|floatformat:0 }}</p>
+                    {% if p.receipt.receipt_number %}
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400">{{ p.receipt.receipt_number }}</p>
+                    {% else %}
+                    <p class="text-[10px] text-slate-500 dark:text-slate-400">No receipt</p>
+                    {% endif %}
+                </div>
+                <span class="status-chip status-chip-verified">Verified</span>
+            {% if p.receipt.receipt_number %}
+            </a>
+            {% else %}
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No approvals yet.</div>
+        {% endif %}
+    </div>
+
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
+            <h3 class="scholarly-section-title"><i class="fas fa-hourglass-half text-amber-500"></i> Awaiting Verification</h3>
+            <a href="{% url 'fees:accountant_verify_list' %}" class="text-sm font-medium text-amber-600 dark:text-amber-400">Verify</a>
+        </div>
+        {% if recent_pending %}
+        <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% for p in recent_pending %}
+            <a href="{% url 'fees:verify_payment' p.pk %}" class="flex items-center gap-3 px-5 sm:px-6 py-3 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-950/50 flex items-center justify-center flex-shrink-0">
+                    <i class="fas fa-clock text-amber-600 dark:text-amber-400 text-sm"></i>
+                </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ p.resolved_student.user.get_full_name }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 truncate">{{ p.transaction_reference }} · {{ p.get_bank_name_display }}</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-sm font-bold text-slate-900 dark:text-white">MWK {{ p.amount_paid|floatformat:0 }}</p>
+                </div>
+                <span class="status-chip status-chip-pending">Pending</span>
+            </a>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">
+            <i class="fas fa-check-circle text-emerald-500 text-2xl mb-2 block"></i>
+            All clear — no pending payments.
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+{{ chart_labels|json_script:"chart-labels-data" }}
+{{ chart_data|json_script:"chart-income-data" }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var labels = JSON.parse(document.getElementById('chart-labels-data').textContent);
+    var data = JSON.parse(document.getElementById('chart-income-data').textContent);
+    var skel = document.getElementById('incomeChartSkeleton');
+    var ctx = document.getElementById('incomeChart');
+    if (ctx && labels.length) {
+        if (skel) skel.style.display = 'none';
+        var styles = getComputedStyle(document.documentElement);
+        var primary = styles.getPropertyValue('--scholarly-primary').trim() || '#00288e';
+        var tickColor = document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#444653';
+        var gridColor = document.documentElement.classList.contains('dark') ? 'rgba(148,163,184,0.15)' : 'rgba(0,0,0,0.05)';
+        var grad = ctx.getContext('2d').createLinearGradient(0, 0, 0, 220);
+        grad.addColorStop(0, 'rgba(78, 69, 213, 0.85)');
+        grad.addColorStop(1, 'rgba(0, 40, 142, 0.55)');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Income (MWK)',
+                    data: data,
+                    backgroundColor: grad,
+                    borderRadius: 8,
+                    borderSkipped: false,
+                    maxBarThickness: 40,
+                }]
+            },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, ticks: { color: tickColor }, grid: { color: gridColor } },
+                    x: { ticks: { color: tickColor, font: { weight: '600' } }, grid: { display: false } }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endblock %}

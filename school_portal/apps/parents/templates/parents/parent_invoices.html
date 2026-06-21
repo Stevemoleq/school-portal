@@ -1,0 +1,157 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Fees & Invoices — Nazarene School{% endblock %}
+{% block page_title %}Fees & Invoices{% endblock %}
+
+{% block content %}
+<!-- Welcome hero (Scholarly) -->
+<div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-6 text-white scholarly-glass"
+     style="background: linear-gradient(135deg, #00288e 0%, #1e40af 40%, #4e45d5 100%); border: none;">
+    <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex items-center gap-4 min-w-0">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl sm:text-3xl text-white flex-shrink-0">
+                <i class="fas fa-university"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-white/70 text-sm font-medium">Fees & Invoices</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1 truncate">School Fees</h1>
+                <p class="text-white/80 text-sm mt-2">Pay fees at the bank and upload your deposit slip here for verification.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if invoices %}
+<div class="space-y-5">
+    {% for invoice in invoices %}
+    <div class="scholarly-glass overflow-hidden">
+        <!-- Invoice Header -->
+        <div class="{% if invoice.status == 'paid' %}bg-gradient-to-r from-emerald-600 to-emerald-700{% elif invoice.status == 'partially_paid' %}bg-gradient-to-r from-amber-500 to-amber-600{% else %}bg-gradient-to-r from-red-500 to-red-600{% endif %} px-5 sm:px-6 py-4 relative overflow-hidden">
+            <div class="absolute inset-0 opacity-10">
+                <div class="absolute -top-10 -right-10 w-48 h-48 bg-white rounded-full blur-2xl"></div>
+            </div>
+            <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <div>
+                    <p class="text-white/80 text-xs font-medium uppercase tracking-wider mb-1">{{ invoice.fee_structure.get_term_display }} — {{ invoice.fee_structure.session }}</p>
+                    <h2 class="text-xl font-bold text-white">{{ invoice.fee_structure.name }}</h2>
+                    <p class="text-white/70 text-sm mt-0.5">
+                        <i class="fas fa-user-graduate mr-1"></i>{{ invoice.student.user.get_full_name }} ({{ invoice.student.student_id }})
+                    </p>
+                </div>
+                <div class="text-right">
+                    <p class="text-white/70 text-xs">Outstanding Balance</p>
+                    <p class="text-3xl font-black text-white">MWK {{ invoice.balance|floatformat:0 }}</p>
+                    {% if invoice.status == 'paid' %}
+                        <span class="status-chip status-chip-paid mt-1"><i class="fas fa-check-circle"></i> Fully Paid</span>
+                    {% elif invoice.status == 'partially_paid' %}
+                        <span class="status-chip status-chip-partial mt-1"><i class="fas fa-adjust"></i> Partially Paid</span>
+                    {% else %}
+                        <span class="status-chip status-chip-unpaid mt-1"><i class="fas fa-exclamation-circle"></i> Unpaid</span>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <!-- Invoice Details -->
+        <div class="p-5 sm:p-6">
+            <div class="grid grid-cols-3 gap-4 mb-5">
+                <div class="text-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/50">
+                    <p class="text-lg font-bold text-slate-900 dark:text-white">MWK {{ invoice.total_amount|floatformat:0 }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Total Invoice</p>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-200/60 dark:border-emerald-800/50">
+                    <p class="text-lg font-bold text-emerald-700 dark:text-emerald-400">MWK {{ invoice.paid_amount|floatformat:0 }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Paid So Far</p>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-red-50 dark:bg-red-950/30 border border-red-200/60 dark:border-red-800/50">
+                    <p class="text-lg font-bold text-red-700 dark:text-red-400">MWK {{ invoice.balance|floatformat:0 }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Remaining</p>
+                </div>
+            </div>
+
+            <!-- Payment Receipts for this Invoice -->
+            {% if invoice.receipts.all %}
+            <div class="mb-5">
+                <h3 class="scholarly-section-title mb-3">
+                    <i class="fas fa-receipt text-scholarly-primary"></i> Submitted Deposit Slips
+                </h3>
+                <div class="space-y-2">
+                    {% for receipt in invoice.receipts.all %}
+                    <div class="flex items-center justify-between gap-3 px-4 py-3 rounded-xl border
+                        {% if receipt.status == 'approved' %}bg-emerald-50 dark:bg-emerald-950/20 border-emerald-200 dark:border-emerald-800/50
+                        {% elif receipt.status == 'rejected' %}bg-red-50 dark:bg-red-950/20 border-red-200 dark:border-red-800/50
+                        {% else %}bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-800/50{% endif %}">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <div class="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0
+                                {% if receipt.status == 'approved' %}bg-emerald-100 dark:bg-emerald-900/50{% elif receipt.status == 'rejected' %}bg-red-100 dark:bg-red-900/50{% else %}bg-amber-100 dark:bg-amber-900/50{% endif %}">
+                                <i class="fas {% if receipt.status == 'approved' %}fa-check text-emerald-600 dark:text-emerald-400{% elif receipt.status == 'rejected' %}fa-times text-red-600 dark:text-red-400{% else %}fa-clock text-amber-600 dark:text-amber-400{% endif %} text-xs"></i>
+                            </div>
+                            <div class="min-w-0">
+                                <p class="text-sm font-medium text-slate-900 dark:text-white truncate">Ref: {{ receipt.transaction_reference }}</p>
+                                <p class="text-xs text-slate-500 dark:text-slate-400">{{ receipt.get_bank_name_display }} · {{ receipt.payment_date }}</p>
+                                {% if receipt.status == 'rejected' and receipt.rejection_reason %}
+                                <p class="text-xs text-red-600 dark:text-red-400 mt-0.5 italic">{{ receipt.rejection_reason }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <p class="text-sm font-bold text-slate-900 dark:text-white">MWK {{ receipt.amount_paid|floatformat:0 }}</p>
+                            {% if receipt.status == 'approved' %}
+                                <span class="status-chip status-chip-verified">Verified</span>
+                            {% elif receipt.status == 'rejected' %}
+                                <span class="status-chip status-chip-rejected">Rejected</span>
+                            {% else %}
+                                <span class="status-chip status-chip-pending">Pending</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- Submit Payment Button -->
+            {% if invoice.status != 'paid' %}
+            <div class="pt-3 border-t border-slate-200/60 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                <a href="{% url 'submit_bank_payment' invoice.pk %}" class="scholarly-btn-primary">
+                    <i class="fas fa-upload"></i> Upload Bank Deposit Slip
+                </a>
+                <p class="text-xs text-slate-500 dark:text-slate-400">
+                    <i class="fas fa-info-circle mr-1"></i> Pay at any bank branch and upload the stamped slip.
+                </p>
+            </div>
+            {% else %}
+            <div class="pt-3 border-t border-slate-200/60 dark:border-slate-700/60">
+                <div class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 font-semibold text-sm">
+                    <i class="fas fa-check-circle"></i> Invoice Fully Settled — Thank you!
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% else %}
+<div class="scholarly-glass p-12 text-center">
+    <div class="w-16 h-16 mx-auto rounded-2xl bg-scholarly-primary-container text-white flex items-center justify-center mb-4" style="background: #1e40af; color: white;">
+        <i class="fas fa-file-invoice-dollar text-2xl"></i>
+    </div>
+    <p class="text-base font-semibold text-slate-900 dark:text-white">No fee invoices found</p>
+    <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+        Invoices will appear here once the school accountant generates them for the current term.
+    </p>
+    <a href="{% url 'upload_receipt' %}" class="mt-4 inline-flex items-center gap-2 px-5 py-2.5 bg-scholarly-primary hover:bg-blue-900 text-white font-semibold rounded-xl transition-all text-sm">
+        <i class="fas fa-upload"></i> Upload Bank Slip (No Invoice)
+    </a>
+</div>
+{% endif %}
+
+<div class="mt-6 text-center">
+    <a href="{% url 'upload_receipt' %}" class="inline-flex items-center gap-2 px-5 py-2.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-scholarly-primary-container/20 hover:text-scholarly-primary rounded-xl transition-all text-sm font-semibold">
+        <i class="fas fa-upload"></i> Upload Bank Slip Without an Invoice
+    </a>
+</div>
+{% endblock %}

@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Parent Dashboard — Nazarene School{% endblock %}
+{% block page_title %}Parent Portal{% endblock %}
+
+{% block content %}
+<!-- Welcome Section (Scholarly gradient + glass overlay) -->
+<div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-6 text-white scholarly-glass"
+     style="background: linear-gradient(135deg, #00288e 0%, #1e40af 40%, #4e45d5 100%); border: none;">
+    <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div class="flex items-center gap-4 min-w-0">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-white/15 border border-white/20 flex items-center justify-center text-2xl sm:text-3xl text-white flex-shrink-0">
+                <i class="fas fa-user-shield"></i>
+            </div>
+            <div class="min-w-0">
+                <p class="text-white/70 text-sm font-medium">Welcome back</p>
+                <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1 truncate">
+                    {{ user.first_name|default:"Parent" }}
+                </h1>
+                <div class="flex items-center gap-2 mt-2 text-white/80 text-sm flex-wrap">
+                    <span class="text-xs bg-white/10 px-2 py-0.5 rounded">{{ relationship_display }}</span>
+                    <span class="text-white/40">|</span>
+                    <span>{{ children_count }} child{{ children_count|pluralize:"ren" }} linked</span>
+                </div>
+            </div>
+        </div>
+        <a href="{% url 'parent_announcements' %}" class="scholarly-btn-ghost relative" style="background: rgba(255,255,255,0.15); color: #fff; border-color: rgba(255,255,255,0.25);">
+            <i class="fas fa-bullhorn"></i> Announcements
+            {% if unread_announcements > 0 %}
+            <span class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2 py-0.5 font-bold">{{ unread_announcements }}</span>
+            {% endif %}
+        </a>
+    </div>
+</div>
+
+<!-- ===== BENTO OVERVIEW (Scholarly) ===== -->
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-user-graduate"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Children</p>
+        <h3 class="text-3xl font-bold text-scholarly-primary tracking-tight">{{ children_count|stringformat:"02d" }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">Linked to your account</p>
+    </div>
+
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-scholarly-secondary"><i class="fas fa-bell"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Unread Notices</p>
+        <h3 class="text-3xl font-bold text-scholarly-secondary tracking-tight">{{ unread_announcements|stringformat:"02d" }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">From school admin</p>
+    </div>
+
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-file-invoice-dollar"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Total Fees</p>
+        <h3 class="text-2xl font-bold text-scholarly-primary tracking-tight">MWK {{ overall_fee_total|floatformat:0 }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">All children</p>
+    </div>
+
+    <div class="scholarly-bento">
+        <span class="bento-glyph" style="color: var(--scholarly-error, #ba1a1a);"><i class="fas fa-exclamation-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Balance</p>
+        <h3 class="text-2xl font-bold tracking-tight" style="color: var(--scholarly-error, #ba1a1a);">MWK {{ overall_fee_balance|floatformat:0 }}</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">
+            {% if overall_fee_status == 'paid' %}
+                <span class="status-chip-paid">All paid</span>
+            {% elif overall_fee_status == 'partial' %}
+                <span class="status-chip-partial">Partial</span>
+            {% elif overall_fee_status == 'unpaid' %}
+                <span class="status-chip-unpaid">Outstanding</span>
+            {% else %}
+                <span>No invoices</span>
+            {% endif %}
+        </p>
+    </div>
+</div>
+
+<!-- ===== FEES STATUS CARD (Stich-style deep blue) ===== -->
+{% if children_count > 0 %}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
+    <div class="lg:col-span-1 rounded-2xl p-5 sm:p-6 text-white relative overflow-hidden scholarly-glass" style="background: linear-gradient(135deg, #1e40af 0%, #00288e 100%); border: none;">
+        <div class="absolute -top-6 -right-6 w-32 h-32 bg-white/10 rounded-full blur-2xl"></div>
+        <h3 class="scholarly-section-title text-white mb-4">
+            <i class="fas fa-coins text-white"></i> Fees Status
+        </h3>
+        <div class="space-y-3 relative z-10">
+            <div>
+                <p class="text-xs opacity-80 uppercase font-semibold tracking-wider mb-1">Total Fees</p>
+                <p class="text-2xl font-bold">MWK {{ overall_fee_total|floatformat:0 }}</p>
+            </div>
+            <div class="h-px bg-white/20"></div>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <p class="text-xs opacity-80 mb-1">Paid</p>
+                    <p class="text-lg font-bold text-emerald-300">MWK {{ overall_fee_paid|floatformat:0 }}</p>
+                </div>
+                <div>
+                    <p class="text-xs opacity-80 mb-1">Balance</p>
+                    <p class="text-lg font-bold text-amber-200">MWK {{ overall_fee_balance|floatformat:0 }}</p>
+                </div>
+            </div>
+            <a href="{% url 'upload_receipt' %}" class="mt-2 w-full inline-flex items-center justify-center gap-2 py-2.5 bg-white text-scholarly-primary font-bold rounded-xl hover:bg-white/95 transition-all text-sm">
+                <i class="fas fa-upload"></i> Upload Bank Slip
+            </a>
+        </div>
+    </div>
+
+    <!-- Multi-child Progress Trends Chart -->
+    {% if children_count > 0 %}
+    <div class="lg:col-span-2 scholarly-glass p-5 sm:p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h3 class="scholarly-section-title">
+                <i class="fas fa-chart-line text-scholarly-primary"></i> Progress Trends
+            </h3>
+            <div class="flex flex-wrap gap-2">
+                {% for c in children_data %}
+                <span class="flex items-center gap-1 text-[10px] font-bold {% if forloop.first %}text-scholarly-primary{% else %}text-scholarly-secondary{% endif %}">
+                    <span class="w-2 h-2 rounded-full {% if forloop.first %}bg-scholarly-primary{% else %}bg-scholarly-secondary{% endif %}"></span> {{ c.student.user.first_name|default:c.student.student_id }}
+                </span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="relative h-48">
+            <canvas id="trendsChart"></canvas>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- ===== CHILDREN OVERVIEW ===== -->
+{% if children_data %}
+<div class="space-y-4">
+    {% for child in children_data %}
+    <div class="scholarly-glass overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+            <div class="flex items-center gap-3 min-w-0">
+                <div class="w-12 h-12 rounded-xl bg-scholarly-primary-container text-white flex items-center justify-center text-xl flex-shrink-0" style="background: #1e40af; color: white;">
+                    <i class="fas fa-user-graduate"></i>
+                </div>
+                <div class="min-w-0">
+                    <h3 class="text-base font-bold text-slate-900 dark:text-white truncate">{{ child.student.user.get_full_name }}</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {{ child.student.student_id }} · {{ child.student.current_class.name|default:"Class not set" }}
+                    </p>
+                </div>
+                {% if child.fee_status == 'paid' %}
+                    <span class="status-chip status-chip-paid">Paid</span>
+                {% elif child.fee_status == 'partial' %}
+                    <span class="status-chip status-chip-partial">Partial</span>
+                {% elif child.fee_status == 'unpaid' %}
+                    <span class="status-chip status-chip-unpaid">Unpaid</span>
+                {% endif %}
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="{% url 'parent_child_results' child.student.student_id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-scholarly-primary-container/20 hover:text-scholarly-primary rounded-lg text-xs font-semibold transition-colors">
+                    <i class="fas fa-chart-bar"></i> Results
+                </a>
+                <a href="{% url 'parent_child_attendance' child.student.student_id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-emerald-100 hover:text-emerald-700 dark:hover:bg-emerald-950/30 dark:hover:text-emerald-400 rounded-lg text-xs font-semibold transition-colors">
+                    <i class="fas fa-calendar-check"></i> Attendance
+                </a>
+                <a href="{% url 'parent_child_report_card' child.student.student_id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-amber-100 hover:text-amber-700 dark:hover:bg-amber-950/30 dark:hover:text-amber-400 rounded-lg text-xs font-semibold transition-colors">
+                    <i class="fas fa-file-alt"></i> Report
+                </a>
+                <a href="{% url 'fees:parent_child_fees' child.student.student_id %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-scholarly-primary-container/20 hover:text-scholarly-primary rounded-lg text-xs font-semibold transition-colors">
+                    <i class="fas fa-coins"></i> Fees
+                </a>
+                <a href="{% url 'upload_receipt' %}" class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-emerald-100 dark:bg-emerald-950/30 text-emerald-700 dark:text-emerald-400 hover:bg-emerald-200 dark:hover:bg-emerald-900/50 rounded-lg text-xs font-semibold transition-colors">
+                    <i class="fas fa-upload"></i> Upload Slip
+                </a>
+            </div>
+        </div>
+        <div class="p-5 sm:p-6">
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
+                <div class="text-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
+                    <p class="text-2xl font-bold text-scholarly-primary">{{ child.average }}%</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Term Average</p>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
+                    <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400">{{ child.attendance.present }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Days Present</p>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
+                    <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ child.attendance.absent }}</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Days Absent</p>
+                </div>
+                <div class="text-center p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200/60 dark:border-slate-700/60">
+                    <p class="text-2xl font-bold text-scholarly-secondary">{{ child.attendance.percentage }}%</p>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Attendance Rate</p>
+                </div>
+            </div>
+
+            <!-- Child Subjects -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                <div class="rounded-xl border border-emerald-200 dark:border-emerald-900 bg-emerald-50/40 dark:bg-emerald-950/20 p-3">
+                    <h3 class="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i class="fas fa-lock"></i> Compulsory ({{ child.compulsory_subjects|length }})
+                    </h3>
+                    <ul class="flex flex-wrap gap-1.5">
+                        {% for s in child.compulsory_subjects %}
+                            <li class="text-xs px-2 py-1 bg-white dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800 rounded-md text-slate-700 dark:text-emerald-200">
+                                {{ s.name }}
+                            </li>
+                        {% empty %}
+                            <li class="text-xs text-slate-500">None</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="rounded-xl border border-sky-200 dark:border-sky-900 bg-sky-50/40 dark:bg-sky-950/20 p-3">
+                    <h3 class="text-xs font-semibold text-sky-700 dark:text-sky-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                        <i class="fas fa-book-open"></i> Electives ({{ child.elective_subjects|length }})
+                    </h3>
+                    <ul class="flex flex-wrap gap-1.5">
+                        {% for s in child.elective_subjects %}
+                            <li class="text-xs px-2 py-1 bg-white dark:bg-sky-950/50 border border-sky-200 dark:border-sky-800 rounded-md text-slate-700 dark:text-sky-200">
+                                {{ s.name }}
+                            </li>
+                        {% empty %}
+                            <li class="text-xs text-slate-500">No electives yet</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="scholarly-glass p-12 text-center">
+    <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+        <i class="fas fa-users"></i>
+    </div>
+    <p class="text-sm font-medium text-slate-900 dark:text-white">No children linked to your account</p>
+    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+        Please contact the school administration to link your children.
+    </p>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+{% if children_count > 0 %}
+{{ trend_chart_json|json_script:"trend-chart-data" }}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var data;
+    try { data = JSON.parse(document.getElementById('trend-chart-data').textContent); }
+    catch (e) { data = { labels: [], children: [] }; }
+    var ctx = document.getElementById('trendsChart');
+    if (!ctx || !data.children || data.children.length === 0) return;
+
+    var styles = getComputedStyle(document.documentElement);
+    var primary = styles.getPropertyValue('--scholarly-primary').trim() || '#00288e';
+    var secondary = styles.getPropertyValue('--scholarly-secondary').trim() || '#4e45d5';
+    var tickColor = document.documentElement.classList.contains('dark') ? '#cbd5e1' : '#444653';
+    var gridColor = document.documentElement.classList.contains('dark') ? 'rgba(148,163,184,0.15)' : 'rgba(0,0,0,0.05)';
+
+    var palette = [primary, secondary, '#10b981', '#f59e0b', '#ef4444', '#0ea5e9'];
+    var datasets = data.children.map(function(c, i) {
+        return {
+            label: c.name,
+            data: c.series,
+            backgroundColor: palette[i % palette.length],
+            borderRadius: 6,
+            barThickness: 24,
+        };
+    });
+
+    if (typeof Chart !== 'undefined') {
+        new Chart(ctx, {
+            type: 'bar',
+            data: { labels: data.labels, datasets: datasets },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    y: { beginAtZero: true, max: 100, ticks: { color: tickColor }, grid: { color: gridColor } },
+                    x: { ticks: { color: tickColor, font: { weight: '600' } }, grid: { display: false } }
+                }
+            }
+        });
+    }
+});
+</script>
+{% endif %}
+{% endblock %}

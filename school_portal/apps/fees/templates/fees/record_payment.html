@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block title %}Record Payment — {{ student.user.get_full_name }}{% endblock %}
+{% block page_title %}Record Payment{% endblock %}
+
+{% block content %}
+<div class="mb-6">
+    <p class="text-xs text-slate-500 dark:text-slate-400">
+        <a href="{% url 'fees:search_student' %}" class="hover:underline">Search</a> /
+        <a href="{% url 'fees:student_fee_detail' student.student_id %}" class="hover:underline">{{ student.user.get_full_name }}</a> /
+        Record Payment
+    </p>
+    <h1 class="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mt-1">Record Payment</h1>
+    <p class="text-slate-500 dark:text-slate-400 mt-1 text-sm">{{ student.user.get_full_name }} · {{ student.student_id }}</p>
+</div>
+
+<div class="scholarly-glass p-5 sm:p-6 max-w-2xl">
+    <form method="post" class="space-y-4">
+        {% csrf_token %}
+
+        {% if invoices %}
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Invoice (optional)</label>
+            <select name="invoice" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                <option value="">— No invoice (record directly) —</option>
+                {% for inv in invoices %}
+                <option value="{{ inv.pk }}">
+                    {{ inv.fee_structure.name }} · {{ inv.fee_structure.get_term_display }} · {{ inv.fee_structure.session }} —
+                    Balance MWK {{ inv.balance|floatformat:0 }}
+                </option>
+                {% endfor %}
+            </select>
+            <p class="text-xs text-slate-400 mt-1">Select an invoice to credit, or leave blank to record a standalone payment.</p>
+        </div>
+        {% else %}
+        <input type="hidden" name="invoice" value="">
+        {% endif %}
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Amount (MWK)</label>
+                <input type="number" name="amount" required min="0" step="0.01" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary" placeholder="0.00">
+            </div>
+            <div>
+                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Bank</label>
+                <select name="bank_name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                    <option value="">— Select bank —</option>
+                    <option value="nbm">National Bank of Malawi</option>
+                    <option value="standard">Standard Bank</option>
+                    <option value="nbs">NBS Bank</option>
+                    <option value="fdh">FDH Bank</option>
+                    <option value="fcb">First Capital Bank</option>
+                    <option value="ecobank">EcoBank</option>
+                    <option value="mybucks">MyBucks</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Bank Reference / Transaction No.</label>
+            <input type="text" name="transaction_reference" required placeholder="e.g. NBM-2026-001234" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+        </div>
+        <div>
+            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Payment Date</label>
+            <input type="date" name="payment_date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+        </div>
+        <div class="pt-2 flex flex-col sm:flex-row gap-2">
+            <button type="submit" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm transition-colors">
+                <i class="fas fa-check"></i> Record & Issue Receipt
+            </button>
+            <a href="{% url 'fees:student_fee_detail' student.student_id %}" class="scholarly-btn-ghost inline-flex items-center justify-center gap-2">
+                Cancel
+            </a>
+        </div>
+    </form>
+</div>
+{% endblock %}

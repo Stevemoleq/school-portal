@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Delete Class — Nazarene School{% endblock %}
+{% block page_title %}Delete Class{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto">
+    <a href="{% url 'class_list' %}" class="inline-flex items-center gap-1.5 text-sm text-surface-500 dark:text-surface-400 hover:text-brand-600 dark:hover:text-brand-400 mb-6 transition-colors">
+        <i class="fas fa-arrow-left text-xs"></i> Back to Classes
+    </a>
+
+    <div class="content-card">
+        <div class="content-card-body text-center py-10">
+            <div class="w-16 h-16 rounded-2xl bg-red-100 dark:bg-red-950/50 flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-exclamation-triangle text-red-500 text-2xl"></i>
+            </div>
+            <h2 class="text-lg font-bold text-surface-900 dark:text-white mb-2">Delete Class?</h2>
+            <p class="text-sm text-surface-500 dark:text-surface-400 mb-1">You are about to delete <strong class="text-surface-900 dark:text-white">{{ class.name }}</strong>.</p>
+            <p class="text-xs text-surface-500 dark:text-surface-400 mb-8">This action cannot be undone. All subjects linked to this class will be affected.</p>
+            <div class="flex items-center justify-center gap-3">
+                <a href="{% url 'class_list' %}" class="btn btn-secondary">Cancel</a>
+                <form method="post">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger"><i class="fas fa-trash"></i> Delete Class</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+{% block title %}My Fees — Nazarene School{% endblock %}
+{% block page_title %}My Fees{% endblock %}
+
+{% block content %}
+<!-- Welcome hero (Scholarly) -->
+<div class="relative overflow-hidden rounded-2xl p-6 sm:p-8 mb-6 text-white scholarly-glass"
+     style="background: linear-gradient(135deg, #00288e 0%, #1e40af 40%, #4e45d5 100%); border: none;">
+    <div class="absolute -top-10 -right-10 w-48 h-48 bg-white/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute -bottom-10 -left-10 w-40 h-40 bg-white/5 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="relative">
+        <p class="text-white/70 text-sm font-medium">Finance</p>
+        <h1 class="text-2xl sm:text-3xl font-bold text-white mt-1">My Fees</h1>
+        <p class="text-white/80 text-sm mt-2">View your fee balance, payment history, and download receipts.</p>
+    </div>
+</div>
+
+<!-- Summary (Scholarly bento) -->
+<div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-file-invoice-dollar"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Total Due</p>
+        <h3 class="text-2xl font-bold text-scholarly-primary tracking-tight">MWK {{ total_due|floatformat:0 }}</h3>
+    </div>
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-emerald-500"><i class="fas fa-check-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Total Paid</p>
+        <h3 class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 tracking-tight">MWK {{ total_paid|floatformat:0 }}</h3>
+    </div>
+    <div class="scholarly-bento">
+        <span class="bento-glyph text-red-500"><i class="fas fa-exclamation-circle"></i></span>
+        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Outstanding</p>
+        <h3 class="text-2xl font-bold text-red-600 dark:text-red-400 tracking-tight">MWK {{ total_balance|floatformat:0 }}</h3>
+    </div>
+</div>
+
+<!-- Pending slips -->
+{% if pending_slips %}
+<div class="scholarly-glass p-5 sm:p-6 mb-6" style="border-color: rgba(180,83,9,0.25); background: rgba(180,83,9,0.04);">
+    <h3 class="scholarly-section-title mb-3"><i class="fas fa-clock text-amber-500"></i> Awaiting Verification</h3>
+    <div class="space-y-2">
+        {% for p in pending_slips %}
+        <div class="px-4 py-3 rounded-xl bg-white/80 dark:bg-slate-800/60 border border-amber-200/60 dark:border-amber-800/40 flex items-center justify-between gap-3">
+            <div class="min-w-0">
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">{% if p.invoice %}{{ p.invoice.fee_structure.name }}{% else %}Bank Payment{% endif %}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">Ref: {{ p.transaction_reference }} · {{ p.get_bank_name_display }} · {{ p.payment_date|date:"M d, Y" }}</p>
+            </div>
+            <p class="text-sm font-bold text-amber-700 dark:text-amber-400">MWK {{ p.amount_paid|floatformat:0 }}</p>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
+
+<!-- Invoices -->
+<div class="scholarly-glass mb-6 overflow-hidden">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-list text-scholarly-primary"></i> Invoices</h3>
+    </div>
+    {% if invoices %}
+    <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+        {% for inv in invoices %}
+        <div class="px-5 sm:px-6 py-4 flex flex-col sm:flex-row sm:items-center gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+            <div class="flex-1 min-w-0">
+                <p class="text-sm font-semibold text-slate-900 dark:text-white">{{ inv.fee_structure.name }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">{{ inv.fee_structure.get_term_display }} · {{ inv.fee_structure.session }}</p>
+            </div>
+            <div class="flex items-center gap-4 text-sm">
+                <p class="font-semibold text-slate-700 dark:text-slate-300">MWK {{ inv.total_amount|floatformat:0 }}</p>
+                {% if inv.status == 'paid' %}
+                    <span class="status-chip status-chip-paid">{{ inv.get_status_display }}</span>
+                {% elif inv.status == 'partially_paid' %}
+                    <span class="status-chip status-chip-partial">{{ inv.get_status_display }}</span>
+                {% else %}
+                    <span class="status-chip status-chip-unpaid">{{ inv.get_status_display }}</span>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No invoices yet.</div>
+    {% endif %}
+</div>
+
+<!-- Receipts -->
+<div class="scholarly-glass overflow-hidden">
+    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+        <h3 class="scholarly-section-title"><i class="fas fa-receipt text-scholarly-primary"></i> My Receipts</h3>
+    </div>
+    {% if receipts %}
+    <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+        {% for r in receipts %}
+        <div class="px-5 sm:px-6 py-3 flex items-center justify-between gap-3 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
+            <div class="min-w-0">
+                <p class="text-sm font-mono font-semibold text-slate-900 dark:text-white">{{ r.receipt_number }}</p>
+                <p class="text-xs text-slate-500 dark:text-slate-400">{{ r.date_issued|date:"M d, Y" }} · {{ r.get_term_display }} · {{ r.academic_year }}</p>
+            </div>
+            <div class="flex items-center gap-3">
+                <p class="text-sm font-bold text-emerald-600 dark:text-emerald-400">MWK {{ r.amount|floatformat:0 }}</p>
+                <a href="{% url 'fees:receipt_pdf' r.receipt_number %}" class="inline-flex items-center gap-1 px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-semibold">
+                    <i class="fas fa-file-pdf"></i> PDF
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="px-6 py-10 text-center text-sm text-slate-500 dark:text-slate-400">No receipts yet.</div>
+    {% endif %}
+</div>
+{% endblock %}
