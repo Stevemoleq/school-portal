@@ -1,3 +1,9 @@
+databases:
+  - name: school-portal-db
+    plan: free
+    databaseName: school_portal
+    ipAllowList: []
+
 services:
   - type: web
     name: school-portal
