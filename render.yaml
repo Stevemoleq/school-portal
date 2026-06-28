@@ -15,8 +15,11 @@ services:
       pip install -r requirements.txt
       python manage.py migrate
       python manage.py collectstatic --noinput --clear
+      echo "=== RUNNING CREATE_ADMIN ==="
       python manage.py create_admin
+      echo "=== RUNNING SEED_FAKE_DATA ==="
       python manage.py seed_fake_data --clear
+      echo "=== BUILD COMMANDS COMPLETE ==="
     startCommand: gunicorn school_portal.wsgi:application --workers 3 --bind 0.0.0.0:$PORT
     envVars:
       - key: DEBUG
