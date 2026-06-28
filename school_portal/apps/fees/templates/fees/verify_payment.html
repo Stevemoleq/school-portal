@@ -16,12 +16,12 @@
         <div class="p-5 sm:p-6 space-y-4">
             <div class="grid grid-cols-2 gap-4">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Student</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Student</p>
                     <p class="text-sm font-semibold text-slate-900 dark:text-white mt-1">{{ receipt.resolved_student.user.get_full_name }}</p>
                     <p class="text-xs text-slate-500 dark:text-slate-400 font-mono">{{ receipt.resolved_student.student_id }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ receipt.invoice|yesno:"Invoice,Payment" }}</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">{{ receipt.invoice|yesno:"Invoice,Payment" }}</p>
                     {% if receipt.invoice %}
                     <p class="text-sm font-semibold text-slate-900 dark:text-white mt-1">{{ receipt.invoice.fee_structure.name }}</p>
                     <p class="text-xs text-slate-500 dark:text-slate-400">{{ receipt.invoice.fee_structure.get_term_display }} · {{ receipt.invoice.fee_structure.session }}</p>
@@ -31,29 +31,29 @@
                     {% endif %}
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bank</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bank</p>
                     <p class="text-sm font-semibold text-slate-900 dark:text-white mt-1">{{ receipt.get_bank_name_display }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bank Reference</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Bank Reference</p>
                     <p class="text-sm font-mono font-semibold text-slate-900 dark:text-white mt-1">{{ receipt.transaction_reference }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Amount</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Amount</p>
                     <p class="text-2xl font-bold text-emerald-600 dark:text-emerald-400 mt-1">MWK {{ receipt.amount_paid|floatformat:2 }}</p>
                 </div>
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Deposit Date</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Deposit Date</p>
                     <p class="text-sm font-semibold text-slate-900 dark:text-white mt-1">{{ receipt.payment_date|date:"M d, Y" }}</p>
                 </div>
                 <div class="col-span-2">
-                    <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Depositor Name</p>
+                    <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Depositor Name</p>
                     <p class="text-sm font-semibold text-slate-900 dark:text-white mt-1">{{ receipt.depositor_name }}</p>
                 </div>
             </div>
             {% if receipt.deposit_slip_image %}
             <div class="pt-4 border-t border-slate-200/60 dark:border-slate-700/60">
-                <p class="text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Deposit Slip Image</p>
+                <p class="text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-2">Deposit Slip Image</p>
                 <a href="{{ receipt.deposit_slip_image.url }}" target="_blank" class="inline-block">
                     <img src="{{ receipt.deposit_slip_image.url }}" alt="Bank slip" class="max-h-64 rounded-xl border border-slate-200/60 dark:border-slate-700/60">
                 </a>
@@ -68,15 +68,26 @@
         </div>
         <form method="post" class="p-5 sm:p-6 space-y-4">
             {% csrf_token %}
+
+            {% if form.non_field_errors %}
+            <div class="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 text-sm text-red-700 dark:text-red-400" role="alert" aria-live="assertive">
+                {% for error in form.non_field_errors %}<p class="flex items-center gap-1.5"><i class="fas fa-exclamation-circle text-xs"></i> {{ error }}</p>{% endfor %}
+            </div>
+            {% endif %}
+
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
+                <label for="{{ form.status.id_for_label }}" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Status</label>
                 {{ form.status }}
+                <p id="id_status_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Choose Approved to credit funds, or Rejected to request correction.</p>
+                {% if form.status.errors %}<p id="id_status_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.status.errors.0 }}</p>{% endif %}
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Rejection Reason</label>
+                <label for="{{ form.rejection_reason.id_for_label }}" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Rejection Reason</label>
                 {{ form.rejection_reason }}
+                <p id="id_rejection_reason_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Required only when status is Rejected.</p>
+                {% if form.rejection_reason.errors %}<p id="id_rejection_reason_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.rejection_reason.errors.0 }}</p>{% endif %}
             </div>
-            {% if form.errors %}
+            {% if form.errors and not form.non_field_errors %}
             <div class="p-3 rounded-xl bg-red-50 dark:bg-red-950/30 text-sm text-red-700 dark:text-red-400">
                 {% for field, errors in form.errors.items %}
                 <p>{{ field }}: {{ errors|join:", " }}</p>

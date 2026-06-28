@@ -1,6 +1,9 @@
 """
 Forms for the fees module.
 """
+from datetime import date
+from decimal import Decimal
+
 from django import forms
 
 from apps.parents.models import BankPaymentReceipt, FeeStructure, StudentInvoice
@@ -39,6 +42,74 @@ class StudentSearchForm(forms.Form):
         self.fields["class_level"].queryset = Class.objects.all().order_by("name")
 
 
+class RecordPaymentForm(forms.Form):
+    """Form used by accountants to record and approve a payment directly."""
+
+    invoice = forms.ModelChoiceField(
+        queryset=StudentInvoice.objects.none(),
+        required=True,
+        empty_label="Select an unpaid invoice",
+        widget=forms.Select(attrs={
+            "class": "w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 "
+                     "bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 "
+                     "focus:ring-scholarly-primary/40 focus:border-scholarly-primary",
+        }),
+    )
+    amount = forms.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        min_value=Decimal("0.01"),
+        widget=forms.NumberInput(attrs={
+            "class": "w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 "
+                     "bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 "
+                     "focus:ring-scholarly-primary/40 focus:border-scholarly-primary",
+            "placeholder": "0.00",
+            "step": "0.01",
+            "min": "0.01",
+        }),
+    )
+    bank_name = forms.ChoiceField(
+        choices=BankPaymentReceipt.BANK_CHOICES,
+        widget=forms.Select(attrs={
+            "class": "w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 "
+                     "bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 "
+                     "focus:ring-scholarly-primary/40 focus:border-scholarly-primary",
+        }),
+    )
+    transaction_reference = forms.CharField(
+        max_length=100,
+        widget=forms.TextInput(attrs={
+            "class": "w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 "
+                     "bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 "
+                     "focus:ring-scholarly-primary/40 focus:border-scholarly-primary",
+            "placeholder": "e.g. NBM-2026-001234",
+        }),
+    )
+    payment_date = forms.DateField(
+        initial=date.today,
+        widget=forms.DateInput(attrs={
+            "type": "date",
+            "class": "w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 "
+                     "bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 "
+                     "focus:ring-scholarly-primary/40 focus:border-scholarly-primary",
+        }),
+    )
+
+    def __init__(self, *args, **kwargs):
+        invoices = kwargs.pop("invoices", StudentInvoice.objects.none())
+        super().__init__(*args, **kwargs)
+        self.fields["invoice"].queryset = invoices
+
+    def clean_transaction_reference(self):
+        return (self.cleaned_data.get("transaction_reference") or "").strip()
+
+    def clean_payment_date(self):
+        paid_on = self.cleaned_data["payment_date"]
+        if paid_on > date.today():
+            raise forms.ValidationError("Payment date cannot be in the future.")
+        return paid_on
+
+
 class VerifyPaymentForm(forms.ModelForm):
     """Form used by the accountant to approve/reject a pending bank slip."""
 
@@ -61,6 +132,16 @@ class VerifyPaymentForm(forms.ModelForm):
                          "bg-white dark:bg-surface-900 text-surface-900 dark:text-white px-4 py-3",
             }),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field_name, field in self.fields.items():
+            described_by = f"id_{field_name}_help"
+            has_error = self.is_bound and field_name in self.errors
+            if has_error:
+                described_by = f"{described_by} id_{field_name}_error"
+            field.widget.attrs["aria-describedby"] = described_by
+            field.widget.attrs["aria-invalid"] = "true" if has_error else "false"
 
     def clean(self):
         cleaned = super().clean()

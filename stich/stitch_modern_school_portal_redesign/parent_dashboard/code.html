@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduPortal | Parent Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "primary-fixed-dim": "#b8c4ff",
+                      "on-error-container": "#93000a",
+                      "surface-tint": "#3755c3",
+                      "outline-variant": "#c4c5d5",
+                      "on-secondary-fixed": "#100069",
+                      "surface-container": "#e5eeff",
+                      "secondary-fixed-dim": "#c3c0ff",
+                      "on-tertiary-container": "#b4bbd5",
+                      "on-secondary-container": "#fffbff",
+                      "on-error": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed-variant": "#3f465c",
+                      "on-primary-fixed-variant": "#173bab",
+                      "inverse-surface": "#213145",
+                      "secondary-container": "#6860ef",
+                      "tertiary-fixed-dim": "#bec6e0",
+                      "on-tertiary-fixed": "#131b2e",
+                      "on-surface-variant": "#444653",
+                      "on-background": "#0b1c30",
+                      "on-surface": "#0b1c30",
+                      "primary": "#00288e",
+                      "surface-variant": "#d3e4fe",
+                      "surface-container-low": "#eff4ff",
+                      "background": "#f8f9ff",
+                      "on-secondary-fixed-variant": "#372abf",
+                      "inverse-primary": "#b8c4ff",
+                      "on-primary-container": "#a8b8ff",
+                      "inverse-on-surface": "#eaf1ff",
+                      "secondary": "#4e45d5",
+                      "outline": "#757684",
+                      "on-primary-fixed": "#001453",
+                      "on-primary": "#ffffff",
+                      "surface-container-high": "#dce9ff",
+                      "surface": "#f8f9ff",
+                      "surface-bright": "#f8f9ff",
+                      "primary-fixed": "#dde1ff",
+                      "on-tertiary": "#ffffff",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed": "#dae2fd",
+                      "tertiary-container": "#434b60",
+                      "secondary-fixed": "#e3dfff",
+                      "surface-container-lowest": "#ffffff",
+                      "tertiary": "#2d3449",
+                      "error": "#ba1a1a",
+                      "surface-dim": "#cbdbf5",
+                      "primary-container": "#1e40af",
+                      "surface-container-highest": "#d3e4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-desktop": "2rem",
+                      "sm": "0.5rem",
+                      "margin-mobile": "1rem",
+                      "gutter": "1.5rem",
+                      "lg": "1.5rem",
+                      "max-width": "1280px",
+                      "base": "4px",
+                      "xl": "2.5rem",
+                      "md": "1rem",
+                      "xs": "0.25rem"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "display": ["Inter"],
+                      "headline-sm": ["Inter"],
+                      "label-md": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        .dark .glass-card {
+            background: rgba(33, 49, 69, 0.7);
+            border: 1px solid rgba(117, 118, 132, 0.3);
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 12px rgba(30, 64, 175, 0.05);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background dark:bg-on-background text-on-surface transition-colors duration-300 min-h-screen">
+<!-- Navigation Drawer Overlay -->
+<div class="fixed inset-0 bg-black/50 z-[55] hidden transition-opacity duration-300" id="drawer-overlay" onclick="toggleDrawer()"></div>
+<!-- NavigationDrawer Component -->
+<aside class="fixed top-0 left-0 h-full z-[60] overflow-y-auto bg-surface-container-lowest dark:bg-inverse-surface shadow-md h-full w-72 rounded-r-xl -translate-x-full transition-transform duration-300" id="main-drawer">
+<div class="flex flex-col h-full py-6">
+<div class="px-6 mb-8 flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined">school</span>
+</div>
+<h1 class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim">EduPortal</h1>
+</div>
+<div class="px-6 mb-8">
+<div class="flex items-center gap-3 p-3 bg-surface-container dark:bg-on-surface-variant/10 rounded-xl">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="A professional studio portrait of a woman in her late 30s with a warm, confident expression. She is wearing a soft charcoal blazer against a clean, out-of-focus academic office background. The lighting is bright and airy, following a modern corporate light-mode aesthetic with soft shadows and high-key tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBGc_pxl2ZbnlHMEP9Muc90jaUbDh4SjJ9BgAzKMI4cZA1-RUedm4U5eqD2Nc4qpIN9I-UCLTXtof7AjXL4j-KMQQGtPccEF9kZI37wdim1H4oyrZJyXFOk3gr1G3lDQP6BfOHRk1kawQ24zDywq479zAl3jmUPYrrXwvbn3JwU3cyLD0FF5GARLhLbFznev5JUsFaQxy2uqxooYEprEfrT22mAn9uS88IpH9l8RiEHUtus-hlKQch8NABmzR8B-TFzc5MULRw7Oek"/>
+<div>
+<p class="font-label-md text-label-md font-bold text-on-surface dark:text-inverse-on-surface">Academic Profile</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant dark:text-outline-variant">Parent ID: P-2024-88</p>
+</div>
+</div>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="bg-secondary-container text-on-secondary-container dark:bg-secondary dark:text-on-secondary rounded-full mx-2 flex items-center px-4 py-3 hover:bg-surface-container-high dark:hover:bg-surface-container transition-all translate-x-1 duration-200" href="#">
+<span class="material-symbols-outlined mr-3">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant flex items-center px-4 py-3 mx-2 hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined mr-3">school</span>
+<span class="font-label-md text-label-md">Academics</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant flex items-center px-4 py-3 mx-2 hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined mr-3">calendar_today</span>
+<span class="font-label-md text-label-md">Schedule</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant flex items-center px-4 py-3 mx-2 hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined mr-3">fact_check</span>
+<span class="font-label-md text-label-md">Attendance</span>
+</a>
+<a class="text-on-surface-variant dark:text-outline-variant flex items-center px-4 py-3 mx-2 hover:bg-surface-container-high dark:hover:bg-surface-container transition-all" href="#">
+<span class="material-symbols-outlined mr-3">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<div class="px-6 mt-auto">
+<button class="w-full flex items-center justify-between p-3 rounded-xl border border-outline-variant text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-high transition-colors" onclick="toggleDarkMode()">
+<span class="font-label-md text-label-md">Appearance</span>
+<span class="material-symbols-outlined" id="theme-icon">light_mode</span>
+</button>
+</div>
+</div>
+</aside>
+<!-- TopAppBar Component -->
+<header class="fixed top-0 left-0 w-full z-50 flex justify-between items-center px-margin-mobile md:px-margin-desktop h-16 bg-surface dark:bg-surface-dim shadow-sm">
+<div class="flex items-center gap-4">
+<button class="p-2 hover:bg-surface-container dark:hover:bg-surface-container-high transition-colors text-primary dark:text-primary-fixed-dim rounded-full active:scale-95 duration-100" onclick="toggleDrawer()">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<span class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed-dim">EduPortal</span>
+</div>
+<div class="flex items-center gap-4">
+<button class="hidden md:flex items-center gap-2 px-4 py-2 text-on-surface-variant dark:text-outline-variant hover:bg-surface-container transition-colors rounded-full font-label-md text-label-md">
+<span class="material-symbols-outlined">search</span>
+                Search
+            </button>
+<div class="flex items-center gap-3">
+<div class="text-right hidden sm:block">
+<p class="font-label-md text-label-md font-bold text-on-surface">Jane Doe</p>
+<p class="text-xs text-on-surface-variant">2 Linked Students</p>
+</div>
+<img class="w-10 h-10 rounded-full border-2 border-primary-container" data-alt="A detailed headshot of a professional educator or administrator, featuring a woman with a kind smile and sophisticated glasses. The setting is a minimalist, contemporary school reception area with soft daylighting. The visual style is high-end corporate modern, focusing on clean lines and a palette of whites and soft blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAodkG-JWWY6BstaVrS3LXLofFLuq6lKZZ_Mzysqe_mbkwKaBy7LcwvxGwipQ3AR3PzdtVrLQE5dses9aETd8_pnKEnXPIWlVDnTrDopSyn6VYImNlgKZxu7ra_Kxa8pnXbafeUroDOjbmKTX6F3NwDBqS2wUcl61KLrh4hcTMIjbDNcpXa0ebOftwdLirKzZ2wDwiABdxFZB5uqYN8iHCMZQ4ejhAHZB9yFE8ibyhmgshNNoyAc1XuqxiTBVMDsDG2GmHlalQEgjQ"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="pt-24 pb-20 px-margin-mobile md:px-margin-desktop max-w-max-width mx-auto">
+<!-- Welcome Header Section -->
+<section class="mb-xl">
+<h2 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-primary mb-2">Welcome back, Jane</h2>
+<p class="font-body-md text-body-md text-on-surface-variant">Here is a quick summary of David and Sarah's academic progress for this term.</p>
+</section>
+<!-- Bento Grid Layout -->
+<div class="grid grid-cols-1 md:grid-cols-12 gap-gutter">
+<!-- Child Cards Area -->
+<div class="md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-gutter">
+<!-- Sarah's Card -->
+<div class="glass-card rounded-xl p-md custom-shadow hover:translate-y-[-2px] transition-all duration-200">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-primary-container/20 border border-primary-container/30">
+<img class="w-full h-full object-cover" data-alt="A portrait of a primary school girl with a bright, curious expression, wearing a navy blue school uniform. She is in a vibrant, naturally-lit classroom with colorful posters blurred in the background. The mood is cheerful and focused, using a professional academic photography style with soft bokeh." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD2tmKhddory23HkAO9sjvmlOJkox8nt201xXETukXiUuq0PL3XS4v8zQ832GhPMVG1hRqLG9VW7H77fLT_g8LIoe6GHIR77Fm_3ld4oZb4x8zvSTPUFA2TNHDYE9clxtThgbo7fJiddbtF3-hZ8Ghqr6FvQ53X_J-ciqwo_XocVsV4QtOXv1Is5alaQuLGiA2LVJlOBSxg7wfkcpJz-2T_zO9jN90BeUmTyum2O0sBY8GGrkorEETcDFK08EXlr5WUvTXIpWQ9pNc"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm">Sarah Doe</h3>
+<p class="text-xs text-on-surface-variant">ID: 2024-SD02</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-green-100 text-green-700 text-[10px] font-bold rounded-full uppercase">On Track</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div class="bg-surface-container-low dark:bg-on-surface-variant/5 p-3 rounded-lg">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Average</p>
+<p class="text-headline-sm text-primary">94.2%</p>
+</div>
+<div class="bg-surface-container-low dark:bg-on-surface-variant/5 p-3 rounded-lg">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Attendance</p>
+<p class="text-headline-sm text-secondary">98%</p>
+</div>
+</div>
+<div class="w-full bg-outline-variant/30 h-1.5 rounded-full overflow-hidden">
+<div class="bg-primary h-full w-[94%] rounded-full"></div>
+</div>
+</div>
+<!-- David's Card -->
+<div class="glass-card rounded-xl p-md custom-shadow hover:translate-y-[-2px] transition-all duration-200">
+<div class="flex items-start justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-full overflow-hidden bg-secondary-container/20 border border-secondary-container/30">
+<img class="w-full h-full object-cover" data-alt="A studio portrait of a teenage high school boy with a thoughtful, serious expression, wearing a white collared shirt. The background is a clean, minimalist library setting with soft directional lighting. The aesthetic is modern and academic, emphasizing reliability and focus through a palette of soft grays and blues." src="https://lh3.googleusercontent.com/aida-public/AB6AXuA2kSOA5VOLMWvt-k-RlZTdM9q7Cjp9_idViNQOyN9WK65PfhualGZtPLTU8KvJffzLXuCc6VpD67GVIG1V_Zh4emm11BRBmGH984OUDldzg5XUTI1I-Y5_VhtFoT5YA1UT4gZ6M_Z7JAsEcE43_OebiW6d0mytfi4chk9KikSZaSoCk5BU3SDXLqmy7p2I0HBwi8NiiU--_B5yOoxU131V3N-0CL9c9OfQ32qZzAARFVTRiG3hjtWP33qlbaHhQf66f9EHCbh8Z2k"/>
+</div>
+<div>
+<h3 class="font-headline-sm text-headline-sm">David Doe</h3>
+<p class="text-xs text-on-surface-variant">ID: 2024-DD01</p>
+</div>
+</div>
+<span class="px-2 py-1 bg-secondary-container text-on-secondary-container text-[10px] font-bold rounded-full uppercase">Steady</span>
+</div>
+<div class="grid grid-cols-2 gap-4 mb-4">
+<div class="bg-surface-container-low dark:bg-on-surface-variant/5 p-3 rounded-lg">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Average</p>
+<p class="text-headline-sm text-primary">82.5%</p>
+</div>
+<div class="bg-surface-container-low dark:bg-on-surface-variant/5 p-3 rounded-lg">
+<p class="text-[10px] text-on-surface-variant uppercase font-bold mb-1">Attendance</p>
+<p class="text-headline-sm text-secondary">91%</p>
+</div>
+</div>
+<div class="w-full bg-outline-variant/30 h-1.5 rounded-full overflow-hidden">
+<div class="bg-secondary h-full w-[82%] rounded-full"></div>
+</div>
+</div>
+<!-- Analytics Section (Spans 2 columns on desktop) -->
+<div class="sm:col-span-2 glass-card rounded-xl p-lg custom-shadow">
+<div class="flex items-center justify-between mb-6">
+<h3 class="font-headline-sm text-headline-sm flex items-center gap-2">
+<span class="material-symbols-outlined text-primary">insights</span>
+                            Progress Trends
+                        </h3>
+<div class="flex gap-2">
+<span class="flex items-center gap-1 text-[10px] font-bold text-primary">
+<span class="w-2 h-2 rounded-full bg-primary"></span> Sarah
+                            </span>
+<span class="flex items-center gap-1 text-[10px] font-bold text-secondary">
+<span class="w-2 h-2 rounded-full bg-secondary"></span> David
+                            </span>
+</div>
+</div>
+<div class="h-48 flex items-end justify-between gap-2 px-2 border-b border-l border-outline-variant">
+<!-- Simplified Visualization Bars representing trend -->
+<div class="w-1/6 flex flex-col items-center gap-1">
+<div class="w-full bg-secondary-container/30 h-24 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-secondary h-[70%] rounded-t-sm"></div>
+</div>
+<div class="w-full bg-primary-container/30 h-32 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-primary h-[85%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] mt-2">Sep</span>
+</div>
+<div class="w-1/6 flex flex-col items-center gap-1">
+<div class="w-full bg-secondary-container/30 h-24 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-secondary h-[75%] rounded-t-sm"></div>
+</div>
+<div class="w-full bg-primary-container/30 h-32 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-primary h-[88%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] mt-2">Oct</span>
+</div>
+<div class="w-1/6 flex flex-col items-center gap-1">
+<div class="w-full bg-secondary-container/30 h-24 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-secondary h-[80%] rounded-t-sm"></div>
+</div>
+<div class="w-full bg-primary-container/30 h-32 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-primary h-[92%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] mt-2">Nov</span>
+</div>
+<div class="w-1/6 flex flex-col items-center gap-1">
+<div class="w-full bg-secondary-container/30 h-24 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-secondary h-[82%] rounded-t-sm"></div>
+</div>
+<div class="w-full bg-primary-container/30 h-32 rounded-t-sm relative">
+<div class="absolute bottom-0 w-full bg-primary h-[94%] rounded-t-sm"></div>
+</div>
+<span class="text-[10px] mt-2">Dec</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Fees & Sidebar Area -->
+<div class="md:col-span-4 flex flex-col gap-gutter">
+<!-- Fees Summary Card -->
+<div class="bg-primary-container text-on-primary-container rounded-xl p-lg custom-shadow relative overflow-hidden">
+<div class="absolute top-[-20px] right-[-20px] w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+<h3 class="font-headline-sm text-headline-sm mb-6 flex items-center gap-2">
+<span class="material-symbols-outlined">payments</span>
+                        Fees Status
+                    </h3>
+<div class="space-y-4 relative z-10">
+<div>
+<p class="text-xs opacity-70 uppercase font-bold mb-1">Total Fees</p>
+<p class="text-headline-md">$12,450.00</p>
+</div>
+<div class="h-px bg-white/20"></div>
+<div class="flex justify-between">
+<div>
+<p class="text-xs opacity-70 mb-1">Paid</p>
+<p class="font-bold text-lg">$8,000.00</p>
+</div>
+<div class="text-right">
+<p class="text-xs opacity-70 mb-1">Balance</p>
+<p class="font-bold text-lg text-primary-fixed-dim">$4,450.00</p>
+</div>
+</div>
+<button class="w-full py-3 bg-white text-primary font-bold rounded-xl active:scale-95 duration-100 transition-transform">
+                            Pay Remaining Balance
+                        </button>
+</div>
+</div>
+<!-- Recent Activity/Notices -->
+<div class="glass-card rounded-xl p-lg custom-shadow">
+<h3 class="font-label-md text-label-md font-bold text-on-surface-variant uppercase mb-4">Upcoming Notices</h3>
+<div class="space-y-4">
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary">campaign</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold">PTA Meeting</p>
+<p class="text-xs text-on-surface-variant">Dec 15, 2024 • Auditorium</p>
+</div>
+</div>
+<div class="flex gap-3">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex-shrink-0 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary">science</span>
+</div>
+<div>
+<p class="font-label-md text-label-md font-bold">Science Fair - Sarah</p>
+<p class="text-xs text-on-surface-variant">Jan 12, 2025 • High School Gym</p>
+</div>
+</div>
+</div>
+<button class="mt-6 w-full text-primary font-label-md text-label-md flex items-center justify-center gap-1 hover:underline">
+                        View All Notices
+                        <span class="material-symbols-outlined text-sm">arrow_forward</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- BottomNavBar Component (Mobile Only) -->
+<nav class="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center h-16 md:hidden px-2 pb-safe bg-surface dark:bg-surface-dim border-t border-outline-variant shadow-lg">
+<a class="flex flex-col items-center justify-center bg-primary-container text-on-primary-container dark:bg-primary dark:text-on-primary rounded-2xl px-4 py-1 active:scale-90 duration-150" href="#">
+<span class="material-symbols-outlined">home</span>
+<span class="font-label-sm text-label-sm-mobile">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">grade</span>
+<span class="font-label-sm text-label-sm-mobile">Grades</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">assignment</span>
+<span class="font-label-sm text-label-sm-mobile">Tasks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant px-4 py-1 hover:bg-surface-variant dark:hover:bg-surface-container-highest" href="#">
+<span class="material-symbols-outlined">person</span>
+<span class="font-label-sm text-label-sm-mobile">Profile</span>
+</a>
+</nav>
+<script>
+        function toggleDrawer() {
+            const drawer = document.getElementById('main-drawer');
+            const overlay = document.getElementById('drawer-overlay');
+            const isOpen = !drawer.classList.contains('-translate-x-full');
+            
+            if (isOpen) {
+                drawer.classList.add('-translate-x-full');
+                overlay.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            } else {
+                drawer.classList.remove('-translate-x-full');
+                overlay.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.innerText = 'light_mode';
+            } else {
+                html.classList.add('dark');
+                icon.innerText = 'dark_mode';
+            }
+        }
+    </script>
+</body></html>

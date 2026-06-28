@@ -144,14 +144,51 @@ class BankPaymentReceiptForm(forms.ModelForm):
             self.fields['student'].required = True
         else:
             del self.fields['student']
-        widgets = {
-            'bank_name': forms.Select(attrs={'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3'}),
-            'depositor_name': forms.TextInput(attrs={'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3', 'placeholder': 'Enter full name'}),
-            'transaction_reference': forms.TextInput(attrs={'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3', 'placeholder': 'Reference number from bank slip'}),
-            'amount_paid': forms.NumberInput(attrs={'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3', 'placeholder': 'Amount paid in MWK', 'min': '0'}),
-            'payment_date': forms.DateInput(attrs={'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3', 'type': 'date'}),
-            'deposit_slip_image': forms.ClearableFileInput(attrs={'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3'}),
+        widget_attrs = {
+            'student': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+            },
+            'bank_name': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+            },
+            'depositor_name': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+                'placeholder': 'Enter full name',
+                'autocomplete': 'name',
+            },
+            'transaction_reference': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+                'placeholder': 'Reference number from bank slip',
+                'autocomplete': 'off',
+            },
+            'amount_paid': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+                'placeholder': 'Amount paid in MWK',
+                'min': '0',
+                'step': '0.01',
+                'inputmode': 'decimal',
+            },
+            'payment_date': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+                'type': 'date',
+            },
+            'deposit_slip_image': {
+                'class': 'form-input w-full rounded-xl border-surface-200 dark:border-surface-700 bg-white dark:bg-surface-800 text-surface-900 dark:text-white px-4 py-3',
+                'accept': '.jpg,.jpeg,.png,image/jpeg,image/png',
+            },
         }
+
+        for field_name, attrs in widget_attrs.items():
+            if field_name in self.fields:
+                self.fields[field_name].widget.attrs.update(attrs)
+
+        for field_name, field in self.fields.items():
+            described_by = f'id_{field_name}_help'
+            has_error = self.is_bound and field_name in self.errors
+            if has_error:
+                described_by = f'{described_by} id_{field_name}_error'
+            field.widget.attrs['aria-describedby'] = described_by
+            field.widget.attrs['aria-invalid'] = 'true' if has_error else 'false'
 
     def clean_deposit_slip_image(self):
         image = self.cleaned_data.get('deposit_slip_image')

@@ -33,7 +33,7 @@ from apps.parents.models import (
 )
 
 from .decorators import accountant_required, user_is_accountant
-from .forms import StudentSearchForm, VerifyPaymentForm, FeeStructureForm, AccountantForm
+from .forms import StudentSearchForm, VerifyPaymentForm, FeeStructureForm, AccountantForm, RecordPaymentForm
 from .models import Accountant, AuditLog, FeeConfiguration, Receipt
 from .pdf import render_receipt_pdf
 
@@ -419,101 +419,73 @@ def record_payment(request, student_id):
         .select_related("fee_structure")
         .order_by("fee_structure__session", "fee_structure__term")
     )
+    form = RecordPaymentForm(request.POST or None, invoices=invoices)
 
-    if request.method == "POST":
-        invoice_id = request.POST.get("invoice") or None
-        amount_raw = request.POST.get("amount")
-        bank_name = (request.POST.get("bank_name") or "").strip()
-        reference = (request.POST.get("transaction_reference") or "").strip()
-        payment_date_raw = request.POST.get("payment_date") or date.today().isoformat()
+    if request.method == "POST" and form.is_valid():
+        invoice = form.cleaned_data["invoice"]
+        amount = form.cleaned_data["amount"]
+        bank_name = (form.cleaned_data.get("bank_name") or "").strip()
+        reference = form.cleaned_data["transaction_reference"]
+        parsed_date = form.cleaned_data["payment_date"]
 
-        # Validate payment_date strictly — bad input previously caused 500s.
-        try:
-            parsed_date = date.fromisoformat(payment_date_raw)
-        except (TypeError, ValueError):
-            messages.error(request, "Invalid payment date. Use the date picker.")
-            return redirect("fees:record_payment", student_id=student_id)
-        if parsed_date > date.today():
-            messages.error(request, "Payment date cannot be in the future.")
-            return redirect("fees:record_payment", student_id=student_id)
-
-        try:
-            amount = Decimal(amount_raw)
-        except Exception:
-            amount = Decimal("0.00")
-        if amount <= 0:
-            messages.error(request, "Amount must be greater than zero.")
-            return redirect("fees:record_payment", student_id=student_id)
-        if not reference:
-            messages.error(request, "A bank reference / transaction number is required.")
-            return redirect("fees:record_payment", student_id=student_id)
         if BankPaymentReceipt.objects.filter(transaction_reference=reference).exists():
-            messages.error(request, "A payment with this reference already exists. Use a different reference.")
-            return redirect("fees:record_payment", student_id=student_id)
+            form.add_error("transaction_reference", "A payment with this reference already exists. Use a different reference.")
 
-        if not invoice_id:
-            messages.error(request, "Please select an invoice for this payment.")
-            return redirect("fees:record_payment", student_id=student_id)
-        # Reject any POST that targets an already-paid or wrong-student
-        # invoice, even if the dropdown was bypassed.
-        invoice = get_object_or_404(
-            StudentInvoice,
-            pk=invoice_id,
-            student=student,
-        )
-        if invoice.status == "paid":
-            messages.error(
-                request,
-                "This invoice is already fully paid. A new receipt cannot be issued.",
-            )
-            return redirect("fees:record_payment", student_id=student_id)
-        outstanding = Decimal(str(invoice.balance or 0))
-        if amount > outstanding:
-            messages.error(
-                request,
-                f"Amount MWK {amount:,.2f} exceeds the outstanding balance "
-                f"of MWK {outstanding:,.2f}.",
-            )
-            return redirect("fees:record_payment", student_id=student_id)
+        if invoice.student_id != student.id:
+            form.add_error("invoice", "Please select an invoice for this student.")
+        elif invoice.status == "paid":
+            form.add_error("invoice", "This invoice is already fully paid. A new receipt cannot be issued.")
+        else:
+            outstanding = Decimal(str(invoice.balance or 0))
+            if amount > outstanding:
+                form.add_error(
+                    "amount",
+                    f"Amount MWK {amount:,.2f} exceeds the outstanding balance of MWK {outstanding:,.2f}.",
+                )
 
-        with transaction.atomic():
-            receipt = BankPaymentReceipt.objects.create(
-                invoice=invoice,
-                bank_name=bank_name or "other",
-                depositor_name=(student.user.get_full_name() or student.student_id),
-                transaction_reference=reference,
-                amount_paid=amount,
-                payment_date=parsed_date,
-                status="approved",
-                verified_by=request.user,
-                verified_at=timezone.now(),
-            )
-            current_paid = Decimal(str(invoice.paid_amount or 0))
-            invoice.paid_amount = current_paid + amount
-            invoice.save()
+        if form.errors:
+            messages.error(request, "Please correct the highlighted fields.")
+        else:
+            with transaction.atomic():
+                receipt = BankPaymentReceipt.objects.create(
+                    invoice=invoice,
+                    bank_name=bank_name or "other",
+                    depositor_name=(student.user.get_full_name() or student.student_id),
+                    transaction_reference=reference,
+                    amount_paid=amount,
+                    payment_date=parsed_date,
+                    status="approved",
+                    verified_by=request.user,
+                    verified_at=timezone.now(),
+                )
+                current_paid = Decimal(str(invoice.paid_amount or 0))
+                invoice.paid_amount = current_paid + amount
+                invoice.save()
 
-            Receipt.objects.create(
-                payment=receipt,
-                invoice=invoice,
-                student_name=invoice.student.user.get_full_name() or invoice.student.student_id,
-                student_id=invoice.student.student_id,
-                amount=amount,
-                balance_after=invoice.balance,
-                term=invoice.fee_structure.term,
-                academic_year=invoice.fee_structure.session,
-                issued_by=request.user,
-            )
-            _write_audit(
-                action="record_payment", request=request,
-                description=f"Recorded direct payment {reference}",
-                target_model="StudentInvoice",
-                target_id=invoice.pk,
-                metadata={"amount": float(amount), "reference": reference, "student_id": student.student_id},
-            )
-            messages.success(request, f"Payment of MWK {amount:,.2f} recorded and receipt issued.")
-        return redirect("fees:student_fee_detail", student_id=student_id)
+                Receipt.objects.create(
+                    payment=receipt,
+                    invoice=invoice,
+                    student_name=invoice.student.user.get_full_name() or invoice.student.student_id,
+                    student_id=invoice.student.student_id,
+                    amount=amount,
+                    balance_after=invoice.balance,
+                    term=invoice.fee_structure.term,
+                    academic_year=invoice.fee_structure.session,
+                    issued_by=request.user,
+                )
+                _write_audit(
+                    action="record_payment", request=request,
+                    description=f"Recorded direct payment {reference}",
+                    target_model="StudentInvoice",
+                    target_id=invoice.pk,
+                    metadata={"amount": float(amount), "reference": reference, "student_id": student.student_id},
+                )
+                messages.success(request, f"Payment of MWK {amount:,.2f} recorded and receipt issued.")
+            return redirect("fees:student_fee_detail", student_id=student_id)
+    elif request.method == "POST":
+        messages.error(request, "Please correct the highlighted fields.")
 
-    context = {"student": student, "invoices": invoices}
+    context = {"student": student, "invoices": invoices, "form": form}
     return render(request, "fees/record_payment.html", context)
 
 

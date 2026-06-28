@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EduGlobal Portal - Accountant Fee Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(8px);
+            border: 1px solid #E2E8F0;
+        }
+        .dark .glass-card {
+            background: rgba(30, 41, 59, 0.7);
+            border: 1px solid #334155;
+        }
+        /* Hide scrollbars but keep functionality */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary-fixed": "#131b2e",
+                        "error": "#ba1a1a",
+                        "on-surface-variant": "#444653",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#6860ef",
+                        "secondary": "#4e45d5",
+                        "secondary-fixed-dim": "#c3c0ff",
+                        "on-primary-fixed-variant": "#173bab",
+                        "inverse-surface": "#213145",
+                        "primary-container": "#1e40af",
+                        "on-tertiary-container": "#b4bbd5",
+                        "tertiary-fixed": "#dae2fd",
+                        "primary": "#00288e",
+                        "on-tertiary-fixed-variant": "#3f465c",
+                        "on-error-container": "#93000a",
+                        "surface-variant": "#d3e4fe",
+                        "surface-tint": "#3755c3",
+                        "outline": "#757684",
+                        "on-error": "#ffffff",
+                        "inverse-on-surface": "#eaf1ff",
+                        "surface-container-high": "#dce9ff",
+                        "on-background": "#0b1c30",
+                        "on-secondary-container": "#fffbff",
+                        "surface-dim": "#cbdbf5",
+                        "primary-fixed-dim": "#b8c4ff",
+                        "on-surface": "#0b1c30",
+                        "secondary-fixed": "#e3dfff",
+                        "background": "#f8f9ff",
+                        "tertiary": "#2d3449",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "inverse-primary": "#b8c4ff",
+                        "surface-container": "#e5eeff",
+                        "on-primary-fixed": "#001453",
+                        "primary-fixed": "#dde1ff",
+                        "on-secondary-fixed-variant": "#372abf",
+                        "surface-bright": "#f8f9ff",
+                        "surface-container-highest": "#d3e4fe",
+                        "tertiary-fixed-dim": "#bec6e0",
+                        "surface-container-low": "#eff4ff",
+                        "outline-variant": "#c4c5d5",
+                        "on-secondary-fixed": "#100069",
+                        "tertiary-container": "#434b60",
+                        "surface": "#f8f9ff",
+                        "on-tertiary": "#ffffff",
+                        "on-primary-container": "#a8b8ff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "xl": "2.5rem",
+                        "max-width": "1280px",
+                        "margin-mobile": "1rem",
+                        "sm": "0.5rem",
+                        "lg": "1.5rem",
+                        "margin-desktop": "2rem",
+                        "xs": "0.25rem",
+                        "md": "1rem",
+                        "gutter": "1.5rem",
+                        "base": "4px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "headline-sm": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "display": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                        "headline-sm": ["20px", {"lineHeight": "28px", "fontWeight": "600"}],
+                        "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                        "label-sm": ["12px", {"lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "label-md": ["14px", {"lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "500"}],
+                        "display": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "headline-md": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                        "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                        "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface transition-colors duration-300">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim border-b border-outline-variant dark:border-outline shadow-sm flex justify-between items-center w-full px-md h-16 sticky top-0 z-50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-primary dark:text-primary-fixed-dim text-headline-md">school</span>
+<span class="text-headline-md font-headline-md font-bold text-primary dark:text-primary-fixed-dim">EduPortal</span>
+</div>
+<div class="flex items-center gap-md">
+<button class="p-sm rounded-full hover:bg-surface-container-high dark:hover:bg-surface-container-highest transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant dark:text-on-tertiary-container">notifications</span>
+</button>
+<div class="h-10 w-10 rounded-full bg-primary-fixed flex items-center justify-center overflow-hidden border border-outline-variant">
+<img alt="Sarah's Profile" class="h-full w-full object-cover" data-alt="A professional portrait of a female academic administrator with a warm, confident expression. She is wearing professional attire in a modern, brightly lit office environment that reflects a clean, scholarly atmosphere. The lighting is soft and high-key, emphasizing a reliable and human-centered persona, consistent with a high-end corporate educational portal." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmwRYjByRrCGarT3CR7_o-IMvSIwk3aRFpCgVnxhIwNZ4yxB6VdMzXqSwu50F1GOt-QRDo1bvzPOjjjmn9WVq_UoT0uwcJf0T8u4BVVs2O8YKPBZ5TrA1T4w3v9DC6W34ENketB_575jCjOD_CwWkTGmxJS3ct3z4DZ18cDyV9FwuFSIsCFb3ZQCmERrF3UcmEay29C_-_EZyyBYzWa1d7eo_JS72QvyOU41jKE1s-Z6wU5-uE9JT76ihGvWPhJae_7A7RKbYHp34"/>
+</div>
+</div>
+</header>
+<div class="flex min-h-screen">
+<!-- Desktop Navigation Drawer -->
+<aside class="hidden md:flex fixed inset-y-0 left-0 z-50 flex-col p-md bg-surface-container-low dark:bg-surface-container-lowest shadow-lg h-full w-72 rounded-r-xl mt-16">
+<div class="mb-lg px-md">
+<p class="font-headline-sm text-headline-sm text-primary dark:text-primary-fixed-dim">Sarah Collins</p>
+<p class="font-label-md text-label-md text-on-surface-variant">Senior Accountant</p>
+</div>
+<nav class="space-y-sm">
+<a class="flex items-center gap-md bg-secondary-container dark:bg-secondary text-on-secondary-container dark:text-on-secondary rounded-full px-md py-sm transition-transform duration-150 active:scale-95" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-on-tertiary-container px-md py-sm hover:bg-surface-container-highest dark:hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">payments</span>
+<span class="font-label-md text-label-md">Fee Management</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-on-tertiary-container px-md py-sm hover:bg-surface-container-highest dark:hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">assessment</span>
+<span class="font-label-md text-label-md">Reports</span>
+</a>
+<a class="flex items-center gap-md text-on-surface-variant dark:text-on-tertiary-container px-md py-sm hover:bg-surface-container-highest dark:hover:bg-surface-variant rounded-full transition-colors" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 p-md md:pl-80 md:pt-8 transition-all">
+<div class="max-w-max-width mx-auto">
+<!-- Header Welcome -->
+<div class="mb-xl">
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Welcome, Accountant Sarah</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Managing financials for <span class="text-primary font-semibold">St. Julian's Academy</span></p>
+</div>
+<!-- Action Toolbar (Mobile First) -->
+<div class="flex flex-wrap gap-md mb-xl">
+<button class="bg-primary text-on-primary font-label-md text-label-md px-lg py-sm rounded-lg shadow-sm flex items-center gap-sm hover:bg-primary-container transition-all active:scale-95">
+<span class="material-symbols-outlined text-body-lg">verified</span>
+                        Verify Payment
+                    </button>
+<button class="bg-surface-variant text-primary font-label-md text-label-md px-lg py-sm rounded-lg border border-outline-variant flex items-center gap-sm hover:bg-surface-container-high transition-all active:scale-95">
+<span class="material-symbols-outlined text-body-lg">receipt_long</span>
+                        Generate Receipt
+                    </button>
+<button class="bg-surface text-on-surface-variant font-label-md text-label-md px-lg py-sm rounded-lg border border-outline-variant flex items-center gap-sm hover:bg-surface-container-highest transition-all active:scale-95">
+<span class="material-symbols-outlined text-body-lg">file_download</span>
+                        Export Report
+                    </button>
+</div>
+<!-- Financial Overview Cards (Bento Grid) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-lg mb-xl">
+<!-- Card 1 -->
+<div class="glass-card p-lg rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all transform hover:-translate-y-1">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-primary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-primary text-headline-sm">account_balance_wallet</span>
+</div>
+<span class="text-label-sm font-label-sm text-on-surface-variant px-sm py-xs bg-surface-container rounded-full">+12% vs last month</span>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-xs">Total Collections (This Month)</p>
+<h2 class="text-headline-lg font-headline-lg text-primary">$142,500.00</h2>
+</div>
+<!-- Card 2 -->
+<div class="glass-card p-lg rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all transform hover:-translate-y-1">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-error-container/10 rounded-lg">
+<span class="material-symbols-outlined text-error text-headline-sm">pending_actions</span>
+</div>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-xs">Outstanding Balance</p>
+<h2 class="text-headline-lg font-headline-lg text-error">$28,420.00</h2>
+</div>
+<!-- Card 3 -->
+<div class="glass-card p-lg rounded-xl shadow-sm border border-outline-variant hover:shadow-lg transition-all transform hover:-translate-y-1">
+<div class="flex justify-between items-start mb-md">
+<div class="p-sm bg-secondary-container/10 rounded-lg">
+<span class="material-symbols-outlined text-secondary text-headline-sm">rule</span>
+</div>
+<div class="flex items-center -space-x-2">
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-200"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-300"></div>
+<div class="w-6 h-6 rounded-full border-2 border-surface bg-slate-400"></div>
+</div>
+</div>
+<p class="text-label-md font-label-md text-on-surface-variant mb-xs">Pending Verifications</p>
+<h2 class="text-headline-lg font-headline-lg text-secondary">48 Records</h2>
+</div>
+</div>
+<!-- Search Section -->
+<div class="mb-xl">
+<div class="relative max-w-2xl">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant">search</span>
+<input class="w-full bg-surface-container-low border border-outline-variant rounded-xl py-4 pl-12 pr-4 focus:ring-2 focus:ring-primary focus:border-primary text-body-md outline-none transition-all placeholder:text-on-surface-variant" placeholder="Search Student ID or Name to find fee records..." type="text"/>
+<div class="absolute right-4 top-1/2 -translate-y-1/2 hidden sm:flex items-center gap-xs text-on-surface-variant text-label-sm border border-outline-variant px-2 py-1 rounded">
+<span>⌘</span>
+<span>K</span>
+</div>
+</div>
+</div>
+<!-- Recent Transactions Table -->
+<div class="glass-card rounded-xl shadow-sm border border-outline-variant overflow-hidden">
+<div class="p-lg border-b border-outline-variant flex justify-between items-center">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Recent Fee Payments</h3>
+<button class="text-primary font-label-md text-label-md hover:underline">View All</button>
+</div>
+<div class="overflow-x-auto no-scrollbar">
+<table class="w-full text-left">
+<thead class="bg-surface-container-low border-b border-outline-variant">
+<tr>
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant">STUDENT NAME</th>
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant">STUDENT ID</th>
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant">AMOUNT</th>
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant">DATE</th>
+<th class="px-lg py-md font-label-sm text-label-sm text-on-surface-variant text-right">STATUS</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-outline-variant">
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">AM</div>
+<span class="text-body-md font-medium">Alex Morgan</span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">EDU-2024-001</td>
+<td class="px-lg py-md text-body-md font-semibold">$1,200.00</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">Oct 24, 2024</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-emerald-100 text-emerald-700 text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px] mr-1" data-weight="fill">check_circle</span>
+                                            Verified
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">SW</div>
+<span class="text-body-md font-medium">Sarah Williams</span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">EDU-2024-152</td>
+<td class="px-lg py-md text-body-md font-semibold">$850.00</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">Oct 23, 2024</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-blue-100 text-blue-700 text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px] mr-1">history</span>
+                                            Pending
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">RJ</div>
+<span class="text-body-md font-medium">Robert Jenkins</span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">EDU-2024-089</td>
+<td class="px-lg py-md text-body-md font-semibold">$2,400.00</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">Oct 23, 2024</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-emerald-100 text-emerald-700 text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px] mr-1" data-weight="fill">check_circle</span>
+                                            Verified
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">LC</div>
+<span class="text-body-md font-medium">Linda Chen</span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">EDU-2024-211</td>
+<td class="px-lg py-md text-body-md font-semibold">$300.00</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">Oct 22, 2024</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-red-100 text-red-700 text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px] mr-1">flag</span>
+                                            Flagged
+                                        </span>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-high transition-colors">
+<td class="px-lg py-md flex items-center gap-md">
+<div class="w-8 h-8 rounded-full bg-surface-container-highest flex items-center justify-center text-primary font-bold text-xs">BT</div>
+<span class="text-body-md font-medium">Brian Thompson</span>
+</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">EDU-2024-004</td>
+<td class="px-lg py-md text-body-md font-semibold">$1,200.00</td>
+<td class="px-lg py-md text-body-sm text-on-surface-variant">Oct 21, 2024</td>
+<td class="px-lg py-md text-right">
+<span class="inline-flex items-center px-sm py-xs rounded-full bg-emerald-100 text-emerald-700 text-label-sm font-bold">
+<span class="material-symbols-outlined text-[14px] mr-1" data-weight="fill">check_circle</span>
+                                            Verified
+                                        </span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- Spacer for mobile bottom nav -->
+<div class="h-24 md:hidden"></div>
+</main>
+</div>
+<!-- BottomNavBar (Mobile) -->
+<nav class="fixed bottom-0 left-0 w-full z-40 flex justify-around items-center px-sm pb-safe h-20 md:hidden bg-surface dark:bg-surface-dim border-t border-outline-variant dark:border-outline shadow-lg rounded-t-xl">
+<a class="flex flex-col items-center justify-center bg-primary-container dark:bg-primary text-on-primary-container dark:text-on-primary rounded-2xl px-4 py-1 transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="home">home</span>
+<span class="font-label-sm text-label-sm">Home</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="font-label-sm text-label-sm">Financials</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="checklist">checklist</span>
+<span class="font-label-sm text-label-sm">Tasks</span>
+</a>
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-on-tertiary-container px-4 py-1 hover:bg-surface-container dark:hover:bg-surface-variant transition-all active:scale-90" href="#">
+<span class="material-symbols-outlined" data-icon="person">person</span>
+<span class="font-label-sm text-label-sm">Profile</span>
+</a>
+</nav>
+<script>
+        // Simple Interaction: Toggle status colors on hover
+        document.querySelectorAll('tr').forEach(row => {
+            row.addEventListener('click', () => {
+                const name = row.querySelector('.text-body-md')?.innerText;
+                if(name) {
+                    // Logic for selecting a transaction
+                    console.log('Selected Transaction for:', name);
+                }
+            });
+        });
+
+        // Search highlight interaction
+        const searchInput = document.querySelector('input');
+        searchInput.addEventListener('focus', () => {
+            searchInput.parentElement.classList.add('ring-2', 'ring-primary');
+        });
+        searchInput.addEventListener('blur', () => {
+            searchInput.parentElement.classList.remove('ring-2', 'ring-primary');
+        });
+
+        // Dark mode toggle simulation (can be linked to a button)
+        function toggleDarkMode() {
+            document.documentElement.classList.toggle('dark');
+        }
+    </script>
+</body></html>

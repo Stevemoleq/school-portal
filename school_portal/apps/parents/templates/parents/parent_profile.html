@@ -43,32 +43,34 @@
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Parent ID</label>
-                    <input type="text" value="{{ parent.parent_id }}" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/50 text-sm text-slate-500 cursor-not-allowed">
+                    <label for="id_parent_id" class="block text-sm font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Parent ID</label>
+                    <input type="text" id="id_parent_id" value="{{ parent.parent_id }}" readonly class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-slate-100 dark:bg-slate-800/50 text-sm text-slate-500 cursor-not-allowed">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Email Address</label>
-                    <input type="email" name="email" value="{{ user.email }}" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                    <label for="id_parent_email" class="block text-sm font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Email Address</label>
+                    <input type="email" id="id_parent_email" name="email" value="{{ user.email }}" aria-describedby="id_parent_email_help" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                    <p id="id_parent_email_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Used for account recovery and important notifications.</p>
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">First Name</label>
-                    <input type="text" name="first_name" value="{{ user.first_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                    <label for="id_parent_first_name" class="block text-sm font-semibold text-slate-600 uppercase tracking-wider mb-1.5">First Name</label>
+                    <input type="text" id="id_parent_first_name" name="first_name" value="{{ user.first_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Last Name</label>
-                    <input type="text" name="last_name" value="{{ user.last_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                    <label for="id_parent_last_name" class="block text-sm font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Last Name</label>
+                    <input type="text" id="id_parent_last_name" name="last_name" value="{{ user.last_name }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Phone Number</label>
-                    <input type="text" name="phone_number" value="{{ parent.phone_number }}" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary"
+                    <label for="id_parent_phone_number" class="block text-sm font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Phone Number</label>
+                    <input type="text" id="id_parent_phone_number" name="phone_number" value="{{ parent.phone_number }}" required aria-invalid="{% if form.phone_number.errors %}true{% else %}false{% endif %}" aria-describedby="id_parent_phone_help{% if form.phone_number.errors %} id_parent_phone_error{% endif %}" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary"
                            placeholder="e.g., 0991234567">
+                    <p id="id_parent_phone_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Use the number that can receive school notifications.</p>
                     {% if form.phone_number.errors %}
-                    <p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.phone_number.errors.0 }}</p>
+                    <p id="id_parent_phone_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.phone_number.errors.0 }}</p>
                     {% endif %}
                 </div>
                 <div>
-                    <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1.5">Relationship</label>
-                    <select name="relationship" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
+                    <label for="id_parent_relationship" class="block text-sm font-semibold text-slate-600 uppercase tracking-wider mb-1.5">Relationship</label>
+                    <select id="id_parent_relationship" name="relationship" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/60 dark:border-slate-700/60 bg-white/70 dark:bg-slate-800/50 text-sm text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-scholarly-primary/30 focus:border-scholarly-primary">
                         {% for code, display in form.fields.relationship.choices %}
                         <option value="{{ code }}" {% if parent.relationship == code %}selected{% endif %}>{{ display }}</option>
                         {% endfor %}

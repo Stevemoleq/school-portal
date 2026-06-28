@@ -115,7 +115,7 @@
                 </div>
                 <div>
                     <h1 class="text-white font-extrabold text-lg tracking-tight">NAZARENE</h1>
-                    <p class="text-indigo-200/70 text-[10px] uppercase tracking-[0.2em] font-medium">Secondary School</p>
+                    <p class="text-indigo-200/70 text-xs uppercase tracking-[0.2em] font-medium">Secondary School</p>
                 </div>
             </div>
         </div>
@@ -180,12 +180,12 @@
                     <p class="text-slate-500 dark:text-slate-400 text-sm mt-1">Welcome back! Please enter your credentials.</p>
                 </div>
 
-                <form method="post" class="space-y-5" novalidate>
+                <form method="post" class="space-y-5">
                     {% csrf_token %}
 
                     {% if messages %}
                     {% for message in messages %}
-                    <div class="{% if message.tags == 'error' %}bg-red-50 border-red-200 text-red-700{% else %}bg-emerald-50 border-emerald-200 text-emerald-700{% endif %} border rounded-xl px-4 py-3 flex items-center gap-3 fade-in" role="alert">
+                    <div class="{% if message.tags == 'error' %}bg-red-50 border-red-200 text-red-700{% else %}bg-emerald-50 border-emerald-200 text-emerald-700{% endif %} border rounded-xl px-4 py-3 flex items-center gap-3 fade-in" role="alert" aria-live="assertive">
                         <div class="w-8 h-8 rounded-lg {% if message.tags == 'error' %}bg-red-100 text-red-500{% else %}bg-emerald-100 text-emerald-500{% endif %} flex items-center justify-center flex-shrink-0">
                             <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
                         </div>
@@ -201,11 +201,19 @@
                         </label>
                         <div class="relative">
                             <input type="text" name="username" id="id_username" required autofocus autocomplete="username"
-                                   class="input-field {% if form.errors %}error{% endif %}"
+                                   class="input-field {% if form.username.errors or form.errors %}error{% endif %}"
+                                   aria-invalid="{% if form.username.errors %}true{% else %}false{% endif %}"
+                                   aria-describedby="id_username_help{% if form.username.errors %} id_username_error{% elif form.errors %} id_login_error{% endif %}"
                                    placeholder="e.g., NZS-26-F1-0001"
                                    value="{{ form.username.value|default:'' }}">
                             <i class="fas fa-id-card input-icon"></i>
                         </div>
+                        <p id="id_username_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1.5">Use your student ID or assigned username.</p>
+                        {% if form.username.errors %}
+                        <p id="id_username_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.username.errors.0 }}</p>
+                        {% elif form.errors %}
+                        <p id="id_login_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">Please verify your credentials and try again.</p>
+                        {% endif %}
                     </div>
 
                     <!-- Password -->
@@ -215,16 +223,22 @@
                         </label>
                         <div class="relative">
                             <input type="password" name="password" id="id_password" required autocomplete="current-password"
-                                   class="input-field {% if form.errors %}error{% endif %} pr-12"
+                                   class="input-field {% if form.password.errors or form.errors %}error{% endif %} pr-12"
+                                   aria-invalid="{% if form.password.errors %}true{% else %}false{% endif %}"
+                                   aria-describedby="{% if form.password.errors %}id_password_error{% elif form.errors %}id_login_error{% endif %}"
                                    placeholder="Enter your password">
                             <i class="fas fa-lock input-icon"></i>
                             <button type="button" onclick="togglePassword()"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-scholarly-primary transition-colors p-1"
                                     aria-label="Toggle password visibility"
-                                    tabindex="-1">
+                                    aria-controls="id_password"
+                                    aria-pressed="false">
                                 <i id="passwordIcon" class="fas fa-eye text-sm"></i>
                             </button>
                         </div>
+                        {% if form.password.errors %}
+                        <p id="id_password_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.password.errors.0 }}</p>
+                        {% endif %}
                     </div>
 
                     <!-- Remember Me & Forgot Password -->
@@ -305,13 +319,17 @@
             }
         })();
 
-        function togglePassword() {
+        function togglePassword(button) {
             const input = document.getElementById('id_password');
             const icon = document.getElementById('passwordIcon');
             if (!input || !icon) return;
             const isPassword = input.type === 'password';
             input.type = isPassword ? 'text' : 'password';
             icon.className = isPassword ? 'fas fa-eye-slash text-sm' : 'fas fa-eye text-sm';
+            if (button) {
+                button.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+                button.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            }
         }
 
         (function() {

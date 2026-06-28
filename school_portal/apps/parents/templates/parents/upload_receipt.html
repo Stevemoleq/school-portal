@@ -14,7 +14,7 @@
         <i class="fas fa-info-circle text-scholarly-primary mt-0.5"></i>
         <div class="text-sm text-slate-700 dark:text-slate-200">
             <p class="font-semibold mb-1 text-scholarly-primary">How this works</p>
-            <ol class="list-decimal pl-5 space-y-1 text-xs">
+            <ol class="list-decimal pl-5 space-y-1 text-sm">
                 <li>Visit any bank branch and deposit the school fees to the official school account.</li>
                 <li>Collect the stamped bank deposit slip.</li>
                 <li>Fill in the form below and upload a clear photo/scan of the slip.</li>
@@ -28,42 +28,54 @@
 <div class="scholarly-glass p-5 sm:p-6 max-w-2xl">
     <form method="post" enctype="multipart/form-data" class="space-y-4">
         {% csrf_token %}
+
+        {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm" role="alert" aria-live="assertive">
+            {% for err in form.non_field_errors %}<p>{{ err }}</p>{% endfor %}
+        </div>
+        {% endif %}
+
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Student *</label>
+            <label for="{{ form.student.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Student *</label>
             {{ form.student }}
-            {% if form.student.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.student.errors.0 }}</p>{% endif %}
+            <p id="id_student_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Choose which child this payment belongs to.</p>
+            {% if form.student.errors %}<p id="id_student_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.student.errors.0 }}</p>{% endif %}
         </div>
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Bank *</label>
+            <label for="{{ form.bank_name.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Bank *</label>
             {{ form.bank_name }}
-            {% if form.bank_name.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.bank_name.errors.0 }}</p>{% endif %}
+            <p id="id_bank_name_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Select the bank where the deposit was made.</p>
+            {% if form.bank_name.errors %}<p id="id_bank_name_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.bank_name.errors.0 }}</p>{% endif %}
         </div>
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Depositor's Full Name *</label>
+            <label for="{{ form.depositor_name.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Depositor's Full Name *</label>
             {{ form.depositor_name }}
-            {% if form.depositor_name.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.depositor_name.errors.0 }}</p>{% endif %}
+            <p id="id_depositor_name_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Enter the exact name written on the deposit slip.</p>
+            {% if form.depositor_name.errors %}<p id="id_depositor_name_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.depositor_name.errors.0 }}</p>{% endif %}
         </div>
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Transaction Reference *</label>
+            <label for="{{ form.transaction_reference.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Transaction Reference *</label>
             {{ form.transaction_reference }}
-            {% if form.transaction_reference.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.transaction_reference.errors.0 }}</p>{% endif %}
-            <p class="text-xs text-slate-400 mt-1">The unique reference number stamped on the bank slip.</p>
+            {% if form.transaction_reference.errors %}<p id="id_transaction_reference_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.transaction_reference.errors.0 }}</p>{% endif %}
+            <p id="id_transaction_reference_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">The unique reference number stamped on the bank slip.</p>
         </div>
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Amount Paid (MWK) *</label>
+            <label for="{{ form.amount_paid.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Amount Paid (MWK) *</label>
             {{ form.amount_paid }}
-            {% if form.amount_paid.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.amount_paid.errors.0 }}</p>{% endif %}
+            <p id="id_amount_paid_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Enter the exact amount you paid.</p>
+            {% if form.amount_paid.errors %}<p id="id_amount_paid_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.amount_paid.errors.0 }}</p>{% endif %}
         </div>
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Payment Date *</label>
+            <label for="{{ form.payment_date.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Payment Date *</label>
             {{ form.payment_date }}
-            {% if form.payment_date.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.payment_date.errors.0 }}</p>{% endif %}
+            <p id="id_payment_date_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Use the date shown on your stamped deposit slip.</p>
+            {% if form.payment_date.errors %}<p id="id_payment_date_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.payment_date.errors.0 }}</p>{% endif %}
         </div>
         <div>
-            <label class="text-xs font-semibold text-slate-500 uppercase block mb-1.5">Deposit Slip Image *</label>
+            <label for="{{ form.deposit_slip_image.id_for_label }}" class="text-sm font-semibold text-slate-600 uppercase block mb-1.5">Deposit Slip Image *</label>
             {{ form.deposit_slip_image }}
-            {% if form.deposit_slip_image.errors %}<p class="text-xs text-red-600 dark:text-red-400 mt-1">{{ form.deposit_slip_image.errors.0 }}</p>{% endif %}
-            <p class="text-xs text-slate-400 mt-1">Clear photo or scan of the stamped deposit slip (JPG/PNG, max 5MB).</p>
+            {% if form.deposit_slip_image.errors %}<p id="id_deposit_slip_image_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.deposit_slip_image.errors.0 }}</p>{% endif %}
+            <p id="id_deposit_slip_image_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Clear photo or scan of the stamped deposit slip (JPG/PNG, max 5MB).</p>
         </div>
         <div class="pt-2">
             <button type="submit" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-scholarly-primary hover:bg-blue-900 text-white font-bold rounded-xl transition-all">

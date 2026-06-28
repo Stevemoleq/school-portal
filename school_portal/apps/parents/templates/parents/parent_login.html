@@ -81,7 +81,7 @@
                 </div>
                 <div>
                     <h1 class="text-white font-extrabold text-lg tracking-tight">NAZARENE</h1>
-                    <p class="text-emerald-200/70 text-[10px] uppercase tracking-[0.2em] font-medium">Secondary School</p>
+                    <p class="text-emerald-200/70 text-xs uppercase tracking-[0.2em] font-medium">Secondary School</p>
                 </div>
             </div>
         </div>
@@ -136,13 +136,13 @@
                     <p class="text-gray-500 text-sm mt-1">Enter your phone number or Parent ID to continue.</p>
                 </div>
 
-                <form method="post" class="space-y-5" novalidate>
+                <form method="post" class="space-y-5">
                     {% csrf_token %}
 
                     {% if messages %}
                     <div class="space-y-2 fade-in">
                         {% for message in messages %}
-                        <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 flex items-center gap-3" role="alert">
+                        <div class="bg-red-50 border border-red-200 text-red-700 rounded-xl px-4 py-3 flex items-center gap-3" role="alert" aria-live="assertive">
                             <div class="w-8 h-8 rounded-lg bg-red-100 text-red-500 flex items-center justify-center flex-shrink-0">
                                 <i class="fas fa-exclamation-circle"></i>
                             </div>
@@ -160,10 +160,15 @@
                         <div class="relative">
                             <input type="text" name="login_id" id="id_login_id" required autofocus autocomplete="username"
                                    class="input-field {% if messages %}error{% endif %}"
+                                   aria-invalid="{% if messages %}true{% else %}false{% endif %}"
+                                   aria-describedby="id_login_id_help{% if messages %} id_parent_login_error{% endif %}"
                                    placeholder="e.g., 0991234567 or PAR-0001">
                             <i class="fas fa-phone input-icon"></i>
                         </div>
-                        <p class="text-gray-400 text-xs mt-1.5">Use your registered phone number or Parent ID (e.g., PAR-0001)</p>
+                        <p id="id_login_id_help" class="text-gray-500 text-sm mt-1.5">Use your registered phone number or Parent ID (e.g., PAR-0001)</p>
+                        {% if messages %}
+                        <p id="id_parent_login_error" class="text-sm text-red-600 mt-1" role="alert">Login details were not accepted. Check your ID and password.</p>
+                        {% endif %}
                     </div>
 
                     <!-- Password -->
@@ -174,12 +179,15 @@
                         <div class="relative">
                             <input type="password" name="password" id="id_password" required autocomplete="current-password"
                                    class="input-field {% if messages %}error{% endif %} pr-12"
+                                   aria-invalid="{% if messages %}true{% else %}false{% endif %}"
+                                   aria-describedby="{% if messages %}id_parent_login_error{% endif %}"
                                    placeholder="Enter your password">
                             <i class="fas fa-lock input-icon"></i>
-                            <button type="button" onclick="togglePassword()"
+                            <button type="button" onclick="togglePassword(this)"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
                                     aria-label="Toggle password visibility"
-                                    tabindex="-1">
+                                    aria-controls="id_password"
+                                    aria-pressed="false">
                                 <i id="passwordIcon" class="fas fa-eye text-sm"></i>
                             </button>
                         </div>
@@ -216,13 +224,17 @@
     <script>
         if (localStorage.getItem('darkMode') === 'true') document.documentElement.classList.add('dark');
 
-        function togglePassword() {
+        function togglePassword(button) {
             const input = document.getElementById('id_password');
             const icon = document.getElementById('passwordIcon');
             if (!input || !icon) return;
             const isPassword = input.type === 'password';
             input.type = isPassword ? 'text' : 'password';
             icon.className = isPassword ? 'fas fa-eye-slash text-sm' : 'fas fa-eye text-sm';
+            if (button) {
+                button.setAttribute('aria-pressed', isPassword ? 'true' : 'false');
+                button.setAttribute('aria-label', isPassword ? 'Hide password' : 'Show password');
+            }
         }
     </script>
 </body>

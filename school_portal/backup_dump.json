@@ -1,0 +1,2152 @@
+[
+{
+  "model": "admin.logentry",
+  "pk": 1,
+  "fields": {
+    "action_time": "2026-06-20T14:19:43.199Z",
+    "user": 1,
+    "content_type": 7,
+    "object_id": "1",
+    "object_repr": "form 1 A",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 2,
+  "fields": {
+    "action_time": "2026-06-20T14:21:41.747Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "1",
+    "object_repr": "mphatso dyson (NZS-26-F1-0001)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 3,
+  "fields": {
+    "action_time": "2026-06-20T14:53:47.923Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "4",
+    "object_repr": "wyson jumbe (NZS-26-F1-0004)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 4,
+  "fields": {
+    "action_time": "2026-06-20T15:19:26.459Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "4",
+    "object_repr": "wyson jumbe (NZS-26-F1-0004)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 5,
+  "fields": {
+    "action_time": "2026-06-20T15:19:35.870Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "2",
+    "object_repr": "mphatso dyson (NZS-26-F1-0002)",
+    "action_flag": 3,
+    "change_message": ""
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 6,
+  "fields": {
+    "action_time": "2026-06-20T15:20:24.897Z",
+    "user": 1,
+    "content_type": 8,
+    "object_id": "5",
+    "object_repr": "wyson jumbe (NZS-26-F1-0004)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 7,
+  "fields": {
+    "action_time": "2026-06-20T15:40:51.177Z",
+    "user": 1,
+    "content_type": 16,
+    "object_id": "1",
+    "object_repr": "james maida (PAR-0001)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 8,
+  "fields": {
+    "action_time": "2026-06-20T15:41:53.484Z",
+    "user": 1,
+    "content_type": 17,
+    "object_id": "1",
+    "object_repr": "james maida (PAR-0001) → lumesa mollen (NZS-26-F1-0003)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 9,
+  "fields": {
+    "action_time": "2026-06-20T16:01:40.128Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "1",
+    "object_repr": "English (Eng1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 10,
+  "fields": {
+    "action_time": "2026-06-20T16:02:27.561Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "2",
+    "object_repr": "Mathematics (Math1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 11,
+  "fields": {
+    "action_time": "2026-06-20T16:03:09.625Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "3",
+    "object_repr": "Chichewa (Chich1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 12,
+  "fields": {
+    "action_time": "2026-06-20T16:03:54.266Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "4",
+    "object_repr": "Chemistry (chem1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 13,
+  "fields": {
+    "action_time": "2026-06-20T16:04:18.360Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "5",
+    "object_repr": "Biology (Bio1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 14,
+  "fields": {
+    "action_time": "2026-06-20T16:05:44.417Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "6",
+    "object_repr": "Physics (Phy1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 15,
+  "fields": {
+    "action_time": "2026-06-20T16:06:20.635Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "7",
+    "object_repr": "Agriculture (agri1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 16,
+  "fields": {
+    "action_time": "2026-06-20T16:07:32.451Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "8",
+    "object_repr": "History (Hist1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 17,
+  "fields": {
+    "action_time": "2026-06-20T16:08:00.908Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "9",
+    "object_repr": "Bible knowledge (B/k1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "admin.logentry",
+  "pk": 18,
+  "fields": {
+    "action_time": "2026-06-20T16:08:29.697Z",
+    "user": 1,
+    "content_type": 9,
+    "object_id": "10",
+    "object_repr": "Geography (Geo1)",
+    "action_flag": 1,
+    "change_message": "[{\"added\": {}}]"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 1,
+  "fields": {
+    "name": "Can add log entry",
+    "content_type": 1,
+    "codename": "add_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 2,
+  "fields": {
+    "name": "Can change log entry",
+    "content_type": 1,
+    "codename": "change_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 3,
+  "fields": {
+    "name": "Can delete log entry",
+    "content_type": 1,
+    "codename": "delete_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 4,
+  "fields": {
+    "name": "Can view log entry",
+    "content_type": 1,
+    "codename": "view_logentry"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 5,
+  "fields": {
+    "name": "Can add permission",
+    "content_type": 2,
+    "codename": "add_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 6,
+  "fields": {
+    "name": "Can change permission",
+    "content_type": 2,
+    "codename": "change_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 7,
+  "fields": {
+    "name": "Can delete permission",
+    "content_type": 2,
+    "codename": "delete_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 8,
+  "fields": {
+    "name": "Can view permission",
+    "content_type": 2,
+    "codename": "view_permission"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 9,
+  "fields": {
+    "name": "Can add group",
+    "content_type": 3,
+    "codename": "add_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 10,
+  "fields": {
+    "name": "Can change group",
+    "content_type": 3,
+    "codename": "change_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 11,
+  "fields": {
+    "name": "Can delete group",
+    "content_type": 3,
+    "codename": "delete_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 12,
+  "fields": {
+    "name": "Can view group",
+    "content_type": 3,
+    "codename": "view_group"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 13,
+  "fields": {
+    "name": "Can add user",
+    "content_type": 4,
+    "codename": "add_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 14,
+  "fields": {
+    "name": "Can change user",
+    "content_type": 4,
+    "codename": "change_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 15,
+  "fields": {
+    "name": "Can delete user",
+    "content_type": 4,
+    "codename": "delete_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 16,
+  "fields": {
+    "name": "Can view user",
+    "content_type": 4,
+    "codename": "view_user"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 17,
+  "fields": {
+    "name": "Can add content type",
+    "content_type": 5,
+    "codename": "add_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 18,
+  "fields": {
+    "name": "Can change content type",
+    "content_type": 5,
+    "codename": "change_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 19,
+  "fields": {
+    "name": "Can delete content type",
+    "content_type": 5,
+    "codename": "delete_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 20,
+  "fields": {
+    "name": "Can view content type",
+    "content_type": 5,
+    "codename": "view_contenttype"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 21,
+  "fields": {
+    "name": "Can add session",
+    "content_type": 6,
+    "codename": "add_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 22,
+  "fields": {
+    "name": "Can change session",
+    "content_type": 6,
+    "codename": "change_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 23,
+  "fields": {
+    "name": "Can delete session",
+    "content_type": 6,
+    "codename": "delete_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 24,
+  "fields": {
+    "name": "Can view session",
+    "content_type": 6,
+    "codename": "view_session"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 25,
+  "fields": {
+    "name": "Can add class",
+    "content_type": 7,
+    "codename": "add_class"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 26,
+  "fields": {
+    "name": "Can change class",
+    "content_type": 7,
+    "codename": "change_class"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 27,
+  "fields": {
+    "name": "Can delete class",
+    "content_type": 7,
+    "codename": "delete_class"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 28,
+  "fields": {
+    "name": "Can view class",
+    "content_type": 7,
+    "codename": "view_class"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 29,
+  "fields": {
+    "name": "Can add Student",
+    "content_type": 8,
+    "codename": "add_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 30,
+  "fields": {
+    "name": "Can change Student",
+    "content_type": 8,
+    "codename": "change_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 31,
+  "fields": {
+    "name": "Can delete Student",
+    "content_type": 8,
+    "codename": "delete_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 32,
+  "fields": {
+    "name": "Can view Student",
+    "content_type": 8,
+    "codename": "view_student"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 33,
+  "fields": {
+    "name": "Can add subject",
+    "content_type": 9,
+    "codename": "add_subject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 34,
+  "fields": {
+    "name": "Can change subject",
+    "content_type": 9,
+    "codename": "change_subject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 35,
+  "fields": {
+    "name": "Can delete subject",
+    "content_type": 9,
+    "codename": "delete_subject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 36,
+  "fields": {
+    "name": "Can view subject",
+    "content_type": 9,
+    "codename": "view_subject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 37,
+  "fields": {
+    "name": "Can add teacher",
+    "content_type": 10,
+    "codename": "add_teacher"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 38,
+  "fields": {
+    "name": "Can change teacher",
+    "content_type": 10,
+    "codename": "change_teacher"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 39,
+  "fields": {
+    "name": "Can delete teacher",
+    "content_type": 10,
+    "codename": "delete_teacher"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 40,
+  "fields": {
+    "name": "Can view teacher",
+    "content_type": 10,
+    "codename": "view_teacher"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 41,
+  "fields": {
+    "name": "Can add Student Subject",
+    "content_type": 11,
+    "codename": "add_studentsubject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 42,
+  "fields": {
+    "name": "Can change Student Subject",
+    "content_type": 11,
+    "codename": "change_studentsubject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 43,
+  "fields": {
+    "name": "Can delete Student Subject",
+    "content_type": 11,
+    "codename": "delete_studentsubject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 44,
+  "fields": {
+    "name": "Can view Student Subject",
+    "content_type": 11,
+    "codename": "view_studentsubject"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 45,
+  "fields": {
+    "name": "Can add Academic Term",
+    "content_type": 12,
+    "codename": "add_academicterm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 46,
+  "fields": {
+    "name": "Can change Academic Term",
+    "content_type": 12,
+    "codename": "change_academicterm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 47,
+  "fields": {
+    "name": "Can delete Academic Term",
+    "content_type": 12,
+    "codename": "delete_academicterm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 48,
+  "fields": {
+    "name": "Can view Academic Term",
+    "content_type": 12,
+    "codename": "view_academicterm"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 49,
+  "fields": {
+    "name": "Can add Subject Registration",
+    "content_type": 13,
+    "codename": "add_subjectregistration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 50,
+  "fields": {
+    "name": "Can change Subject Registration",
+    "content_type": 13,
+    "codename": "change_subjectregistration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 51,
+  "fields": {
+    "name": "Can delete Subject Registration",
+    "content_type": 13,
+    "codename": "delete_subjectregistration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 52,
+  "fields": {
+    "name": "Can view Subject Registration",
+    "content_type": 13,
+    "codename": "view_subjectregistration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 53,
+  "fields": {
+    "name": "Can add result",
+    "content_type": 14,
+    "codename": "add_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 54,
+  "fields": {
+    "name": "Can change result",
+    "content_type": 14,
+    "codename": "change_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 55,
+  "fields": {
+    "name": "Can delete result",
+    "content_type": 14,
+    "codename": "delete_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 56,
+  "fields": {
+    "name": "Can view result",
+    "content_type": 14,
+    "codename": "view_result"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 57,
+  "fields": {
+    "name": "Can add announcement",
+    "content_type": 15,
+    "codename": "add_announcement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 58,
+  "fields": {
+    "name": "Can change announcement",
+    "content_type": 15,
+    "codename": "change_announcement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 59,
+  "fields": {
+    "name": "Can delete announcement",
+    "content_type": 15,
+    "codename": "delete_announcement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 60,
+  "fields": {
+    "name": "Can view announcement",
+    "content_type": 15,
+    "codename": "view_announcement"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 61,
+  "fields": {
+    "name": "Can add Parent/Guardian",
+    "content_type": 16,
+    "codename": "add_parent"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 62,
+  "fields": {
+    "name": "Can change Parent/Guardian",
+    "content_type": 16,
+    "codename": "change_parent"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 63,
+  "fields": {
+    "name": "Can delete Parent/Guardian",
+    "content_type": 16,
+    "codename": "delete_parent"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 64,
+  "fields": {
+    "name": "Can view Parent/Guardian",
+    "content_type": 16,
+    "codename": "view_parent"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 65,
+  "fields": {
+    "name": "Can add Parent-Student Relationship",
+    "content_type": 17,
+    "codename": "add_parentstudentrelationship"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 66,
+  "fields": {
+    "name": "Can change Parent-Student Relationship",
+    "content_type": 17,
+    "codename": "change_parentstudentrelationship"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 67,
+  "fields": {
+    "name": "Can delete Parent-Student Relationship",
+    "content_type": 17,
+    "codename": "delete_parentstudentrelationship"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 68,
+  "fields": {
+    "name": "Can view Parent-Student Relationship",
+    "content_type": 17,
+    "codename": "view_parentstudentrelationship"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 69,
+  "fields": {
+    "name": "Can add Attendance Record",
+    "content_type": 18,
+    "codename": "add_attendance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 70,
+  "fields": {
+    "name": "Can change Attendance Record",
+    "content_type": 18,
+    "codename": "change_attendance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 71,
+  "fields": {
+    "name": "Can delete Attendance Record",
+    "content_type": 18,
+    "codename": "delete_attendance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 72,
+  "fields": {
+    "name": "Can view Attendance Record",
+    "content_type": 18,
+    "codename": "view_attendance"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 73,
+  "fields": {
+    "name": "Can add Parent Notification",
+    "content_type": 19,
+    "codename": "add_parentnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 74,
+  "fields": {
+    "name": "Can change Parent Notification",
+    "content_type": 19,
+    "codename": "change_parentnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 75,
+  "fields": {
+    "name": "Can delete Parent Notification",
+    "content_type": 19,
+    "codename": "delete_parentnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 76,
+  "fields": {
+    "name": "Can view Parent Notification",
+    "content_type": 19,
+    "codename": "view_parentnotification"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 77,
+  "fields": {
+    "name": "Can add Parent Announcement Read Status",
+    "content_type": 20,
+    "codename": "add_parentannouncementread"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 78,
+  "fields": {
+    "name": "Can change Parent Announcement Read Status",
+    "content_type": 20,
+    "codename": "change_parentannouncementread"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 79,
+  "fields": {
+    "name": "Can delete Parent Announcement Read Status",
+    "content_type": 20,
+    "codename": "delete_parentannouncementread"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 80,
+  "fields": {
+    "name": "Can view Parent Announcement Read Status",
+    "content_type": 20,
+    "codename": "view_parentannouncementread"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 81,
+  "fields": {
+    "name": "Can add fee structure",
+    "content_type": 21,
+    "codename": "add_feestructure"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 82,
+  "fields": {
+    "name": "Can change fee structure",
+    "content_type": 21,
+    "codename": "change_feestructure"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 83,
+  "fields": {
+    "name": "Can delete fee structure",
+    "content_type": 21,
+    "codename": "delete_feestructure"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 84,
+  "fields": {
+    "name": "Can view fee structure",
+    "content_type": 21,
+    "codename": "view_feestructure"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 85,
+  "fields": {
+    "name": "Can add student invoice",
+    "content_type": 22,
+    "codename": "add_studentinvoice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 86,
+  "fields": {
+    "name": "Can change student invoice",
+    "content_type": 22,
+    "codename": "change_studentinvoice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 87,
+  "fields": {
+    "name": "Can delete student invoice",
+    "content_type": 22,
+    "codename": "delete_studentinvoice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 88,
+  "fields": {
+    "name": "Can view student invoice",
+    "content_type": 22,
+    "codename": "view_studentinvoice"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 89,
+  "fields": {
+    "name": "Can add bank payment receipt",
+    "content_type": 23,
+    "codename": "add_bankpaymentreceipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 90,
+  "fields": {
+    "name": "Can change bank payment receipt",
+    "content_type": 23,
+    "codename": "change_bankpaymentreceipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 91,
+  "fields": {
+    "name": "Can delete bank payment receipt",
+    "content_type": 23,
+    "codename": "delete_bankpaymentreceipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 92,
+  "fields": {
+    "name": "Can view bank payment receipt",
+    "content_type": 23,
+    "codename": "view_bankpaymentreceipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 93,
+  "fields": {
+    "name": "Can add Fee Configuration",
+    "content_type": 24,
+    "codename": "add_feeconfiguration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 94,
+  "fields": {
+    "name": "Can change Fee Configuration",
+    "content_type": 24,
+    "codename": "change_feeconfiguration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 95,
+  "fields": {
+    "name": "Can delete Fee Configuration",
+    "content_type": 24,
+    "codename": "delete_feeconfiguration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 96,
+  "fields": {
+    "name": "Can view Fee Configuration",
+    "content_type": 24,
+    "codename": "view_feeconfiguration"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 97,
+  "fields": {
+    "name": "Can add Accountant",
+    "content_type": 25,
+    "codename": "add_accountant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 98,
+  "fields": {
+    "name": "Can change Accountant",
+    "content_type": 25,
+    "codename": "change_accountant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 99,
+  "fields": {
+    "name": "Can delete Accountant",
+    "content_type": 25,
+    "codename": "delete_accountant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 100,
+  "fields": {
+    "name": "Can view Accountant",
+    "content_type": 25,
+    "codename": "view_accountant"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 101,
+  "fields": {
+    "name": "Can add Receipt",
+    "content_type": 26,
+    "codename": "add_receipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 102,
+  "fields": {
+    "name": "Can change Receipt",
+    "content_type": 26,
+    "codename": "change_receipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 103,
+  "fields": {
+    "name": "Can delete Receipt",
+    "content_type": 26,
+    "codename": "delete_receipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 104,
+  "fields": {
+    "name": "Can view Receipt",
+    "content_type": 26,
+    "codename": "view_receipt"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 105,
+  "fields": {
+    "name": "Can add Audit Log",
+    "content_type": 27,
+    "codename": "add_auditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 106,
+  "fields": {
+    "name": "Can change Audit Log",
+    "content_type": 27,
+    "codename": "change_auditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 107,
+  "fields": {
+    "name": "Can delete Audit Log",
+    "content_type": 27,
+    "codename": "delete_auditlog"
+  }
+},
+{
+  "model": "auth.permission",
+  "pk": 108,
+  "fields": {
+    "name": "Can view Audit Log",
+    "content_type": 27,
+    "codename": "view_auditlog"
+  }
+},
+{
+  "model": "auth.group",
+  "pk": 1,
+  "fields": {
+    "name": "Accountant",
+    "permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$BeOWrZoLO67fd13eVxU0GJ$ySDxD8qY10TypxKp/UGYXMx4sYHevc2gqWWolgVyHL0=",
+    "last_login": "2026-06-20T16:45:48.418Z",
+    "is_superuser": true,
+    "username": "admin",
+    "first_name": "",
+    "last_name": "",
+    "email": "admin@example.com",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-06-20T13:33:23.362Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$O0m1LgPWmsBqNtiVuthObz$W9w0hBYUPMnjeIGh/CW9fqL1ciiYPFA04Qf2s/UftTI=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "NZS-26-F1-0001",
+    "first_name": "mphatso",
+    "last_name": "dyson",
+    "email": "steve@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T14:21:41.335Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$qQ43Y9cZA9WzEU7Pm6pqKe$9X3vADsAkYxoZPN+jKb1YrENt47iEIJErJrc1ws+Nq0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "stu_eqjonPg9SMH_",
+    "first_name": "mphatso",
+    "last_name": "dyson",
+    "email": "dy@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T14:25:50.692Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$sBYdJ8aXqfcD8cCY1NW8RX$ok9GP4hD9VsQzENrYHy0KMbmvUMm0RF24mYr+ikmlcY=",
+    "last_login": "2026-06-20T14:37:19.228Z",
+    "is_superuser": false,
+    "username": "stu_LlKnwuw_biMS",
+    "first_name": "lumesa",
+    "last_name": "mollen",
+    "email": "lume@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T14:37:18.037Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$xi9MmWzBeBtN2kTPNCMaxC$+fVxSRkyOE/LBVQ6ZlDSgL60twdRPZ1X/eMHTOF9vwU=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "stu_IIHJgamBgEQ7",
+    "first_name": "wyson",
+    "last_name": "jumbe",
+    "email": "jumbe@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T14:53:47.501Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$25tYmA3HyXx65CFOcpazbe$gOthizNWgy6pYmICW2xqHqE79G+nOOcYQF8twMv20WA=",
+    "last_login": "2026-06-20T16:13:35.703Z",
+    "is_superuser": false,
+    "username": "stu_Z9WwLxKPn7dH",
+    "first_name": "wyson",
+    "last_name": "jumbe",
+    "email": "jumbe@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T15:20:24.487Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$yV47zNQLJAPEHmfOjNb54W$SFuXKKyv93ubRjjaS+4j5frd4gQ4+auhgsTJFR5bIHw=",
+    "last_login": "2026-06-20T16:46:48.261Z",
+    "is_superuser": false,
+    "username": "kapesi",
+    "first_name": "mike",
+    "last_name": "kapes",
+    "email": "mike@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T15:37:11.664Z",
+    "groups": [
+      1
+    ],
+    "user_permissions": []
+  }
+},
+{
+  "model": "auth.user",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$870000$rS9onvGeSebw6s0RIurQ11$+lQsUhbVMkVXpBP918HsjmyVGVtyw8flDc2GWise5go=",
+    "last_login": "2026-06-20T16:35:42.190Z",
+    "is_superuser": false,
+    "username": "parent_0883244617",
+    "first_name": "james",
+    "last_name": "maida",
+    "email": "steve@gmail.com",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-06-20T15:40:50.778Z",
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 1,
+  "fields": {
+    "app_label": "admin",
+    "model": "logentry"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 2,
+  "fields": {
+    "app_label": "auth",
+    "model": "permission"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 3,
+  "fields": {
+    "app_label": "auth",
+    "model": "group"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 4,
+  "fields": {
+    "app_label": "auth",
+    "model": "user"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 5,
+  "fields": {
+    "app_label": "contenttypes",
+    "model": "contenttype"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 6,
+  "fields": {
+    "app_label": "sessions",
+    "model": "session"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 7,
+  "fields": {
+    "app_label": "accounts",
+    "model": "class"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 8,
+  "fields": {
+    "app_label": "accounts",
+    "model": "student"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 9,
+  "fields": {
+    "app_label": "accounts",
+    "model": "subject"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 10,
+  "fields": {
+    "app_label": "accounts",
+    "model": "teacher"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 11,
+  "fields": {
+    "app_label": "accounts",
+    "model": "studentsubject"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 12,
+  "fields": {
+    "app_label": "accounts",
+    "model": "academicterm"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 13,
+  "fields": {
+    "app_label": "accounts",
+    "model": "subjectregistration"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 14,
+  "fields": {
+    "app_label": "results",
+    "model": "result"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 15,
+  "fields": {
+    "app_label": "announcements",
+    "model": "announcement"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 16,
+  "fields": {
+    "app_label": "parents",
+    "model": "parent"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 17,
+  "fields": {
+    "app_label": "parents",
+    "model": "parentstudentrelationship"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 18,
+  "fields": {
+    "app_label": "parents",
+    "model": "attendance"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 19,
+  "fields": {
+    "app_label": "parents",
+    "model": "parentnotification"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 20,
+  "fields": {
+    "app_label": "parents",
+    "model": "parentannouncementread"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 21,
+  "fields": {
+    "app_label": "parents",
+    "model": "feestructure"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 22,
+  "fields": {
+    "app_label": "parents",
+    "model": "studentinvoice"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 23,
+  "fields": {
+    "app_label": "parents",
+    "model": "bankpaymentreceipt"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 24,
+  "fields": {
+    "app_label": "fees",
+    "model": "feeconfiguration"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 25,
+  "fields": {
+    "app_label": "fees",
+    "model": "accountant"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 26,
+  "fields": {
+    "app_label": "fees",
+    "model": "receipt"
+  }
+},
+{
+  "model": "contenttypes.contenttype",
+  "pk": 27,
+  "fields": {
+    "app_label": "fees",
+    "model": "auditlog"
+  }
+},
+{
+  "model": "sessions.session",
+  "pk": "uplgjrqzhrwc1rvdn6dh92typfqhl1mq",
+  "fields": {
+    "session_data": ".eJxVjEEOwiAQAP-yZ0PiIrD06N03kAUWqRpISnsy_t006UGvM5N5Q-BtrWEbsoQ5wwQOTr8scnpK20V-cLt3lXpblzmqPVGHHerWs7yuR_s3qDwqTMCGdcwXI_HsCI3PlnRERDIkxbO2woIOtbGOqLB3WDQn772jItYQfL7dJzd8:1wayqG:jeP7w542u9nIkPUc9GXZ_hgA8XzzSIXQ60Oh6c9MOEQ",
+    "expire_date": "2026-07-04T16:46:48.278Z"
+  }
+},
+{
+  "model": "accounts.class",
+  "pk": 1,
+  "fields": {
+    "name": "form 1",
+    "section": "A",
+    "created_at": "2026-06-20T14:19:43.171Z",
+    "updated_at": "2026-06-20T14:19:43.171Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 1,
+  "fields": {
+    "name": "English",
+    "code": "Eng1",
+    "assigned_class": 1,
+    "category": "CORE",
+    "is_compulsory": true,
+    "created_at": "2026-06-20T16:01:40.120Z",
+    "updated_at": "2026-06-20T16:01:40.120Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 2,
+  "fields": {
+    "name": "Mathematics",
+    "code": "Math1",
+    "assigned_class": 1,
+    "category": "CORE",
+    "is_compulsory": true,
+    "created_at": "2026-06-20T16:02:27.466Z",
+    "updated_at": "2026-06-20T16:02:27.467Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 3,
+  "fields": {
+    "name": "Chichewa",
+    "code": "Chich1",
+    "assigned_class": 1,
+    "category": "CORE",
+    "is_compulsory": true,
+    "created_at": "2026-06-20T16:03:09.621Z",
+    "updated_at": "2026-06-20T16:03:09.621Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 4,
+  "fields": {
+    "name": "Chemistry",
+    "code": "chem1",
+    "assigned_class": 1,
+    "category": "SCIENCE",
+    "is_compulsory": false,
+    "created_at": "2026-06-20T16:03:54.263Z",
+    "updated_at": "2026-06-20T16:03:54.263Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 5,
+  "fields": {
+    "name": "Biology",
+    "code": "Bio1",
+    "assigned_class": 1,
+    "category": "CORE",
+    "is_compulsory": true,
+    "created_at": "2026-06-20T16:04:18.356Z",
+    "updated_at": "2026-06-20T16:04:18.356Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 6,
+  "fields": {
+    "name": "Physics",
+    "code": "Phy1",
+    "assigned_class": 1,
+    "category": "SCIENCE",
+    "is_compulsory": false,
+    "created_at": "2026-06-20T16:05:44.405Z",
+    "updated_at": "2026-06-20T16:05:44.405Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 7,
+  "fields": {
+    "name": "Agriculture",
+    "code": "agri1",
+    "assigned_class": 1,
+    "category": "SCIENCE",
+    "is_compulsory": false,
+    "created_at": "2026-06-20T16:06:20.619Z",
+    "updated_at": "2026-06-20T16:06:20.619Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 8,
+  "fields": {
+    "name": "History",
+    "code": "Hist1",
+    "assigned_class": 1,
+    "category": "HUMANITIES",
+    "is_compulsory": false,
+    "created_at": "2026-06-20T16:07:32.445Z",
+    "updated_at": "2026-06-20T16:07:32.445Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 9,
+  "fields": {
+    "name": "Bible knowledge",
+    "code": "B/k1",
+    "assigned_class": 1,
+    "category": "OTHER",
+    "is_compulsory": false,
+    "created_at": "2026-06-20T16:08:00.890Z",
+    "updated_at": "2026-06-20T16:08:00.890Z"
+  }
+},
+{
+  "model": "accounts.subject",
+  "pk": 10,
+  "fields": {
+    "name": "Geography",
+    "code": "Geo1",
+    "assigned_class": 1,
+    "category": "HUMANITIES",
+    "is_compulsory": false,
+    "created_at": "2026-06-20T16:08:29.693Z",
+    "updated_at": "2026-06-20T16:08:29.693Z"
+  }
+},
+{
+  "model": "accounts.student",
+  "pk": 1,
+  "fields": {
+    "user": 2,
+    "student_id": "NZS-26-F1-0001",
+    "admission_year": 2026,
+    "admission_form": "form 1",
+    "current_class": 1,
+    "date_of_birth": "2003-06-20",
+    "address": "pox 2337 luwinga",
+    "must_change_password": false,
+    "registration_number": "NZS-26-F1-0001",
+    "created_at": "2026-06-20T14:21:41.743Z",
+    "updated_at": "2026-06-20T14:21:41.743Z"
+  }
+},
+{
+  "model": "accounts.student",
+  "pk": 3,
+  "fields": {
+    "user": 4,
+    "student_id": "NZS-26-F1-0003",
+    "admission_year": 2026,
+    "admission_form": "Form 1",
+    "current_class": 1,
+    "date_of_birth": "2005-02-02",
+    "address": "pox 2337 luwinga",
+    "must_change_password": false,
+    "registration_number": "NZS-26-F1-0003",
+    "created_at": "2026-06-20T14:37:19.002Z",
+    "updated_at": "2026-06-20T14:37:19.002Z"
+  }
+},
+{
+  "model": "accounts.student",
+  "pk": 5,
+  "fields": {
+    "user": 6,
+    "student_id": "NZS-26-F1-0004",
+    "admission_year": 2026,
+    "admission_form": "form 1",
+    "current_class": 1,
+    "date_of_birth": "2003-06-20",
+    "address": "pox 2337 luwinga",
+    "must_change_password": false,
+    "registration_number": "NZS-26-F1-0004",
+    "created_at": "2026-06-20T15:20:24.893Z",
+    "updated_at": "2026-06-20T15:20:24.893Z"
+  }
+},
+{
+  "model": "parents.parent",
+  "pk": 1,
+  "fields": {
+    "user": 8,
+    "parent_id": "PAR-0001",
+    "phone_number": "0883244617",
+    "relationship": "guardian",
+    "created_at": "2026-06-20T15:40:51.169Z",
+    "updated_at": "2026-06-20T15:40:51.169Z"
+  }
+},
+{
+  "model": "parents.parentstudentrelationship",
+  "pk": 1,
+  "fields": {
+    "parent": 1,
+    "student": 3,
+    "is_primary_contact": true,
+    "created_at": "2026-06-20T15:41:53.460Z"
+  }
+},
+{
+  "model": "parents.feestructure",
+  "pk": 1,
+  "fields": {
+    "name": "term 1",
+    "amount": "400000.00",
+    "target_class": null,
+    "term": "1st",
+    "session": "2025-2027",
+    "created_at": "2026-06-20T17:48:10.077Z",
+    "updated_at": "2026-06-20T17:48:10.077Z"
+  }
+},
+{
+  "model": "parents.bankpaymentreceipt",
+  "pk": 1,
+  "fields": {
+    "invoice": null,
+    "student": 3,
+    "bank_name": "standard",
+    "depositor_name": "lumesa mollen",
+    "transaction_reference": "pppppp",
+    "amount_paid": "200000.00",
+    "payment_date": "2026-10-02",
+    "deposit_slip_image": "deposit_slips/Screenshot_2025-03-09_203311.png",
+    "status": "approved",
+    "verified_by": 7,
+    "verified_at": "2026-06-20T16:50:18.299Z",
+    "rejection_reason": "",
+    "created_at": "2026-06-20T16:44:53.004Z",
+    "updated_at": "2026-06-20T16:50:18.299Z"
+  }
+},
+{
+  "model": "fees.accountant",
+  "pk": 1,
+  "fields": {
+    "user": 7,
+    "accountant_id": "ACC-0001",
+    "phone": "265883244617",
+    "created_at": "2026-06-20T15:37:12.096Z",
+    "updated_at": "2026-06-20T15:37:12.096Z"
+  }
+},
+{
+  "model": "fees.receipt",
+  "pk": 1,
+  "fields": {
+    "receipt_number": "RCP-20260620-85F27E",
+    "payment": 1,
+    "invoice": null,
+    "student_name": "lumesa mollen",
+    "student_id": "NZS-26-F1-0003",
+    "amount": "200000.00",
+    "balance_after": "0.00",
+    "term": "",
+    "academic_year": "",
+    "date_issued": "2026-06-20T16:50:18.311Z",
+    "issued_by": 7
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 1,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T15:37:38.397Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 2,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T15:38:33.704Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 3,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T16:46:48.445Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 4,
+  "fields": {
+    "action": "reject_payment",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "BankPaymentReceipt",
+    "target_id": "1",
+    "description": "Rejected bank payment pppppp",
+    "metadata": {
+      "reason": ""
+    },
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T16:47:21.030Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 5,
+  "fields": {
+    "action": "approve_payment",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "BankPaymentReceipt",
+    "target_id": "1",
+    "description": "Approved bank payment pppppp",
+    "metadata": {
+      "amount": 200000.0,
+      "student_id": "NZS-26-F1-0003"
+    },
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T16:50:18.316Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 6,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T16:50:25.306Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 7,
+  "fields": {
+    "action": "create_fee_structure",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "FeeStructure",
+    "target_id": "1",
+    "description": "Created fee structure 'term 1' (2025-2027 1st)",
+    "metadata": {
+      "amount": 400000.0
+    },
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T17:48:10.112Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 8,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Report",
+    "target_id": "month",
+    "description": "Viewed financial report (month)",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T17:48:27.745Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 9,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T17:48:55.865Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 10,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T17:48:59.892Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 11,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Report",
+    "target_id": "month",
+    "description": "Viewed financial report (month)",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T17:49:06.224Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 12,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T17:49:43.838Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 13,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:06:38.626Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 14,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:06:45.183Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 15,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Report",
+    "target_id": "month",
+    "description": "Viewed financial report (month)",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:06:58.153Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 16,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:07:21.104Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 17,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:11:00.980Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 18,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:11:01.882Z"
+  }
+},
+{
+  "model": "fees.auditlog",
+  "pk": 19,
+  "fields": {
+    "action": "view_report",
+    "actor": 7,
+    "actor_role": "accountant",
+    "target_model": "fees.Dashboard",
+    "target_id": "accountant",
+    "description": "Viewed accountant dashboard",
+    "metadata": {},
+    "ip_address": "127.0.0.1",
+    "timestamp": "2026-06-20T18:11:04.942Z"
+  }
+}
+]

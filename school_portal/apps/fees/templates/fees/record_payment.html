@@ -17,51 +17,85 @@
     <form method="post" class="space-y-4">
         {% csrf_token %}
 
+        {% if form.non_field_errors %}
+        <div class="rounded-xl border border-red-200 bg-red-50 text-red-700 px-4 py-3 text-sm" role="alert" aria-live="assertive">
+            {% for err in form.non_field_errors %}<p>{{ err }}</p>{% endfor %}
+        </div>
+        {% endif %}
+
         {% if invoices %}
         <div>
-            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Invoice (optional)</label>
-            <select name="invoice" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
-                <option value="">— No invoice (record directly) —</option>
+            <label for="id_invoice" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Invoice</label>
+            <select name="invoice" id="id_invoice" required
+                    aria-invalid="{% if form.invoice.errors %}true{% else %}false{% endif %}"
+                    aria-describedby="id_invoice_help{% if form.invoice.errors %} id_invoice_error{% endif %}"
+                    class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                <option value="">— Select unpaid invoice —</option>
                 {% for inv in invoices %}
-                <option value="{{ inv.pk }}">
+                <option value="{{ inv.pk }}" {% if form.invoice.value|stringformat:'s' == inv.pk|stringformat:'s' %}selected{% endif %}>
                     {{ inv.fee_structure.name }} · {{ inv.fee_structure.get_term_display }} · {{ inv.fee_structure.session }} —
                     Balance MWK {{ inv.balance|floatformat:0 }}
                 </option>
                 {% endfor %}
             </select>
-            <p class="text-xs text-slate-400 mt-1">Select an invoice to credit, or leave blank to record a standalone payment.</p>
+            <p id="id_invoice_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Choose the unpaid invoice this payment should credit.</p>
+            {% if form.invoice.errors %}<p id="id_invoice_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.invoice.errors.0 }}</p>{% endif %}
         </div>
         {% else %}
-        <input type="hidden" name="invoice" value="">
+        <div class="rounded-xl border border-amber-200 bg-amber-50 text-amber-800 px-4 py-3 text-sm" role="status">
+            This student has no unpaid invoices available to credit.
+        </div>
         {% endif %}
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Amount (MWK)</label>
-                <input type="number" name="amount" required min="0" step="0.01" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary" placeholder="0.00">
+                <label for="id_amount" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Amount (MWK)</label>
+                <input type="number" name="amount" id="id_amount" required min="0.01" step="0.01"
+                       value="{{ form.amount.value|default:'' }}"
+                       aria-invalid="{% if form.amount.errors %}true{% else %}false{% endif %}"
+                       aria-describedby="id_amount_help{% if form.amount.errors %} id_amount_error{% endif %}"
+                       class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary" placeholder="0.00">
+                <p id="id_amount_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Enter the amount shown on the bank slip.</p>
+                {% if form.amount.errors %}<p id="id_amount_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.amount.errors.0 }}</p>{% endif %}
             </div>
             <div>
-                <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Bank</label>
-                <select name="bank_name" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+                <label for="id_bank_name" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Bank</label>
+                <select name="bank_name" id="id_bank_name" required
+                        aria-invalid="{% if form.bank_name.errors %}true{% else %}false{% endif %}"
+                        aria-describedby="{% if form.bank_name.errors %}id_bank_name_error{% endif %}"
+                        class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
                     <option value="">— Select bank —</option>
-                    <option value="nbm">National Bank of Malawi</option>
-                    <option value="standard">Standard Bank</option>
-                    <option value="nbs">NBS Bank</option>
-                    <option value="fdh">FDH Bank</option>
-                    <option value="fcb">First Capital Bank</option>
-                    <option value="ecobank">EcoBank</option>
-                    <option value="mybucks">MyBucks</option>
-                    <option value="other">Other</option>
+                    <option value="nbm" {% if form.bank_name.value == 'nbm' %}selected{% endif %}>National Bank of Malawi</option>
+                    <option value="standard" {% if form.bank_name.value == 'standard' %}selected{% endif %}>Standard Bank</option>
+                    <option value="nbs" {% if form.bank_name.value == 'nbs' %}selected{% endif %}>NBS Bank</option>
+                    <option value="fdh" {% if form.bank_name.value == 'fdh' %}selected{% endif %}>FDH Bank</option>
+                    <option value="fcb" {% if form.bank_name.value == 'fcb' %}selected{% endif %}>First Capital Bank</option>
+                    <option value="ecobank" {% if form.bank_name.value == 'ecobank' %}selected{% endif %}>EcoBank</option>
+                    <option value="mybucks" {% if form.bank_name.value == 'mybucks' %}selected{% endif %}>MyBucks</option>
+                    <option value="other" {% if form.bank_name.value == 'other' %}selected{% endif %}>Other</option>
                 </select>
+                {% if form.bank_name.errors %}<p id="id_bank_name_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.bank_name.errors.0 }}</p>{% endif %}
             </div>
         </div>
         <div>
-            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Bank Reference / Transaction No.</label>
-            <input type="text" name="transaction_reference" required placeholder="e.g. NBM-2026-001234" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+            <label for="id_transaction_reference" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Bank Reference / Transaction No.</label>
+            <input type="text" name="transaction_reference" id="id_transaction_reference" required
+                   value="{{ form.transaction_reference.value|default:'' }}"
+                   aria-invalid="{% if form.transaction_reference.errors %}true{% else %}false{% endif %}"
+                   aria-describedby="id_transaction_reference_help{% if form.transaction_reference.errors %} id_transaction_reference_error{% endif %}"
+                   placeholder="e.g. NBM-2026-001234" class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+            <p id="id_transaction_reference_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Use the exact reference printed on the bank slip.</p>
+            {% if form.transaction_reference.errors %}<p id="id_transaction_reference_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.transaction_reference.errors.0 }}</p>{% endif %}
         </div>
         <div>
-            <label class="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Payment Date</label>
-            <input type="date" name="payment_date" required class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+            <label for="id_payment_date" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1.5">Payment Date</label>
+            <input type="date" name="payment_date" id="id_payment_date" required
+                   value="{{ form.payment_date.value|default:'' }}"
+                   aria-invalid="{% if form.payment_date.errors %}true{% else %}false{% endif %}"
+                   aria-describedby="id_payment_date_help{% if form.payment_date.errors %} id_payment_date_error{% endif %}"
+                   class="w-full px-4 py-2.5 rounded-xl border border-slate-200/80 dark:border-slate-700/60 bg-white dark:bg-slate-800/40 text-sm focus:outline-none focus:ring-2 focus:ring-scholarly-primary/40 focus:border-scholarly-primary">
+            <p id="id_payment_date_help" class="text-sm text-slate-500 dark:text-slate-400 mt-1">Select the original date the payment was deposited.</p>
+            {% if form.payment_date.errors %}<p id="id_payment_date_error" class="text-sm text-red-600 dark:text-red-400 mt-1" role="alert">{{ form.payment_date.errors.0 }}</p>{% endif %}
         </div>
         <div class="pt-2 flex flex-col sm:flex-row gap-2">
             <button type="submit" class="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl font-semibold text-sm transition-colors">
