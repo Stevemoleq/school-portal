@@ -9,6 +9,7 @@ If DJANGO_SUPERUSER_PASSWORD is not set, a strong random password is
 generated, printed to stdout, and the operator is expected to rotate
 it on first login.
 """
+import os
 import secrets
 import string
 
@@ -44,7 +45,7 @@ class Command(BaseCommand):
         username = options["username"]
         email = options["email"]
 
-        password = options["password"] or getattr(settings, "DJANGO_SUPERUSER_PASSWORD", None)
+        password = options["password"] or os.environ.get("DJANGO_SUPERUSER_PASSWORD") or getattr(settings, "DJANGO_SUPERUSER_PASSWORD", None)
 
         if not password:
             if options["noinput"]:
