@@ -1,31 +1,40 @@
-{% extends 'base.html' %}
-{% block title %}Server Error — Nazarene School{% endblock %}
-{% block page_title %}500{% endblock %}
-
-{% block content %}
-<div class="flex flex-col items-center justify-center py-16 sm:py-24 text-center">
-    <div class="relative mb-8">
-        <span class="text-[8rem] sm:text-[10rem] font-black text-surface-200 dark:text-surface-800 leading-none select-none">500</span>
-        <div class="absolute inset-0 flex items-center justify-center">
-            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-red-500 to-red-700 flex items-center justify-center shadow-xl shadow-red-500/30 -rotate-12 hover:rotate-0 transition-transform duration-500">
-                <i class="fas fa-server text-white text-3xl"></i>
-            </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Error — Nazarene School</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Inter', system-ui, -apple-system, sans-serif; min-height: 100vh; display: flex; align-items: center; justify-content: center; background: #f8f9ff; color: #0b1c30; }
+        .container { text-align: center; padding: 2rem; max-width: 480px; }
+        .icon { width: 80px; height: 80px; margin: 0 auto 2rem; background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 1.25rem; display: flex; align-items: center; justify-content: center; box-shadow: 0 10px 25px rgba(239,68,68,0.3); transform: rotate(-12deg); }
+        .icon svg { width: 40px; height: 40px; fill: white; }
+        h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.75rem; }
+        p { color: #64748b; line-height: 1.6; margin-bottom: 2rem; }
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 1.5rem; border-radius: 0.75rem; font-weight: 600; font-size: 0.875rem; text-decoration: none; border: none; cursor: pointer; transition: all 0.2s; }
+        .btn-primary { background: #00288e; color: white; box-shadow: 0 4px 12px rgba(0,40,142,0.25); }
+        .btn-primary:hover { background: #001f6e; }
+        .btn-secondary { background: #e2e8f0; color: #475569; }
+        .btn-secondary:hover { background: #cbd5e1; }
+        .actions { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+        .info { margin-top: 2rem; background: #fef2f2; border: 1px solid #fecaca; border-radius: 0.75rem; padding: 1rem; font-size: 0.875rem; color: #991b1b; text-align: left; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M2 20h20v-4H2v4zm2-3h2v2H4v-2zM2 4v4h20V4H2zm4 3H4V5h2v2zm-4 7h20v-4H2v4zm2-3h2v2H4v-2z"/></svg>
+        </div>
+        <h1>Server Error</h1>
+        <p>Something went wrong on our end. Our team has been notified. Please try again later.</p>
+        <div class="actions">
+            <a href="/" class="btn btn-primary">Go Home</a>
+            <button onclick="location.reload()" class="btn btn-secondary">Try Again</button>
+        </div>
+        <div class="info">
+            If this persists, contact your school administrator with the date and time.
         </div>
     </div>
-    <h2 class="text-2xl font-bold text-surface-900 dark:text-white mb-3">Server Error</h2>
-    <p class="text-surface-500 dark:text-surface-400 max-w-md mb-8">
-        Something went wrong on our end. Our team has been notified. Please try again later.
-    </p>
-    <div class="flex flex-wrap justify-center gap-3">
-        <a href="{% url 'home' %}" class="btn btn-primary">
-            <i class="fas fa-home"></i> Go Home
-        </a>
-        <button onclick="location.reload()" class="btn btn-secondary">
-            <i class="fas fa-redo"></i> Try Again
-        </button>
-    </div>
-    <div class="mt-8 bg-red-50 dark:bg-red-950/30 border border-red-200 dark:border-red-800 rounded-xl p-4 max-w-md text-sm text-red-700 dark:text-red-400 text-left">
-        <i class="fas fa-info-circle mr-1"></i> If this persists, contact your school administrator with the date and time.
-    </div>
-</div>
-{% endblock %}
+</body>
+</html>

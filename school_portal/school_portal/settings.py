@@ -264,24 +264,24 @@ LOGGING = {
         'file': {
             'level': 'INFO',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'school_portal.log',
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'filename': LOGS_DIR / 'school_portal.log',
+            'maxBytes': 1024 * 1024 * 10,
             'backupCount': 5,
             'formatter': 'detailed',
         },
         'security_file': {
             'level': 'WARNING',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'security.log',
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'filename': LOGS_DIR / 'security.log',
+            'maxBytes': 1024 * 1024 * 10,
             'backupCount': 5,
             'formatter': 'detailed',
         },
         'error_file': {
             'level': 'ERROR',
             'class': 'logging.handlers.RotatingFileHandler',
-            'filename': BASE_DIR / 'logs' / 'errors.log',
-            'maxBytes': 1024 * 1024 * 10,  # 10MB
+            'filename': LOGS_DIR / 'errors.log',
+            'maxBytes': 1024 * 1024 * 10,
             'backupCount': 10,
             'formatter': 'verbose',
         },
@@ -348,7 +348,10 @@ LOGGING = {
 
 # Create logs directory if it doesn't exist
 LOGS_DIR = BASE_DIR / 'logs'
-LOGS_DIR.mkdir(exist_ok=True)
+try:
+    LOGS_DIR.mkdir(exist_ok=True)
+except OSError:
+    pass
 
 
 # SECURITY SETTINGS
