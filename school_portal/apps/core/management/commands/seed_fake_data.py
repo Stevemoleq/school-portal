@@ -173,8 +173,10 @@ class Command(BaseCommand):
             self.stdout.write("  Updated admin user password to: admin123!")
 
         # ── 5. Users & Students ──
-        students = []
-        for i in range(20):
+        existing_count = Student.objects.count()
+        students = list(Student.objects.all())
+        needed = max(0, 20 - existing_count)
+        for i in range(needed):
             first = random.choice(FIRST_NAMES_MALE + FIRST_NAMES_FEMALE)
             last = random.choice(LAST_NAMES)
             username = f"stu_{secrets.token_urlsafe(8)}"
@@ -196,10 +198,10 @@ class Command(BaseCommand):
                 address=f"PO Box {random.randint(100, 9999)}, Lilongwe, Malawi",
             )
             students.append(student)
-        self.stdout.write(f"  Created {len(students)} students (password: student123!)")
+        self.stdout.write(f"  {Student.objects.count()} students (password: student123!)")
 
         # ── 6. Teachers ──
-        teachers = []
+        teachers = list(Teacher.objects.all())
         teacher_subjects = [
             ("ENG", ["English"]),
             ("MATH", ["Mathematics"]),
@@ -211,28 +213,34 @@ class Command(BaseCommand):
             ("TECH", ["Computer Studies", "Agriculture"]),
         ]
         for i, (eid, sub_names) in enumerate(teacher_subjects, 1):
-            first = random.choice(FIRST_NAMES_MALE + FIRST_NAMES_FEMALE)
-            last = random.choice(LAST_NAMES)
-            user = User.objects.create_user(
-                username=f"TCH-{eid}",
-                password="teacher123!",
-                first_name=first,
-                last_name=last,
-                email=f"{first.lower()}.{last.lower()}@nazarene.com",
-                is_staff=False,
+            username = f"TCH-{eid}"
+            user, created = User.objects.get_or_create(
+                username=username,
+                defaults={
+                    "password": "teacher123!",
+                    "first_name": random.choice(FIRST_NAMES_MALE + FIRST_NAMES_FEMALE),
+                    "last_name": random.choice(LAST_NAMES),
+                    "email": f"teacher.{eid.lower()}@nazarene.com",
+                    "is_staff": False,
+                },
             )
-            teacher = Teacher.objects.create(
+            if created:
+                user.set_password("teacher123!")
+                user.save()
+            teacher, _ = Teacher.objects.get_or_create(
                 user=user,
-                employee_id=f"TCH-{eid}",
-                phone=f"+265{random.randint(900000000, 999999999)}",
-                date_hired=date(random.randint(2020, 2025), random.randint(1, 12), 1),
+                defaults={
+                    "employee_id": f"TCH-{eid}",
+                    "phone": f"+265{random.randint(900000000, 999999999)}",
+                    "date_hired": date(random.randint(2020, 2025), random.randint(1, 12), 1),
+                },
             )
             for sn in sub_names:
                 sub = Subject.objects.filter(name=sn).first()
                 if sub:
                     teacher.subjects.add(sub)
             teachers.append(teacher)
-        self.stdout.write(f"  Created {len(teachers)} teachers (password: teacher123!)")
+        self.stdout.write(f"  {Teacher.objects.count()} teachers (password: teacher123!)")
 
         # ── 7. StudentSubject assignments ──
         count = 0
@@ -274,9 +282,11 @@ class Command(BaseCommand):
             self.stdout.write(f"  Created {reg_count} subject registrations for {active_term}")
 
         # ── 9. Parents ──
-        parents = []
+        existing_parents = Parent.objects.count()
+        parents = list(Parent.objects.all())
+        needed = max(0, 10 - existing_parents)
         relationships = ["father", "mother", "guardian"]
-        for i in range(10):
+        for i in range(needed):
             first = random.choice(FIRST_NAMES_MALE + FIRST_NAMES_FEMALE)
             last = random.choice(LAST_NAMES)
             user = User.objects.create_user(
@@ -292,7 +302,7 @@ class Command(BaseCommand):
                 relationship=random.choice(relationships),
             )
             parents.append(parent)
-        self.stdout.write(f"  Created {len(parents)} parents (password: parent123!)")
+        self.stdout.write(f"  {Parent.objects.count()} parents (password: parent123!)")
 
         # ── 10. Parent-Student Relationships ──
         rel_count = 0
@@ -393,19 +403,22 @@ class Command(BaseCommand):
         self.stdout.write(f"  Created {inv_count} student invoices")
 
         # ── 15. Accountant ──
-        acc_user = User.objects.create_user(
+        acc_user, created = User.objects.get_or_create(
             username="accountant1",
-            password="account123!",
-            first_name="Grace",
-            last_name="Mwale",
-            email="grace.mwale@nazarene.com",
-            is_staff=False,
+            defaults={
+                "first_name": "Grace",
+                "last_name": "Mwale",
+                "email": "grace.mwale@nazarene.com",
+                "is_staff": False,
+            },
         )
-        accountant = Accountant.objects.create(
+        acc_user.set_password("account123!")
+        acc_user.save()
+        accountant, _ = Accountant.objects.get_or_create(
             user=acc_user,
-            phone="+265987654321",
+            defaults={"phone": "+265987654321"},
         )
-        self.stdout.write("  Created accountant (username: accountant1, password: account123!)")
+        self.stdout.write(f"  Accountant username=accountant1 password=account123!")
 
         # ── 16. Bank Payment Receipts ──
         slip_count = 0
