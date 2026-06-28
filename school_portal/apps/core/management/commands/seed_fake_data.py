@@ -154,7 +154,25 @@ class Command(BaseCommand):
         active_term = AcademicTerm.objects.filter(is_active=True).first()
         self.stdout.write(f"  Created {len(terms)} academic terms (active: {active_term})")
 
-        # ── 4. Users & Students ──
+        # ── 4. Admin User ──
+        admin_user, created = User.objects.get_or_create(
+            username="admin",
+            defaults={
+                "email": "admin@nazareneschool.com",
+                "is_staff": True,
+                "is_superuser": True,
+            },
+        )
+        if created:
+            admin_user.set_password("admin123!")
+            admin_user.save()
+            self.stdout.write("  Created admin user (username: admin, password: admin123!)")
+        else:
+            admin_user.set_password("admin123!")
+            admin_user.save()
+            self.stdout.write("  Updated admin user password to: admin123!")
+
+        # ── 5. Users & Students ──
         students = []
         for i in range(20):
             first = random.choice(FIRST_NAMES_MALE + FIRST_NAMES_FEMALE)
@@ -180,7 +198,7 @@ class Command(BaseCommand):
             students.append(student)
         self.stdout.write(f"  Created {len(students)} students (password: student123!)")
 
-        # ── 5. Teachers ──
+        # ── 6. Teachers ──
         teachers = []
         teacher_subjects = [
             ("ENG", ["English"]),
@@ -216,7 +234,7 @@ class Command(BaseCommand):
             teachers.append(teacher)
         self.stdout.write(f"  Created {len(teachers)} teachers (password: teacher123!)")
 
-        # ── 6. StudentSubject assignments ──
+        # ── 7. StudentSubject assignments ──
         count = 0
         for student in students:
             # Assign all compulsory subjects
@@ -238,7 +256,7 @@ class Command(BaseCommand):
                     count += 1
         self.stdout.write(f"  Created {count} student-subject assignments")
 
-        # ── 7. Subject Registrations (for active term) ──
+        # ── 8. Subject Registrations (for active term) ──
         if active_term:
             reg_count = 0
             for student in students:
@@ -255,7 +273,7 @@ class Command(BaseCommand):
                         reg_count += 1
             self.stdout.write(f"  Created {reg_count} subject registrations for {active_term}")
 
-        # ── 8. Parents ──
+        # ── 9. Parents ──
         parents = []
         relationships = ["father", "mother", "guardian"]
         for i in range(10):
@@ -276,7 +294,7 @@ class Command(BaseCommand):
             parents.append(parent)
         self.stdout.write(f"  Created {len(parents)} parents (password: parent123!)")
 
-        # ── 9. Parent-Student Relationships ──
+        # ── 10. Parent-Student Relationships ──
         rel_count = 0
         for student in students[:10]:
             parent = random.choice(parents[:5])
@@ -289,7 +307,7 @@ class Command(BaseCommand):
                 rel_count += 1
         self.stdout.write(f"  Created {rel_count} parent-student relationships")
 
-        # ── 10. Results ──
+        # ── 11. Results ──
         if active_term:
             result_count = 0
             for student in students:
@@ -312,7 +330,7 @@ class Command(BaseCommand):
                     result_count += 1
             self.stdout.write(f"  Created {result_count} results for {active_term}")
 
-        # ── 11. Attendance ──
+        # ── 12. Attendance ──
         att_count = 0
         for student in students:
             d = date.today()
@@ -335,7 +353,7 @@ class Command(BaseCommand):
                     att_count += 1
         self.stdout.write(f"  Created {att_count} attendance records")
 
-        # ── 12. Fee Structures ──
+        # ── 13. Fee Structures ──
         fee_structures = []
         fee_data = [
             ("Term 1 Tuition Fee", 85000, "1st"),
@@ -355,7 +373,7 @@ class Command(BaseCommand):
             fee_structures.append(fs)
         self.stdout.write(f"  Created {len(fee_structures)} fee structures")
 
-        # ── 13. Student Invoices ──
+        # ── 14. Student Invoices ──
         inv_count = 0
         for student in students:
             for fs in random.sample(fee_structures, min(3, len(fee_structures))):
@@ -374,7 +392,7 @@ class Command(BaseCommand):
                 inv_count += 1
         self.stdout.write(f"  Created {inv_count} student invoices")
 
-        # ── 14. Accountant ──
+        # ── 15. Accountant ──
         acc_user = User.objects.create_user(
             username="accountant1",
             password="account123!",
@@ -389,7 +407,7 @@ class Command(BaseCommand):
         )
         self.stdout.write("  Created accountant (username: accountant1, password: account123!)")
 
-        # ── 15. Bank Payment Receipts ──
+        # ── 16. Bank Payment Receipts ──
         slip_count = 0
         for inv in StudentInvoice.objects.filter(paid_amount__gt=0)[:5]:
             receipt_data = {
@@ -423,7 +441,7 @@ class Command(BaseCommand):
             slip_count += 1
         self.stdout.write(f"  Created {slip_count} bank payment receipts")
 
-        # ── 16. Announcements ──
+        # ── 17. Announcements ──
         announcements_data = [
             ("Welcome Back to School!", "We welcome all students and staff to the new academic term. Please ensure all fees are paid before registration.", "all"),
             ("Sports Day Announcement", "Annual sports day will be held on 15th July. All students are expected to participate.", "students"),
