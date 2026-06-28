@@ -51,258 +51,290 @@
         </a>
     </div>
 </div>
-
-<!-- ===== BENTO GRID METRICS ===== -->
-<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-    <!-- Current Average -->
-    <div class="scholarly-bento">
-        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-chart-line"></i></span>
-        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Current Average</p>
-        <div class="flex items-baseline gap-2">
-            <h3 class="text-3xl font-bold text-scholarly-primary tracking-tight">{{ overall_average }}%</h3>
-        </div>
-        <div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mt-3 overflow-hidden">
-            <div class="h-full rounded-full bg-scholarly-primary"
-                 style="width: {{ overall_average }}%"></div>
-        </div>
-    </div>
-
-    <!-- Attendance -->
-    <div class="scholarly-bento">
-        <span class="bento-glyph text-scholarly-secondary"><i class="fas fa-calendar-check"></i></span>
-        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Attendance</p>
-        <h3 class="text-3xl font-bold text-scholarly-secondary tracking-tight">{{ att_summary.percentage|floatformat:0 }}%</h3>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">
-            <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1"></span>{{ att_summary.present }} present
-            <span class="inline-block w-2 h-2 rounded-full bg-red-400 ml-2 mr-1"></span>{{ att_summary.absent }} absent
-        </p>
-    </div>
-
-    <!-- Enrolled Subjects -->
-    <div class="scholarly-bento">
-        <span class="bento-glyph text-scholarly-primary"><i class="fas fa-book-open"></i></span>
-        <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Enrolled Subjects</p>
-        <h3 class="text-3xl font-bold text-scholarly-on dark:text-white tracking-tight">{{ assigned_count|stringformat:"02d" }}</h3>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">
-            <span class="text-emerald-600 font-semibold">{{ compulsory_count }} core</span> ·
-            <span class="text-scholarly-secondary font-semibold">{{ elective_count }} elective</span>
-        </p>
-    </div>
-
-    <!-- Announcements (bento primary variant) -->
-    <div class="scholarly-bento scholarly-bento-primary">
-        <span class="bento-glyph"><i class="fas fa-bullhorn"></i></span>
-        <p class="text-[10px] font-bold uppercase tracking-wider mb-2 opacity-80">New Updates</p>
-        <h3 class="text-3xl font-bold tracking-tight">{{ announcements|length|stringformat:"02d" }}</h3>
-        <p class="text-xs mt-3 opacity-80">
-            {% if announcements|length %}Action available{% else %}All caught up{% endif %}
-        </p>
-    </div>
+<!-- Mobile Dashboard Navigation Tabs (visible only on mobile) -->
+<div class="mobile-tab-nav md:hidden flex space-x-1 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl mb-6 overflow-x-auto no-scrollbar scroll-smooth" data-default-tab="overview">
+    <button data-tab="overview" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-xs font-bold text-center whitespace-nowrap focus:outline-none transition-all duration-200 bg-white dark:bg-slate-700 text-scholarly-primary shadow-sm">
+        <i class="fas fa-th-large mr-1.5"></i>Overview
+    </button>
+    <button data-tab="performance" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-xs font-bold text-center whitespace-nowrap focus:outline-none transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <i class="fas fa-chart-bar mr-1.5"></i>Performance
+    </button>
+    <button data-tab="subjects" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-xs font-bold text-center whitespace-nowrap focus:outline-none transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <i class="fas fa-book-open mr-1.5"></i>Subjects
+    </button>
+    <button data-tab="announcements" class="tab-btn flex-1 py-2.5 px-3 rounded-lg text-xs font-bold text-center whitespace-nowrap focus:outline-none transition-all duration-200 text-slate-500 dark:text-slate-400 hover:text-slate-800">
+        <i class="fas fa-bullhorn mr-1.5"></i>News
+    </button>
 </div>
 
-<!-- ===== ANALYTICS: bar chart + grade doughnut ===== -->
-{% if term_list|length > 0 or grade_dist %}
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
-    <div class="scholarly-glass p-5 sm:p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="scholarly-section-title">
-                <i class="fas fa-chart-bar text-scholarly-primary"></i> Term Performance
-            </h3>
-            <a href="{% url 'student_results' %}" class="text-xs font-semibold text-scholarly-primary hover:underline">View Details</a>
-        </div>
-        <div class="relative h-56">
-            <div id="performanceChartSkeleton" class="skeleton skeleton-chart absolute inset-0"></div>
-            <canvas id="performanceChart" class="relative z-10"></canvas>
-        </div>
-    </div>
-
-    <div class="scholarly-glass p-5 sm:p-6">
-        <div class="flex items-center justify-between mb-4">
-            <h3 class="scholarly-section-title">
-                <i class="fas fa-chart-pie text-scholarly-secondary"></i> Grade Distribution
-            </h3>
-            <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">All terms</span>
-        </div>
-        <div class="relative h-56 flex items-center justify-center">
-            <canvas id="gradeChart" class="max-h-56"></canvas>
-        </div>
-    </div>
-</div>
-{% endif %}
-
-<!-- ===== RECENT ANNOUNCEMENTS ===== -->
-<div class="scholarly-glass mb-6 overflow-hidden">
-    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
-        <div>
-            <h3 class="scholarly-section-title"><i class="fas fa-bullhorn text-scholarly-primary"></i> Recent Announcements</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Latest school news and updates</p>
-        </div>
-        <a href="{% url 'announcement_list' %}" class="text-sm font-semibold text-scholarly-primary hover:underline">
-            View All <i class="fas fa-arrow-right text-[10px] ml-1"></i>
-        </a>
-    </div>
-    {% if announcements %}
-    <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
-        {% for ann in announcements %}
-        <div class="px-5 sm:px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
-            <div class="flex items-start gap-3">
-                <div class="w-10 h-10 rounded-full bg-scholarly-secondary-container/20 text-scholarly-secondary flex items-center justify-center flex-shrink-0" style="background: rgba(78,69,213,0.15); color: #4e45d5;">
-                    <i class="fas fa-bullhorn"></i>
-                </div>
-                <div class="min-w-0 flex-1">
-                    <div class="flex items-center justify-between gap-2">
-                        <h4 class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ ann.title }}</h4>
-                        <span class="status-chip text-[10px]"
-                              style="background: rgba(0,40,142,0.08); color: #00288e;">{{ ann.get_target_audience_display }}</span>
-                    </div>
-                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-                        <i class="far fa-clock mr-1"></i>{{ ann.created_at|date:"M d, Y" }}
-                        <span class="mx-1">·</span>
-                        <i class="far fa-user mr-1"></i>{{ ann.author.get_full_name|default:ann.author.username }}
-                    </p>
-                    <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">{{ ann.content|truncatewords:25 }}</p>
-                    <a href="{% url 'announcement_detail' ann.pk %}" class="inline-flex items-center gap-1 text-xs font-semibold text-scholarly-primary hover:underline mt-2">
-                        Read more <i class="fas fa-arrow-right text-[10px]"></i>
-                    </a>
-                </div>
+<div id="section-overview" class="dashboard-section">
+    <!-- ===== BENTO GRID METRICS ===== -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <!-- Current Average -->
+        <div class="scholarly-bento">
+            <span class="bento-glyph text-scholarly-primary"><i class="fas fa-chart-line"></i></span>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Current Average</p>
+            <div class="flex items-baseline gap-2">
+                <h3 class="text-3xl font-bold text-scholarly-primary tracking-tight">{{ overall_average }}%</h3>
+            </div>
+            <div class="w-full bg-slate-200 dark:bg-slate-700 h-1.5 rounded-full mt-3 overflow-hidden">
+                <div class="h-full rounded-full bg-scholarly-primary"
+                     style="width: {{ overall_average }}%"></div>
             </div>
         </div>
-        {% endfor %}
+
+        <!-- Attendance -->
+        <div class="scholarly-bento">
+            <span class="bento-glyph text-scholarly-secondary"><i class="fas fa-calendar-check"></i></span>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Attendance</p>
+            <h3 class="text-3xl font-bold text-scholarly-secondary tracking-tight">{{ att_summary.percentage|floatformat:0 }}%</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">
+                <span class="inline-block w-2 h-2 rounded-full bg-emerald-500 mr-1"></span>{{ att_summary.present }} present
+                <span class="inline-block w-2 h-2 rounded-full bg-red-400 ml-2 mr-1"></span>{{ att_summary.absent }} absent
+            </p>
+        </div>
+
+        <!-- Enrolled Subjects -->
+        <div class="scholarly-bento">
+            <span class="bento-glyph text-scholarly-primary"><i class="fas fa-book-open"></i></span>
+            <p class="text-[10px] font-bold text-scholarly-on-variant uppercase tracking-wider mb-2">Enrolled Subjects</p>
+            <h3 class="text-3xl font-bold text-scholarly-on dark:text-white tracking-tight">{{ assigned_count|stringformat:"02d" }}</h3>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-3">
+                <span class="text-emerald-600 font-semibold">{{ compulsory_count }} core</span> ·
+                <span class="text-scholarly-secondary font-semibold">{{ elective_count }} elective</span>
+            </p>
+        </div>
+
+        <!-- Announcements (bento primary variant) -->
+        <div class="scholarly-bento scholarly-bento-primary">
+            <span class="bento-glyph"><i class="fas fa-bullhorn"></i></span>
+            <p class="text-[10px] font-bold uppercase tracking-wider mb-2 opacity-80">New Updates</p>
+            <h3 class="text-3xl font-bold tracking-tight">{{ announcements|length|stringformat:"02d" }}</h3>
+            <p class="text-xs mt-3 opacity-80">
+                {% if announcements|length %}Action available{% else %}All caught up{% endif %}
+            </p>
+        </div>
+    </div>
+</div>
+
+<div id="section-performance" class="dashboard-section">
+    <!-- ===== ANALYTICS: bar chart + grade doughnut ===== -->
+    {% if term_list|length > 0 or grade_dist %}
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-6">
+        <div class="scholarly-glass p-5 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="scholarly-section-title">
+                    <i class="fas fa-chart-bar text-scholarly-primary"></i> Term Performance
+                </h3>
+                <a href="{% url 'student_results' %}" class="text-xs font-semibold text-scholarly-primary hover:underline">View Details</a>
+            </div>
+            <div class="relative h-56">
+                <div id="performanceChartSkeleton" class="skeleton skeleton-chart absolute inset-0"></div>
+                <canvas id="performanceChart" class="relative z-10"></canvas>
+            </div>
+        </div>
+
+        <div class="scholarly-glass p-5 sm:p-6">
+            <div class="flex items-center justify-between mb-4">
+                <h3 class="scholarly-section-title">
+                    <i class="fas fa-chart-pie text-scholarly-secondary"></i> Grade Distribution
+                </h3>
+                <span class="text-[10px] font-semibold text-slate-500 uppercase tracking-wider">All terms</span>
+            </div>
+            <div class="relative h-56 flex items-center justify-center">
+                <canvas id="gradeChart" class="max-h-56"></canvas>
+            </div>
+        </div>
     </div>
     {% else %}
-    <div class="px-6 py-12 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
-            <i class="fas fa-bullhorn"></i>
+    <div class="scholarly-glass p-6 text-center mb-6">
+        <div class="w-12 h-12 rounded-full bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-slate-400 mx-auto mb-3">
+            <i class="fas fa-chart-line text-lg"></i>
         </div>
-        <p class="text-sm font-medium text-slate-900 dark:text-white">No announcements yet</p>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Check back later for updates from your school.</p>
+        <p class="text-sm font-medium text-slate-900 dark:text-white">No performance analytics available yet</p>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Once grades are uploaded, performance graphs will be visible here.</p>
     </div>
     {% endif %}
 </div>
 
-<!-- ===== MY SUBJECTS ===== -->
-<div class="scholarly-glass mt-6">
-    <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+<div id="section-announcements" class="dashboard-section">
+    <!-- ===== RECENT ANNOUNCEMENTS ===== -->
+    <div class="scholarly-glass mb-6 overflow-hidden">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between">
             <div>
-                <h3 class="scholarly-section-title"><i class="fas fa-book text-scholarly-primary"></i> My Subjects</h3>
-                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-                    {% if selected_term %}{{ selected_term.name }}{% endif %}
-                    · {{ assigned_count }} subject{{ assigned_count|pluralize }}
-                </p>
+                <h3 class="scholarly-section-title"><i class="fas fa-bullhorn text-scholarly-primary"></i> Recent Announcements</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Latest school news and updates</p>
             </div>
-            <div class="flex items-center gap-2">
-                {% if available_terms|length > 1 %}
-                <form method="get" class="flex items-center gap-1">
-                    <select name="term" onchange="this.form.submit()"
-                        class="text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 focus:ring-2 focus:ring-scholarly-primary">
-                        {% for t in available_terms %}
-                        <option value="{{ t.id }}" {% if selected_term and t.id == selected_term.id %}selected{% endif %}>{{ t.name }}</option>
-                        {% endfor %}
-                    </select>
-                </form>
-                {% endif %}
-                <a href="{% url 'register_subjects' %}" class="scholarly-btn-primary text-xs py-1.5">
-                    <i class="fas fa-pen"></i> Register
-                </a>
-                <a href="{% url 'student_results' %}" class="text-sm font-medium text-scholarly-primary hover:underline whitespace-nowrap">Results <i class="fas fa-arrow-right text-[10px] ml-1"></i></a>
-            </div>
-        </div>
-    </div>
-
-    {% if registration_open and needs_registration %}
-    <div class="p-5 sm:p-6">
-        <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-xl p-5 text-center">
-            <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/50 flex items-center justify-center text-2xl text-amber-600 dark:text-amber-400 mx-auto mb-3">
-                <i class="fas fa-hand-pointer"></i>
-            </div>
-            <h3 class="text-sm font-bold text-slate-900 dark:text-white">Register for {{ selected_term.name }}</h3>
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">You haven't registered any subjects yet. Choose your subjects for this term.</p>
-            <a href="{% url 'register_subjects' %}" class="scholarly-btn-primary mt-4">
-                <i class="fas fa-pen"></i> Register Now
+            <a href="{% url 'announcement_list' %}" class="text-sm font-semibold text-scholarly-primary hover:underline">
+                View All <i class="fas fa-arrow-right text-[10px] ml-1"></i>
             </a>
         </div>
-    </div>
-    {% elif registration_open %}
-    <div class="px-5 sm:px-6 py-3 bg-scholarly-primary-container/10 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between" style="background: rgba(0,40,142,0.04);">
-        <p class="text-xs text-slate-600 dark:text-slate-400">
-            <i class="fas fa-door-open text-scholarly-primary mr-1"></i>
-            Registration is open for {{ selected_term.name }}
-        </p>
-        <a href="{% url 'register_subjects' %}" class="text-xs font-semibold text-scholarly-primary hover:underline">
-            Change <i class="fas fa-arrow-right text-[10px] ml-0.5"></i>
-        </a>
-    </div>
-    {% endif %}
-
-    {% if subjects_by_category %}
-    <div class="p-5 sm:p-6 space-y-5">
-        {% for group in subjects_by_category %}
-        <div>
-            <h3 class="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
-                {% if group.code == 'CORE' %}
-                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-                <span class="text-emerald-600 dark:text-emerald-400">{{ group.label }}</span>
-                {% elif group.code == 'SCIENCE' %}
-                <span class="w-2 h-2 rounded-full bg-sky-500"></span>
-                <span class="text-sky-600 dark:text-sky-400">{{ group.label }}</span>
-                {% elif group.code == 'HUMANITIES' %}
-                <span class="w-2 h-2 rounded-full bg-amber-500"></span>
-                <span class="text-amber-600 dark:text-amber-400">{{ group.label }}</span>
-                {% elif group.code == 'COMMERCIAL' %}
-                <span class="w-2 h-2 rounded-full bg-purple-500"></span>
-                <span class="text-purple-600 dark:text-purple-400">{{ group.label }}</span>
-                {% elif group.code == 'TECHNICAL' %}
-                <span class="w-2 h-2 rounded-full bg-rose-500"></span>
-                <span class="text-rose-600 dark:text-rose-400">{{ group.label }}</span>
-                {% else %}
-                <span class="w-2 h-2 rounded-full bg-slate-400"></span>
-                <span class="text-slate-600 dark:text-slate-400">{{ group.label }}</span>
-                {% endif %}
-            </h3>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                {% for s in group.subjects %}
-                <div class="flex items-center gap-3 p-3 rounded-xl border {% if s.is_compulsory %}border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-950/20{% else %}border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30{% endif %}">
-                    <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 {% if s.is_compulsory %}bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400{% else %}bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400{% endif %}">
-                        <i class="fas {% if s.is_compulsory %}fa-lock{% else %}fa-book{% endif %}"></i>
+        {% if announcements %}
+        <div class="divide-y divide-slate-200/60 dark:divide-slate-700/60">
+            {% for ann in announcements %}
+            <div class="px-5 sm:px-6 py-4 hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+                <div class="flex items-start gap-3">
+                    <div class="w-10 h-10 rounded-full bg-scholarly-secondary-container/20 text-scholarly-secondary flex items-center justify-center flex-shrink-0" style="background: rgba(78,69,213,0.15); color: #4e45d5;">
+                        <i class="fas fa-bullhorn"></i>
                     </div>
                     <div class="min-w-0 flex-1">
-                        <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ s.name }}</p>
-                        <p class="text-xs text-slate-500 dark:text-slate-400">{{ s.code }}</p>
+                        <div class="flex items-center justify-between gap-2">
+                            <h4 class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ ann.title }}</h4>
+                            <span class="status-chip text-[10px]"
+                                  style="background: rgba(0,40,142,0.08); color: #00288e;">{{ ann.get_target_audience_display }}</span>
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                            <i class="far fa-clock mr-1"></i>{{ ann.created_at|date:"M d, Y" }}
+                            <span class="mx-1">·</span>
+                            <i class="far fa-user mr-1"></i>{{ ann.author.get_full_name|default:ann.author.username }}
+                        </p>
+                        <p class="text-sm text-slate-600 dark:text-slate-400 mt-2">{{ ann.content|truncatewords:25 }}</p>
+                        <a href="{% url 'announcement_detail' ann.pk %}" class="inline-flex items-center gap-1 text-xs font-semibold text-scholarly-primary hover:underline mt-2">
+                            Read more <i class="fas fa-arrow-right text-[10px]"></i>
+                        </a>
                     </div>
-                    {% if s.current_result %}
-                    <div class="flex-shrink-0 text-right">
-                        <span class="text-sm font-bold {% if s.current_result.marks >= 75 %}text-emerald-600 dark:text-emerald-400{% elif s.current_result.marks >= 50 %}text-scholarly-primary{% elif s.current_result.marks >= 40 %}text-amber-600 dark:text-amber-400{% else %}text-red-600 dark:text-red-400{% endif %}">
-                            {{ s.current_result.marks|floatformat:0 }}%
-                        </span>
-                        <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 ml-1">{{ s.current_result.grade }}</span>
-                    </div>
-                    {% else %}
-                    <div class="flex-shrink-0">
-                        <span class="text-xs text-slate-400 dark:text-slate-500">—</span>
-                    </div>
-                    {% endif %}
                 </div>
-                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="px-6 py-12 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+                <i class="fas fa-bullhorn"></i>
+            </div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">No announcements yet</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">Check back later for updates from your school.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<div id="section-subjects" class="dashboard-section">
+    <!-- ===== MY SUBJECTS ===== -->
+    <div class="scholarly-glass mt-6">
+        <div class="px-5 sm:px-6 py-4 border-b border-slate-200/60 dark:border-slate-700/60">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                <div>
+                    <h3 class="scholarly-section-title"><i class="fas fa-book text-scholarly-primary"></i> My Subjects</h3>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+                        {% if selected_term %}{{ selected_term.name }}{% endif %}
+                        · {{ assigned_count }} subject{{ assigned_count|pluralize }}
+                    </p>
+                </div>
+                <div class="flex items-center gap-2">
+                    {% if available_terms|length > 1 %}
+                    <form method="get" class="flex items-center gap-1">
+                        <select name="term" onchange="this.form.submit()"
+                            class="text-xs rounded-lg border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-2.5 py-1.5 focus:ring-2 focus:ring-scholarly-primary">
+                            {% for t in available_terms %}
+                            <option value="{{ t.id }}" {% if selected_term and t.id == selected_term.id %}selected{% endif %}>{{ t.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </form>
+                    {% endif %}
+                    <a href="{% url 'register_subjects' %}" class="scholarly-btn-primary text-xs py-1.5">
+                        <i class="fas fa-pen"></i> Register
+                    </a>
+                    <a href="{% url 'student_results' %}" class="text-sm font-medium text-scholarly-primary hover:underline whitespace-nowrap">Results <i class="fas fa-arrow-right text-[10px] ml-1"></i></a>
+                </div>
             </div>
         </div>
-        {% endfor %}
-    </div>
-    {% elif not needs_registration %}
-    <div class="px-6 py-12 text-center">
-        <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
-            <i class="fas fa-book"></i>
+
+        {% if registration_open and needs_registration %}
+        <div class="p-5 sm:p-6">
+            <div class="bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-900 rounded-xl p-5 text-center">
+                <div class="w-12 h-12 rounded-xl bg-amber-100 dark:bg-amber-950/50 flex items-center justify-center text-2xl text-amber-600 dark:text-amber-400 mx-auto mb-3">
+                    <i class="fas fa-hand-pointer"></i>
+                </div>
+                <h3 class="text-sm font-bold text-slate-900 dark:text-white">Register for {{ selected_term.name }}</h3>
+                <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">You haven't registered any subjects yet. Choose your subjects for this term.</p>
+                <a href="{% url 'register_subjects' %}" class="scholarly-btn-primary mt-4">
+                    <i class="fas fa-pen"></i> Register Now
+                </a>
+            </div>
         </div>
-        <p class="text-sm font-medium text-slate-900 dark:text-white">No subjects registered for this term</p>
-        <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
-            {% if registration_open %}
-            <a href="{% url 'register_subjects' %}" class="text-scholarly-primary font-medium">Register now</a>
-            {% else %}
-            Subject registration is not currently open.
-            {% endif %}
-        </p>
+        {% elif registration_open %}
+        <div class="px-5 sm:px-6 py-3 bg-scholarly-primary-container/10 border-b border-slate-200/60 dark:border-slate-700/60 flex items-center justify-between" style="background: rgba(0,40,142,0.04);">
+            <p class="text-xs text-slate-600 dark:text-slate-400">
+                <i class="fas fa-door-open text-scholarly-primary mr-1"></i>
+                Registration is open for {{ selected_term.name }}
+            </p>
+            <a href="{% url 'register_subjects' %}" class="text-xs font-semibold text-scholarly-primary hover:underline">
+                Change <i class="fas fa-arrow-right text-[10px] ml-0.5"></i>
+            </a>
+        </div>
+        {% endif %}
+
+        {% if subjects_by_category %}
+        <div class="p-5 sm:p-6 space-y-5">
+            {% for group in subjects_by_category %}
+            <div>
+                <h3 class="text-xs font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                    {% if group.code == 'CORE' %}
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="text-emerald-600 dark:text-emerald-400">{{ group.label }}</span>
+                    {% elif group.code == 'SCIENCE' %}
+                    <span class="w-2 h-2 rounded-full bg-sky-500"></span>
+                    <span class="text-sky-600 dark:text-sky-400">{{ group.label }}</span>
+                    {% elif group.code == 'HUMANITIES' %}
+                    <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+                    <span class="text-amber-600 dark:text-amber-400">{{ group.label }}</span>
+                    {% elif group.code == 'COMMERCIAL' %}
+                    <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                    <span class="text-purple-600 dark:text-purple-400">{{ group.label }}</span>
+                    {% elif group.code == 'TECHNICAL' %}
+                    <span class="w-2 h-2 rounded-full bg-rose-500"></span>
+                    <span class="text-rose-600 dark:text-rose-400">{{ group.label }}</span>
+                    {% else %}
+                    <span class="w-2 h-2 rounded-full bg-slate-400"></span>
+                    <span class="text-slate-600 dark:text-slate-400">{{ group.label }}</span>
+                    {% endif %}
+                </h3>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {% for s in group.subjects %}
+                    <div class="flex items-center gap-3 p-3 rounded-xl border {% if s.is_compulsory %}border-emerald-200 dark:border-emerald-900 bg-emerald-50/50 dark:bg-emerald-950/20{% else %}border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-800/30{% endif %}">
+                        <div class="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 {% if s.is_compulsory %}bg-emerald-100 text-emerald-600 dark:bg-emerald-950/50 dark:text-emerald-400{% else %}bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400{% endif %}">
+                            <i class="fas {% if s.is_compulsory %}fa-lock{% else %}fa-book{% endif %}"></i>
+                        </div>
+                        <div class="min-w-0 flex-1">
+                            <p class="text-sm font-semibold text-slate-900 dark:text-white truncate">{{ s.name }}</p>
+                            <p class="text-xs text-slate-500 dark:text-slate-400">{{ s.code }}</p>
+                        </div>
+                        {% if s.current_result %}
+                        <div class="flex-shrink-0 text-right">
+                            <span class="text-sm font-bold {% if s.current_result.marks >= 75 %}text-emerald-600 dark:text-emerald-400{% elif s.current_result.marks >= 50 %}text-scholarly-primary{% elif s.current_result.marks >= 40 %}text-amber-600 dark:text-amber-400{% else %}text-red-600 dark:text-red-400{% endif %}">
+                                {{ s.current_result.marks|floatformat:0 }}%
+                            </span>
+                            <span class="text-xs font-semibold text-slate-500 dark:text-slate-400 ml-1">{{ s.current_result.grade }}</span>
+                        </div>
+                        {% else %}
+                        <div class="flex-shrink-0">
+                            <span class="text-xs text-slate-400 dark:text-slate-500">—</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% elif not needs_registration %}
+        <div class="px-6 py-12 text-center">
+            <div class="w-14 h-14 rounded-2xl bg-slate-100 dark:bg-slate-800 flex items-center justify-center text-2xl text-slate-400 mx-auto mb-3">
+                <i class="fas fa-book"></i>
+            </div>
+            <p class="text-sm font-medium text-slate-900 dark:text-white">No subjects registered for this term</p>
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-1">
+                {% if registration_open %}
+                <a href="{% url 'register_subjects' %}" class="text-scholarly-primary font-medium">Register now</a>
+                {% else %}
+                Subject registration is not currently open.
+                {% endif %}
+            </p>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endblock %}
 

@@ -235,6 +235,49 @@ function initScrollAnimations() {
   });
 }
 
+// ── Dashboard Mobile Tabs ───────────────────────────────────────────────────
+window.switchDashboardTab = function(tabId) {
+  // Hide all dashboard sections on mobile
+  document.querySelectorAll('.dashboard-section').forEach(el => {
+    el.classList.add('hidden');
+  });
+  // Show selected section
+  const targetSec = document.getElementById('section-' + tabId);
+  if (targetSec) {
+    targetSec.classList.remove('hidden');
+  }
+  document.querySelectorAll(`.dashboard-section[data-tab-content="${tabId}"]`).forEach(el => {
+    el.classList.remove('hidden');
+  });
+
+  // Reset styles on all tab buttons
+  document.querySelectorAll('.mobile-tab-nav .tab-btn').forEach(btn => {
+    btn.classList.remove('bg-white', 'dark:bg-slate-700', 'text-scholarly-primary', 'shadow-sm');
+    btn.classList.add('text-slate-500', 'dark:text-slate-400');
+  });
+
+  // Mark current tab active
+  const activeBtns = document.querySelectorAll(`.mobile-tab-nav [data-tab="${tabId}"]`);
+  activeBtns.forEach(btn => {
+    btn.classList.remove('text-slate-500', 'dark:text-slate-400');
+    btn.classList.add('bg-white', 'dark:bg-slate-700', 'text-scholarly-primary', 'shadow-sm');
+  });
+
+  // Trigger resize to force Chart.js to recalculate canvas sizing
+  window.dispatchEvent(new Event('resize'));
+};
+
+window.initDashboardTabs = function(defaultTab) {
+  if (window.innerWidth < 768) {
+    window.switchDashboardTab(defaultTab);
+  } else {
+    // Desktop: show all sections
+    document.querySelectorAll('.dashboard-section').forEach(el => {
+      el.classList.remove('hidden');
+    });
+  }
+};
+
 // ── Init on DOM ready ──────────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function () {
   // Animate .stat-value numbers
@@ -253,4 +296,25 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Init scroll animations
   initScrollAnimations();
+
+  // Initialize mobile dashboard tabs if present
+  const mobTabs = document.querySelector('.mobile-tab-nav');
+  if (mobTabs) {
+    const defaultTab = mobTabs.dataset.defaultTab || 'overview';
+    window.initDashboardTabs(defaultTab);
+    
+    // Setup click handlers for all buttons in mobile-tab-nav
+    document.querySelectorAll('.mobile-tab-nav .tab-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const tabId = this.dataset.tab;
+        window.switchDashboardTab(tabId);
+      });
+    });
+
+    // Handle screen resize to reset layout if transition between mobile and desktop occurs
+    window.addEventListener('resize', function() {
+      window.initDashboardTabs(defaultTab);
+    });
+  }
 });
+
