@@ -228,6 +228,10 @@ DEFAULT_FROM_EMAIL = os.getenv(
 
 # Create logs directory if it doesn't exist
 LOGS_DIR = BASE_DIR / 'logs'
+try:
+    LOGS_DIR.mkdir(exist_ok=True, parents=True)
+except OSError:
+    pass
 
 # LOGGING CONFIGURATION
 LOGGING = {
